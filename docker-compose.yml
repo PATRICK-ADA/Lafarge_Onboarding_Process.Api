@@ -1,0 +1,55 @@
+# version: '3.8'  # Removed as it's obsolete in newer Docker Compose versions
+
+services:
+  lafarge-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lafarge-onboarding-api
+    ports:
+      - "8080:80"
+      - "8443:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80;https://+:443
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=lafarge_onboarding_db;Username=postgres;Password=postgres_password;Pooling=true;MinPoolSize=5;MaxPoolSize=20;ConnectionLifetime=300;
+      - Jwt__Key=YourSuperSecretKeyHere12345678901234567890
+      - Jwt__Issuer=LafargeOnboardingApi
+      - Jwt__Audience=LafargeOnboardingUsers
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - lafarge-network
+    volumes:
+      - logs:/app/logs
+      - uploads:/app/uploads
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: lafarge-postgres
+    environment:
+      - POSTGRES_DB=lafarge_onboarding_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - lafarge-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d lafarge_onboarding_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+  logs:
+  uploads:
+
+networks:
+  lafarge-network:
+    driver: bridge
