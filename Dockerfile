@@ -24,6 +24,10 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
+# Expose port 8080 for Cloud Run
 EXPOSE 8080
+
+# Set the ASPNETCORE_URLS environment variable to bind to all interfaces on port 8080
+ENV ASPNETCORE_URLS=http://+:8080
 
 ENTRYPOINT ["dotnet", "Lafarge-Onboarding.api.dll"]

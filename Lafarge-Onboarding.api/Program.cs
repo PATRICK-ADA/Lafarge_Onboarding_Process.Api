@@ -10,6 +10,10 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure port for Cloud Run
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+
 // Configure Serilog
 builder.Host.UseSerilog((context, configuration) =>
     configuration
@@ -111,7 +115,8 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseHttpsRedirection();
+    // Remove HTTPS redirection for Cloud Run as it handles SSL externally
+    // app.UseHttpsRedirection();
 }
 
 // Add authentication and authorization middleware
