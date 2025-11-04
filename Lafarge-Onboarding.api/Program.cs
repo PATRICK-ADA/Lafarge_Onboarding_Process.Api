@@ -69,9 +69,9 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = "LafargeOnboardingApi",
-        ValidAudience = "LafargeOnboardingUsers",
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSuperSecretKeyHere12345678901234567890"))
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
     };
 });
 
@@ -80,7 +80,22 @@ builder.Services.AddAuthorization();
 
 // Add DbContext
 builder.Services.AddDbContext<Lafarge_Onboarding.infrastructure.Data.ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    var connectionString = Environment.GetEnvironmentVariable("ONBOARDING_DB_URL") ?? "34.175.55.124:5432" +
+                          $"Database={Environment.GetEnvironmentVariable("ONBOARDING_DB_NAME") ?? "LafargeOnboardingDb"};" +
+                          $"Username={Environment.GetEnvironmentVariable("ONBOARDING_DB_USERNAME") ?? "postgres"};" +
+                          $"Password={Environment.GetEnvironmentVariable("ONBOARDING_DB_PASSWORD") ?? "2MdL^F?)I[fz{_?b"};" +
+                          $"Pooling=true;MinPoolSize=5;MaxPoolSize=20;ConnectionLifetime=300;";
+
+    // For production, use the full connection string if provided, otherwise build from individual env vars
+    // For development, fall back to appsettings.json
+    if (string.IsNullOrEmpty(connectionString) || connectionString.Contains("localhost"))
+    {
+        connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    }
+
+    options.UseNpgsql(connectionString);
+});
 
 // Register services
 builder.Services.AddScoped<IDocumentsUploadService, Lafarge_Onboarding.application.Services.DocumentsUploadService>();

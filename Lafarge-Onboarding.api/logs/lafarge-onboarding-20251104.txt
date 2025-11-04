@@ -539,3 +539,137 @@ ntroller.cs:line 157
 2025-11-04 12:49:47.085 +01:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
 EntityFrameworkCore.Query>
 2025-11-04 12:49:47.085 +01:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased. <s:Microsoft.EntityFrameworkCore.Query>
+2025-11-04 22:41:32.260 +01:00 [INF] Registration attempt for email: strDAFAng <s:Lafarge_Onboarding.api.Controllers.AuthController>
+2025-11-04 22:41:32.296 +01:00 [INF] Registering new user with email: strDAFAng2025-11-04 22:41:32.296 +01:00 [INF] Registering new user2025-11-04 22:41:32.3002025-11-04 22:41:32.300 +01:00 [ERR] Failed to create user: strDAFAng. Errors: Passwords must have at least one digit ('0'-'9').
+2025-11-04 22:41:32.301 +01:00 [ERR] Error during user registration for email: strDAFAng
+System.Exception: User registration failed: Passwords must have at least one digit ('0'-'9').
+   at Lafarge_Onboarding.application.Services.AuthService.RegisterUserAsync(AuthRegisterRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/AuthService.cs:line 100
+2025-11-04 22:41:32.312 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Exception: User registration failed: Passwords must have at least one digit ('0'-'9').
+   at Lafarge_Onboarding.application.Services.AuthService.RegisterUserAsync(AuthRegisterRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/AuthService.cs:line 100
+   at Lafarge_Onboarding.api.Controllers.AuthController.Register(AuthRegisterRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Controllers/AuthController.cs:line 22
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-11-04 22:41:47.810 +01:00 [INF] Registration attempt for email: strDAFAng
+2025-11-04 22:41:47.810 +01:00 [INF] Registering new user with email: strDAFAng
+2025-11-04 22:41:47.811 +01:00 [ERR] Failed to create user: strDAFAng. Errors: Passwords must have at least one digit ('0'-'9').
+2025-11-04 22:41:47.811 +01:00 [ERR] Error during user registration for email: strDAFAng
+System.Exception: User registration failed: Passwords must have at least one digit ('0'-'9').
+   at Lafarge_Onboarding.application.Services.AuthService.RegisterUserAsync(AuthRegisterRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/AuthService.cs:line 100
+2025-11-04 22:41:47.812 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Exception: User registration failed: Passwords must have at least one digit ('0'-'9').
+   at Lafarge_Onboarding.application.Services.AuthService.RegisterUserAsync(AuthRegisterRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/AuthService.cs:line 100
+   at Lafarge_Onboarding.api.Controllers.AuthController.Register(AuthRegisterRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Controllers/AuthController.cs:line 22
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-11-04 22:42:18.673 +01:00 [INF] Registration attempt for email: strDAFAng
+2025-11-04 22:42:18.673 +01:00 [INF] Registering new user with email: strDAFAng
+2025-11-04 22:42:19.123 +01:00 [ERR] Error during user registration for email: strDAFAng
+System.InvalidOperationException: Role ST;S;RING does not exist.
+   at Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore`9.AddToRoleAsync(TUser user, String normalizedRoleName, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.UserManager`1.AddToRoleAsync(TUser user, String role)
+   at Lafarge_Onboarding.application.Services.AuthService.RegisterUserAsync(AuthRegisterRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/AuthService.cs:line 104
+2025-11-04 22:42:19.127 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Role ST;S;RING does not exist.
+   at Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore`9.AddToRoleAsync(TUser user, String normalizedRoleName, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.UserManager`1.AddToRoleAsync(TUser user, String role)
+   at Lafarge_Onboarding.application.Services.AuthService.RegisterUserAsync(AuthRegisterRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/AuthService.cs:line 104
+   at Lafarge_Onboarding.api.Controllers.AuthController.Register(AuthRegisterRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Controllers/AuthController.cs:line 22
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-11-04 22:42:45.808 +01:00 [INF] Registration attempt for email: strDAFAng
+2025-11-04 22:42:45.808 +01:00 [INF] Registering new user with email: strDAFAng
+2025-11-04 22:42:45.933 +01:00 [ERR] Failed to create user: strDAFAng. Errors: Username 'strDAFAng' is already taken.
+2025-11-04 22:42:45.933 +01:00 [ERR] Error during user registration for email: strDAFAng
+System.Exception: User registration failed: Username 'strDAFAng' is already taken.
+   at Lafarge_Onboarding.application.Services.AuthService.RegisterUserAsync(AuthRegisterRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/AuthService.cs:line 100
+2025-11-04 22:42:45.934 +01:00 [ERR] An unhandled exception has occurred while executing the request.
+System.Exception: User registration failed: Username 'strDAFAng' is already taken.
+   at Lafarge_Onboarding.application.Services.AuthService.RegisterUserAsync(AuthRegisterRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/AuthService.cs:line 100
+   at Lafarge_Onboarding.api.Controllers.AuthController.Register(AuthRegisterRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Controllers/AuthController.cs:line 22
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-11-04 22:43:00.991 +01:00 [INF] Registration attempt for email: strwerDAFAng
+2025-11-04 22:43:00.991 +01:00 [INF] Registering new user with email: strwerDAFAng
+2025-11-04 22:43:01.135 +01:00 [INF] User registered successfully: 2c4644d1-d7bb-492c-b71d-a3634e7b5a7a
+2025-11-04 22:43:01.135 +01:00 [INF] User registered successfully: strwerDAFAng
+etCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-11-04 22:43:00.991 +01:00 [INF] Registration attempt for email: strwerDAFAng <s:Lafarge_Onboarding.api.Controllers.AuthController>
+2025-11-04 22:43:00.991 +01:00 [INF] Registering new user with email: strwerDAFAng <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-04 22:43:01.135 +01:00 [INF] User registered successfully: 2c4644d1-d7bb-492c-b71d-a3634e7b5a7a <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-04 22:43:01.135 +01:00 [INF] User registered successfully: strwerDAFAng <s:Lafarge_Onboarding.api.Controllers.AuthController>
+2025-11-04 22:44:13.060 +01:00 [ERR] Failed executing DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "AspNetRoles" (
+    "Id" text NOT NULL,
+    "Description" character varying(500) NOT NULL,
+    "CreatedAt" timestamp with time zone NOT NULL DEFAULT (NOW()),
+    "Name" character varying(256),
+    "NormalizedName" character varying(256),
+    "ConcurrencyStamp" text,
+    CONSTRAINT "PK_AspNetRoles" PRIMARY KEY ("Id")
+); <s:Microsoft.EntityFrameworkCore.Database.Command>
+2025-11-04 22:44:13.060 +01:00 [ERR] Failed executing DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE "AspNetRoles" (
+    "Id" text NOT NULL,
+    "Description" character varying(500) NOT NULL,
+    "CreatedAt" timestamp with time zone NOT NULL DEFAULT (NOW()),
+    "Name" character varying(256),
+    "NormalizedName" character varying(256),
+    "ConcurrencyStamp" text,
+    CONSTRAINT "PK_AspNetRoles" PRIMARY KEY ("Id")
+);
