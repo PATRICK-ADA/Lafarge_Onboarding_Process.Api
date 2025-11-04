@@ -1,16 +1,9 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Lafarge_Onboarding.application.Abstraction;
-using Lafarge_Onboarding.domain.Entities;
-using Lafarge_Onboarding.domain.OnboardingRequests;
-using Lafarge_Onboarding.domain.OnboardingResponses;
-
 namespace Lafarge_Onboarding.api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class UsersController : ControllerBase
+public sealed class UsersController : ControllerBase
 {
     private readonly IUsersService _usersService;
 

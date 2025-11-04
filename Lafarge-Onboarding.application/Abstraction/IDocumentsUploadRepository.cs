@@ -1,6 +1,3 @@
-using Lafarge_Onboarding.domain.Entities;
-using Lafarge_Onboarding.domain.OnboardingRequests;
-
 namespace Lafarge_Onboarding.application.Abstraction;
 
 public interface IDocumentsUploadRepository

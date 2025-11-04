@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http;
-
 namespace Lafarge_Onboarding.domain.OnboardingRequests;
 
 public class DocumentUploadRequest

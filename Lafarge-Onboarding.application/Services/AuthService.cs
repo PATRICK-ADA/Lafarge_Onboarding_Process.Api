@@ -1,15 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using Lafarge_Onboarding.application.Abstraction;
-using Lafarge_Onboarding.domain.Entities;
-using Lafarge_Onboarding.domain.OnboardingRequests;
-using Lafarge_Onboarding.domain.OnboardingResponses;
-
 namespace Lafarge_Onboarding.application.Services;
 
 public sealed class AuthService : IAuthService

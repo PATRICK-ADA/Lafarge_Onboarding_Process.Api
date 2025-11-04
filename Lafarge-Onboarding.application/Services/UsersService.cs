@@ -46,7 +46,7 @@ public sealed class UsersService : IUsersService
         {
             try
             {
-                // Check if user already exists
+                
                 var existingUser = await _userManager.FindByEmailAsync(userRequest.Email);
                 if (existingUser != null)
                 {
@@ -64,10 +64,10 @@ public sealed class UsersService : IUsersService
                     PhoneNumber = userRequest.PhoneNumber,
                     Role = userRequest.Role ?? UserRoles.LocalHire,
                     Department = userRequest.Department,
-                    EmailConfirmed = true // For bulk upload, assume email is confirmed
+                    EmailConfirmed = true 
                 };
 
-                // Generate a temporary password (user will need to reset)
+               
                 var tempPassword = Guid.NewGuid().ToString("N").Substring(0, 8) + "Temp!";
 
                 var result = await _userManager.CreateAsync(user, tempPassword);

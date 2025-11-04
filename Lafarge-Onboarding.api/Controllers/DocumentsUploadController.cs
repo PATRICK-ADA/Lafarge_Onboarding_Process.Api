@@ -1,17 +1,9 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Lafarge_Onboarding.application.Abstraction;
-using Lafarge_Onboarding.domain.OnboardingResponses;
-using Lafarge_Onboarding.domain.OnboardingRequests;
-using Lafarge_Onboarding.domain.Entities;
-
 namespace Lafarge_Onboarding.api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
-public class DocumentsUploadController : ControllerBase
+public sealed class DocumentsUploadController : ControllerBase
 {
     private readonly IDocumentsUploadService _uploadService;
     private readonly ILogger<DocumentsUploadController> _logger;

@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-
 namespace Lafarge_Onboarding.domain.Entities;
 
 public class Role : IdentityRole

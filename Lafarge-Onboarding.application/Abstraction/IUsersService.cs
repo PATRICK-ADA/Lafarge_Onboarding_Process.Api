@@ -1,6 +1,3 @@
-using Lafarge_Onboarding.domain.OnboardingRequests;
-using Lafarge_Onboarding.domain.OnboardingResponses;
-
 namespace Lafarge_Onboarding.application.Abstraction;
 
 public interface IUsersService

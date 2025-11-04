@@ -1,15 +1,8 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Lafarge_Onboarding.application.Abstraction;
-using Lafarge_Onboarding.domain.OnboardingRequests;
-using Lafarge_Onboarding.domain.OnboardingResponses;
-
 namespace Lafarge_Onboarding.api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController : ControllerBase
+public sealed class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
     private readonly ILogger<AuthController> _logger;

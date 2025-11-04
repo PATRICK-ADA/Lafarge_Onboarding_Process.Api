@@ -1,8 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Lafarge_Onboarding.domain.Entities;
-using System;
-
 namespace Lafarge_Onboarding.infrastructure.Data;
 
 public class ApplicationDbContext : IdentityDbContext<Users, Role, string>

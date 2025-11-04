@@ -1,13 +1,4 @@
 
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using Serilog;
-using Swashbuckle.AspNetCore.SwaggerGen;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure port for Cloud Run
@@ -53,7 +44,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddControllers();
 
 // Add Identity
-builder.Services.AddIdentity<Lafarge_Onboarding.domain.Entities.Users, Lafarge_Onboarding.domain.Entities.Role>(options =>
+builder.Services.AddIdentity<Users, Role>(options =>
 {
     options.Password.RequireDigit = true;
     options.Password.RequiredLength = 6;
@@ -61,7 +52,7 @@ builder.Services.AddIdentity<Lafarge_Onboarding.domain.Entities.Users, Lafarge_O
     options.Password.RequireUppercase = true;
     options.Password.RequireLowercase = true;
 })
-.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddEntityFrameworkStores<Lafarge_Onboarding.infrastructure.Data.ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
 // Add JWT Authentication
@@ -88,36 +79,29 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 // Add DbContext
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+builder.Services.AddDbContext<Lafarge_Onboarding.infrastructure.Data.ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Register services
-builder.Services.AddScoped<IDocumentsUploadService, DocumentsUploadService>();
-builder.Services.AddScoped<IDocumentsUploadRepository, DocumentsUploadRepository>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IUsersService, UsersService>();
-builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+builder.Services.AddScoped<IDocumentsUploadService, Lafarge_Onboarding.application.Services.DocumentsUploadService>();
+builder.Services.AddScoped<IDocumentsUploadRepository, Lafarge_Onboarding.infrastructure.Repositories.DocumentsUploadRepository>();
+builder.Services.AddScoped<IAuthService, Lafarge_Onboarding.application.Services.AuthService>();
+builder.Services.AddScoped<IUsersService, Lafarge_Onboarding.application.Services.UsersService>();
+builder.Services.AddScoped<IUsersRepository, Lafarge_Onboarding.infrastructure.Repositories.UsersRepository>();
 
 var app = builder.Build();
 
 // Apply migrations
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<Lafarge_Onboarding.infrastructure.Data.ApplicationDbContext>();
     dbContext.Database.Migrate();
 }
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-else
-{
-    // Remove HTTPS redirection for Cloud Run as it handles SSL externally
-    // app.UseHttpsRedirection();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 // Add authentication and authorization middleware
 app.UseAuthentication();
