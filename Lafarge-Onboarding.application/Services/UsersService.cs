@@ -1,7 +1,7 @@
 
 namespace Lafarge_Onboarding.application.Services;
 
-public class UsersService : IUsersService
+public sealed class UsersService : IUsersService
 {
     private readonly IUsersRepository _usersRepository;
     private readonly UserManager<Users> _userManager;

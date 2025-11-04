@@ -12,7 +12,7 @@ using Lafarge_Onboarding.domain.OnboardingResponses;
 
 namespace Lafarge_Onboarding.application.Services;
 
-public class AuthService : IAuthService
+public sealed class AuthService : IAuthService
 {
     private readonly UserManager<Users> _userManager;
     private readonly RoleManager<Role> _roleManager;

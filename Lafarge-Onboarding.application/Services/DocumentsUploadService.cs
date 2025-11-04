@@ -1,7 +1,7 @@
 
 namespace Lafarge_Onboarding.application.Services;
 
-public class DocumentsUploadService : IDocumentsUploadService
+public sealed class DocumentsUploadService : IDocumentsUploadService
 {
     private readonly IDocumentsUploadRepository _repository;
     private readonly ILogger<DocumentsUploadService> _logger;

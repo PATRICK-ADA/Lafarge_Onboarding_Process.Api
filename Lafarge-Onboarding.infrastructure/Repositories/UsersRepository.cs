@@ -1,7 +1,7 @@
 
 namespace Lafarge_Onboarding.infrastructure.Repositories;
 
-public class UsersRepository : IUsersRepository
+public sealed class UsersRepository : IUsersRepository
 {
     private readonly ApplicationDbContext _context;
 
