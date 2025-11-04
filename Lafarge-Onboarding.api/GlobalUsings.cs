@@ -1,0 +1,10 @@
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.IdentityModel.Tokens;
+global using Serilog;
+global using System.Text;
+global using Lafarge_Onboarding.application.Abstraction;
+global using Lafarge_Onboarding.application.Services;
+global using Lafarge_Onboarding.infrastructure.Data;
+global using Lafarge_Onboarding.infrastructure.Repositories;

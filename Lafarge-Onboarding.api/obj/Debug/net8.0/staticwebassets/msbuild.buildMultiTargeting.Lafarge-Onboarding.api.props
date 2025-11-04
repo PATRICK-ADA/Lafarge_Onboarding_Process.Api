@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/Lafarge-Onboarding.api.props" />
+</Project>

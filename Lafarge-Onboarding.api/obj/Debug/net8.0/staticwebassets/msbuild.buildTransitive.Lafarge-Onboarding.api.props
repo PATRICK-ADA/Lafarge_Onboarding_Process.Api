@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../buildMultiTargeting/Lafarge-Onboarding.api.props" />
+</Project>
