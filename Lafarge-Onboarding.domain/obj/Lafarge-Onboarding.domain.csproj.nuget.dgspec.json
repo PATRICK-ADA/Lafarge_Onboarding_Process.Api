@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/simon-patrick/Documents/Lafarge_Onboarding_Process.app/Lafarge-Onboarding.domain/Lafarge-Onboarding.domain.csproj": {}
+    "/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.domain/Lafarge-Onboarding.domain.csproj": {}
   },
   "projects": {
-    "/home/simon-patrick/Documents/Lafarge_Onboarding_Process.app/Lafarge-Onboarding.domain/Lafarge-Onboarding.domain.csproj": {
+    "/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.domain/Lafarge-Onboarding.domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/simon-patrick/Documents/Lafarge_Onboarding_Process.app/Lafarge-Onboarding.domain/Lafarge-Onboarding.domain.csproj",
+        "projectUniqueName": "/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.domain/Lafarge-Onboarding.domain.csproj",
         "projectName": "Lafarge-Onboarding.domain",
-        "projectPath": "/home/simon-patrick/Documents/Lafarge_Onboarding_Process.app/Lafarge-Onboarding.domain/Lafarge-Onboarding.domain.csproj",
+        "projectPath": "/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.domain/Lafarge-Onboarding.domain.csproj",
         "packagesPath": "/home/simon-patrick/.nuget/packages/",
-        "outputPath": "/home/simon-patrick/Documents/Lafarge_Onboarding_Process.app/Lafarge-Onboarding.domain/obj/",
+        "outputPath": "/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.domain/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/simon-patrick/.nuget/NuGet/NuGet.Config"

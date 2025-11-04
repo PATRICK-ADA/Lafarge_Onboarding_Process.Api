@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "4qn+JF1WZhw9S7ckYBNFHr28V8JGbwPqFtYukz159pHjMJE+fr5Fc7eys5mBNBtWiT9sNr10NwgDNmBpZqDevw==",
+  "dgSpecHash": "vNSlQ5ylqIxKZ8SvF5qW6vKdDSldrOPKcNyrxKCtlcRMJ+g7jxiwwzvpmP4P+KPOb4v1UXEydzHIxHKzGg4vGQ==",
   "success": true,
-  "projectFilePath": "/home/simon-patrick/Documents/Lafarge_Onboarding_Process.app/Lafarge-Onboarding.application/Lafarge-Onboarding.application.csproj",
+  "projectFilePath": "/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Lafarge-Onboarding.application.csproj",
   "expectedPackageFiles": [
     "/home/simon-patrick/.nuget/packages/documentformat.openxml/3.1.1/documentformat.openxml.3.1.1.nupkg.sha512",
     "/home/simon-patrick/.nuget/packages/documentformat.openxml.framework/3.1.1/documentformat.openxml.framework.3.1.1.nupkg.sha512",

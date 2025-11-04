@@ -4809,11 +4809,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/simon-patrick/Documents/Lafarge_Onboarding_Process.app/Lafarge-Onboarding.infrastructure/Lafarge-Onboarding.infrastructure.csproj",
+      "projectUniqueName": "/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.infrastructure/Lafarge-Onboarding.infrastructure.csproj",
       "projectName": "Lafarge-Onboarding.infrastructure",
-      "projectPath": "/home/simon-patrick/Documents/Lafarge_Onboarding_Process.app/Lafarge-Onboarding.infrastructure/Lafarge-Onboarding.infrastructure.csproj",
+      "projectPath": "/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.infrastructure/Lafarge-Onboarding.infrastructure.csproj",
       "packagesPath": "/home/simon-patrick/.nuget/packages/",
-      "outputPath": "/home/simon-patrick/Documents/Lafarge_Onboarding_Process.app/Lafarge-Onboarding.infrastructure/obj/",
+      "outputPath": "/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.infrastructure/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/simon-patrick/.nuget/NuGet/NuGet.Config"
@@ -4828,11 +4828,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/home/simon-patrick/Documents/Lafarge_Onboarding_Process.app/Lafarge-Onboarding.application/Lafarge-Onboarding.application.csproj": {
-              "projectPath": "/home/simon-patrick/Documents/Lafarge_Onboarding_Process.app/Lafarge-Onboarding.application/Lafarge-Onboarding.application.csproj"
+            "/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Lafarge-Onboarding.application.csproj": {
+              "projectPath": "/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Lafarge-Onboarding.application.csproj"
             },
-            "/home/simon-patrick/Documents/Lafarge_Onboarding_Process.app/Lafarge-Onboarding.domain/Lafarge-Onboarding.domain.csproj": {
-              "projectPath": "/home/simon-patrick/Documents/Lafarge_Onboarding_Process.app/Lafarge-Onboarding.domain/Lafarge-Onboarding.domain.csproj"
+            "/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.domain/Lafarge-Onboarding.domain.csproj": {
+              "projectPath": "/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.domain/Lafarge-Onboarding.domain.csproj"
             }
           }
         }
