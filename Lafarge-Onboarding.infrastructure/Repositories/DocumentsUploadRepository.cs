@@ -1,7 +1,7 @@
 
 namespace Lafarge_Onboarding.infrastructure.Repositories;
 
-public class DocumentsUploadRepository : IDocumentsUploadRepository
+public sealed class DocumentsUploadRepository : IDocumentsUploadRepository
 {
     private readonly ApplicationDbContext _context;
 
