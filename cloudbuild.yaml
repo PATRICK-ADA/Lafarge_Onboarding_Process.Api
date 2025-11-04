@@ -1,0 +1,9 @@
+timeout: 3000s  # 50 minutes
+options:
+  machineType: 'E2_HIGHCPU_8'  # Faster build machine
+  diskSizeGb: 100
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/lafarge-api', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/lafarge-api']
