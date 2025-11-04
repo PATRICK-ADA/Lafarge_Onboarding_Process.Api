@@ -528,3 +528,14 @@ ntroller.cs:line 157
 2025-11-04 12:34:59.827 +01:00 [INF] Saving document metadata to database <s:Lafarge_Onboarding.application.Services.DocumentsUploadService>
 2025-11-04 12:34:59.831 +01:00 [INF] Document upload completed successfully. Document ID: 9 <s:Lafarge_Onboarding.application.Services.DocumentsUploadService>
 2025-11-04 12:34:59.831 +01:00 [INF] Document upload completed successfully. ID: 9 <s:Lafarge_Onboarding.application.Services.DocumentsUploadService>
+2025-11-04 12:48:38.512 +01:00 [INF] Login attempt for email: donpat646@gmail.com <s:Lafarge_Onboarding.api.Controllers.AuthController>
+2025-11-04 12:48:38.551 +01:00 [INF] Processing login request for email: donpat6462025-11-04 12:48:38.551 +01:00 [INF] Processing login request for e2025-11-04 12:48:38.552 +02025-11-04 12:48:38.552 +01:00 [INF] Validating credentials for email: donpat646@gmail.com
+2025-11-04 12:48:38.914 +01:00 [INF] Credentials validated successfully for user: 0421bdb4-08aa-47ee-a3de-e1da60f5a1b7
+2025-11-04 12:48:38.916 +01:00 [INF] Generating JWT token for user: 0421bdb4-08aa-47ee-a3de-e1da60f5a1b7
+2025-11-04 12:48:38.976 +01:00 [INF] JWT token generated successfully for user: 0421bdb4-08aa-47ee-a3de-e1da60f5a1b7
+2025-11-04 12:48:38.977 +01:00 [INF] Login successful for user: 0421bdb4-08aa-47ee-a3de-e1da60f5a1b7
+2025-11-04 12:48:38.977 +01:00 [INF] Login successful for user: 0421bdb4-08aa-47ee-a3de-e1da60f5a1b7
+2025-11-04 12:49:47.084 +01:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2025-11-04 12:49:47.085 +01:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+EntityFrameworkCore.Query>
+2025-11-04 12:49:47.085 +01:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased. <s:Microsoft.EntityFrameworkCore.Query>

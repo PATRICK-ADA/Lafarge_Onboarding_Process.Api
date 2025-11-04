@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "3uGiRxFQHdkYMz/9uylRq4UNbLoLA5HapkJcmh1HkUgQhfdrLWLnY57vZV0wcN13RQFCaiCZQ4LYiTjURHLMxg==",
+  "dgSpecHash": "Bo7ZrnfwuKl8elBULyySt2EGe+S6/Hr84s9c80mrJ1Kz1M08Vhmgwp0liHLpeSNlADgAvUMZXF6n3k+PYRuweQ==",
   "success": true,
-  "projectFilePath": "/home/simon-patrick/Documents/Lafarge_Onboarding_Process.app/Lafarge-Onboarding.api/Lafarge-Onboarding.api.csproj",
+  "projectFilePath": "/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Lafarge-Onboarding.api.csproj",
   "expectedPackageFiles": [
     "/home/simon-patrick/.nuget/packages/azure.core/1.35.0/azure.core.1.35.0.nupkg.sha512",
     "/home/simon-patrick/.nuget/packages/azure.identity/1.10.3/azure.identity.1.10.3.nupkg.sha512",
