@@ -81,17 +81,23 @@ builder.Services.AddAuthorization();
 // Add DbContext
 builder.Services.AddDbContext<Lafarge_Onboarding.infrastructure.Data.ApplicationDbContext>(options =>
 {
-    var connectionString = Environment.GetEnvironmentVariable("ONBOARDING_DB_URL") ?? "34.175.55.124:5432" +
-                          $"Database={Environment.GetEnvironmentVariable("ONBOARDING_DB_NAME") ?? "LafargeOnboardingDb"};" +
-                          $"Username={Environment.GetEnvironmentVariable("ONBOARDING_DB_USERNAME") ?? "postgres"};" +
-                          $"Password={Environment.GetEnvironmentVariable("ONBOARDING_DB_PASSWORD") ?? "2MdL^F?)I[fz{_?b"};" +
-                          $"Pooling=true;MinPoolSize=5;MaxPoolSize=20;ConnectionLifetime=300;";
+    var connectionString = Environment.GetEnvironmentVariable("ONBOARDING_DB_URL");
 
-    // For production, use the full connection string if provided, otherwise build from individual env vars
-    // For development, fall back to appsettings.json
+    if (string.IsNullOrEmpty(connectionString))
+    {
+        var host = Environment.GetEnvironmentVariable("ONBOARDING_DB_HOST") ?? "34.175.55.124";
+        var port = Environment.GetEnvironmentVariable("ONBOARDING_DB_PORT") ?? "5432";
+        var database = Environment.GetEnvironmentVariable("ONBOARDING_DB_NAME") ?? "LafargeOnboardingDb";
+        var username = Environment.GetEnvironmentVariable("ONBOARDING_DB_USERNAME") ?? "postgres";
+        var password = Environment.GetEnvironmentVariable("ONBOARDING_DB_PASSWORD") ?? "2MdL^F?)I[fz{_?b";
+
+        // Quote the password to handle special characters
+        connectionString = $"Host={host};Port={port};Database={database};Username={username};Password=\"{password}\"";
+    }
+
     if (string.IsNullOrEmpty(connectionString) || connectionString.Contains("localhost"))
     {
-        connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
     }
 
     options.UseNpgsql(connectionString);

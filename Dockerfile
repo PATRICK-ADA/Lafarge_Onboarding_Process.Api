@@ -27,8 +27,6 @@ COPY --from=build /app/publish .
 # Expose port 8080 for Cloud Run
 EXPOSE 8080
 
-# Cloud Run will set ASPNETCORE_URLS automatically
-# For local development, default to port 8080
-ENV ASPNETCORE_URLS=http://+:8080
+# Let Cloud Run set the PORT environment variable automatically
 
 ENTRYPOINT ["dotnet", "Lafarge-Onboarding.api.dll"]
