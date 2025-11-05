@@ -1,0 +1,42 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lafarge-Onboarding.application", "Lafarge-Onboarding.application\Lafarge-Onboarding.application.csproj", "{2814050C-340F-6A82-B532-A24F5AF57FB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lafarge-Onboarding.api", "Lafarge-Onboarding.api\Lafarge-Onboarding.api.csproj", "{D29A1234-691A-B7DC-5CA2-1340244FCAD4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lafarge-Onboarding.domain", "Lafarge-Onboarding.domain\Lafarge-Onboarding.domain.csproj", "{921D0045-55FC-E028-D70B-E4433DAC706B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lafarge-Onboarding.infrastructure", "Lafarge-Onboarding.infrastructure\Lafarge-Onboarding.infrastructure.csproj", "{1991CC35-64F0-641D-1FB1-8C808C9A724D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2814050C-340F-6A82-B532-A24F5AF57FB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2814050C-340F-6A82-B532-A24F5AF57FB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2814050C-340F-6A82-B532-A24F5AF57FB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2814050C-340F-6A82-B532-A24F5AF57FB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D29A1234-691A-B7DC-5CA2-1340244FCAD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D29A1234-691A-B7DC-5CA2-1340244FCAD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D29A1234-691A-B7DC-5CA2-1340244FCAD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D29A1234-691A-B7DC-5CA2-1340244FCAD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{921D0045-55FC-E028-D70B-E4433DAC706B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{921D0045-55FC-E028-D70B-E4433DAC706B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{921D0045-55FC-E028-D70B-E4433DAC706B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{921D0045-55FC-E028-D70B-E4433DAC706B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1991CC35-64F0-641D-1FB1-8C808C9A724D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1991CC35-64F0-641D-1FB1-8C808C9A724D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1991CC35-64F0-641D-1FB1-8C808C9A724D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1991CC35-64F0-641D-1FB1-8C808C9A724D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {875D236B-9250-4BE9-AB12-452DB7FEF078}
+	EndGlobalSection
+EndGlobal

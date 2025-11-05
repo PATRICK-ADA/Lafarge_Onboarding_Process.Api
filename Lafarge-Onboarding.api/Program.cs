@@ -83,16 +83,6 @@ builder.Services.AddDbContext<Lafarge_Onboarding.infrastructure.Data.Application
 {
     var connectionString = Environment.GetEnvironmentVariable("ONBOARDING_DB_URL");
 
-    if (string.IsNullOrEmpty(connectionString))
-    {
-        var host = Environment.GetEnvironmentVariable("ONBOARDING_DB_HOST");
-        var database = Environment.GetEnvironmentVariable("ONBOARDING_DB_NAME");
-        var username = Environment.GetEnvironmentVariable("ONBOARDING_DB_USERNAME");
-        var password = Environment.GetEnvironmentVariable("ONBOARDING_DB_PASSWORD");
-
-        
-        connectionString = $"Host={host};Database={database};Username={username};Password=\"{password}\"";
-    }
 
     if (string.IsNullOrEmpty(connectionString) || connectionString.Contains("localhost"))
     {
