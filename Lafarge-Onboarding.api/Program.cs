@@ -1,7 +1,7 @@
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure port for Cloud Run
+
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
@@ -12,7 +12,7 @@ builder.Host.UseSerilog((context, configuration) =>
         .WriteTo.Console()
         .WriteTo.File("logs/lafarge-onboarding-.txt", rollingInterval: RollingInterval.Day));
 
-// Add services to the container.
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -43,7 +43,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddControllers();
 
-// Add Identity
+
 builder.Services.AddIdentity<Users, Role>(options =>
 {
     options.Password.RequireDigit = true;
@@ -78,18 +78,18 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-// Add DbContext
+
 builder.Services.AddDbContext<Lafarge_Onboarding.infrastructure.Data.ApplicationDbContext>(options =>
 {
     var connectionString = Environment.GetEnvironmentVariable("ONBOARDING_DB_URL");
 
     if (string.IsNullOrEmpty(connectionString))
     {
-        var host = Environment.GetEnvironmentVariable("ONBOARDING_DB_HOST") ?? "34.175.55.124";
-        var port = Environment.GetEnvironmentVariable("ONBOARDING_DB_PORT") ?? "5432";
-        var database = Environment.GetEnvironmentVariable("ONBOARDING_DB_NAME") ?? "LafargeOnboardingDb";
-        var username = Environment.GetEnvironmentVariable("ONBOARDING_DB_USERNAME") ?? "postgres";
-        var password = Environment.GetEnvironmentVariable("ONBOARDING_DB_PASSWORD") ?? "2MdL^F?)I[fz{_?b";
+        var host = Environment.GetEnvironmentVariable("ONBOARDING_DB_HOST");
+        var port = Environment.GetEnvironmentVariable("ONBOARDING_DB_PORT");
+        var database = Environment.GetEnvironmentVariable("ONBOARDING_DB_NAME");
+        var username = Environment.GetEnvironmentVariable("ONBOARDING_DB_USERNAME");
+        var password = Environment.GetEnvironmentVariable("ONBOARDING_DB_PASSWORD");
 
         
         connectionString = $"Host={host};Port={port};Database={database};Username={username};Password=\"{password}\"";
