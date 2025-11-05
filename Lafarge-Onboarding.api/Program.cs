@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
-// Configure Serilog
+
 builder.Host.UseSerilog((context, configuration) =>
     configuration
         .ReadFrom.Configuration(context.Configuration)
@@ -55,7 +55,7 @@ builder.Services.AddIdentity<Users, Role>(options =>
 .AddEntityFrameworkStores<Lafarge_Onboarding.infrastructure.Data.ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
-// Add JWT Authentication
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -75,7 +75,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Add Authorization
+
 builder.Services.AddAuthorization();
 
 // Add DbContext
@@ -91,7 +91,7 @@ builder.Services.AddDbContext<Lafarge_Onboarding.infrastructure.Data.Application
         var username = Environment.GetEnvironmentVariable("ONBOARDING_DB_USERNAME") ?? "postgres";
         var password = Environment.GetEnvironmentVariable("ONBOARDING_DB_PASSWORD") ?? "2MdL^F?)I[fz{_?b";
 
-        // Quote the password to handle special characters
+        
         connectionString = $"Host={host};Port={port};Database={database};Username={username};Password=\"{password}\"";
     }
 
@@ -103,7 +103,7 @@ builder.Services.AddDbContext<Lafarge_Onboarding.infrastructure.Data.Application
     options.UseNpgsql(connectionString);
 });
 
-// Register services
+
 builder.Services.AddScoped<IDocumentsUploadService, Lafarge_Onboarding.application.Services.DocumentsUploadService>();
 builder.Services.AddScoped<IDocumentsUploadRepository, Lafarge_Onboarding.infrastructure.Repositories.DocumentsUploadRepository>();
 builder.Services.AddScoped<IAuthService, Lafarge_Onboarding.application.Services.AuthService>();
@@ -124,7 +124,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 
-// Add authentication and authorization middleware
+
 app.UseAuthentication();
 app.UseAuthorization();
 
