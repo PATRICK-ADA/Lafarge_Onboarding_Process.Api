@@ -13,3 +13,6 @@ global using Lafarge_Onboarding.application.Abstraction;
 global using Lafarge_Onboarding.domain.Entities;
 global using Lafarge_Onboarding.domain.OnboardingRequests;
 global using Lafarge_Onboarding.domain.OnboardingResponses;
+global using Lafarge_Onboarding.infrastructure.RegisterServices;
+global using Lafarge_Onboarding.application.ServiceRegistrations;
+global using Lafarge_Onboarding.api.ConfigExtension;

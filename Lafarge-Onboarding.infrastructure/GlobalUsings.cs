@@ -5,3 +5,4 @@ global using Lafarge_Onboarding.infrastructure.Data;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore;
 global using System;
+global using Microsoft.Extensions.DependencyInjection;
