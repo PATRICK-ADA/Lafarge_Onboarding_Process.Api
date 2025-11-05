@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Lafarge-Onboarding.application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d69607bf2d3262e4301ceb649e86a7e863ea59d8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e608942d2c1d2f4c351525ca2fd5de795b787a83")]
 [assembly: System.Reflection.AssemblyProductAttribute("Lafarge-Onboarding.application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Lafarge-Onboarding.application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
