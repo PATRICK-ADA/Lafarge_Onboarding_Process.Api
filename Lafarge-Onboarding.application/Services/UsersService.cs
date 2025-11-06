@@ -176,4 +176,38 @@ public sealed class UsersService : IUsersService
 
         return ApiResponse<GetUserResponse>.Success(userResponse, "User retrieved successfully");
     }
+
+    public async Task<ApiResponse<string>> UpdateUserByIdAsync(string id, UpdateUserRequest request)
+    {
+        var result = await _usersRepository.UpdateUserAsync(id, request);
+        if (!result)
+        {
+            return ApiResponse<string>.Failure("User not found");
+        }
+
+        return ApiResponse<string>.Success("User updated successfully", "User updated successfully");
+    }
+
+    public async Task<ApiResponse<string>> UpdateBulkUsersByRoleAsync(UpdateBulkUsersRequest request)
+    {
+        var count = await _usersRepository.UpdateUsersByRoleAsync(request.Role, request);
+        return ApiResponse<string>.Success($"{count} users updated successfully", $"{count} users updated successfully");
+    }
+
+    public async Task<ApiResponse<string>> DeleteUserByIdAsync(string id)
+    {
+        var result = await _usersRepository.DeleteUserAsync(id);
+        if (!result)
+        {
+            return ApiResponse<string>.Failure("User not found");
+        }
+
+        return ApiResponse<string>.Success("User deleted successfully", "User deleted successfully");
+    }
+
+    public async Task<ApiResponse<string>> DeleteBulkUsersByRoleAsync(string role)
+    {
+        var count = await _usersRepository.DeleteUsersByRoleAsync(role);
+        return ApiResponse<string>.Success($"{count} users deleted successfully", $"{count} users deleted successfully");
+    }
 }

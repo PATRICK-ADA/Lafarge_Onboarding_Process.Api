@@ -60,4 +60,100 @@ public sealed class UsersRepository : IUsersRepository
     {
         return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
     }
+
+    public async Task<bool> UpdateUserAsync(string id, UpdateUserRequest request)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        if (user == null)
+        {
+            return false;
+        }
+
+        if (!string.IsNullOrEmpty(request.Name))
+        {
+            var nameParts = request.Name.Split(' ', 2);
+            user.FirstName = nameParts[0];
+            user.LastName = nameParts.Length > 1 ? nameParts[1] : "";
+        }
+
+        if (!string.IsNullOrEmpty(request.Email))
+        {
+            user.Email = request.Email;
+            user.UserName = request.Email;
+        }
+
+        if (!string.IsNullOrEmpty(request.PhoneNumber))
+        {
+            user.PhoneNumber = request.PhoneNumber;
+        }
+
+        if (!string.IsNullOrEmpty(request.Role))
+        {
+            user.Role = request.Role;
+        }
+
+        if (!string.IsNullOrEmpty(request.Department))
+        {
+            user.Department = request.Department;
+        }
+
+        if (!string.IsNullOrEmpty(request.OnboardingStatus))
+        {
+            user.OnboardingStatus = request.OnboardingStatus;
+        }
+
+        if (request.IsActive.HasValue)
+        {
+            user.IsActive = request.IsActive.Value;
+        }
+
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<int> UpdateUsersByRoleAsync(string role, UpdateBulkUsersRequest request)
+    {
+        var users = await _context.Users.Where(u => u.Role == role).ToListAsync();
+        foreach (var user in users)
+        {
+            if (!string.IsNullOrEmpty(request.Department))
+            {
+                user.Department = request.Department;
+            }
+
+            if (!string.IsNullOrEmpty(request.OnboardingStatus))
+            {
+                user.OnboardingStatus = request.OnboardingStatus;
+            }
+
+            if (request.IsActive.HasValue)
+            {
+                user.IsActive = request.IsActive.Value;
+            }
+        }
+
+        await _context.SaveChangesAsync();
+        return users.Count;
+    }
+
+    public async Task<bool> DeleteUserAsync(string id)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        if (user == null)
+        {
+            return false;
+        }
+
+        _context.Users.Remove(user);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<int> DeleteUsersByRoleAsync(string role)
+    {
+        var users = await _context.Users.Where(u => u.Role == role).ToListAsync();
+        _context.Users.RemoveRange(users);
+        await _context.SaveChangesAsync();
+        return users.Count;
+    }
 }

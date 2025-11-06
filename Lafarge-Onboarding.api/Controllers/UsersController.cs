@@ -82,4 +82,66 @@ public sealed class UsersController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpPut("{id}")]
+    [Authorize(Roles = "HR_ADMIN")]
+    [ProducesResponseType(typeof(ApiResponse<string>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<object>), 400)]
+    [ProducesResponseType(typeof(ApiResponse<object>), 404)]
+    public async Task<IActionResult> UpdateUserById(string id, [FromBody] UpdateUserRequest request)
+    {
+        if (!ModelState.IsValid)
+        {
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            return BadRequest(ApiResponse<object>.Failure(string.Join("; ", errors)));
+        }
+
+        var result = await _usersService.UpdateUserByIdAsync(id, request);
+        if (result.StatusCode != "200")
+        {
+            return NotFound(result);
+        }
+
+        return Ok(result);
+    }
+
+    [HttpPut("bulk/role")]
+    [Authorize(Roles = "HR_ADMIN")]
+    [ProducesResponseType(typeof(ApiResponse<string>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<object>), 400)]
+    public async Task<IActionResult> UpdateBulkUsersByRole([FromBody] UpdateBulkUsersRequest request)
+    {
+        if (!ModelState.IsValid)
+        {
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            return BadRequest(ApiResponse<object>.Failure(string.Join("; ", errors)));
+        }
+
+        var result = await _usersService.UpdateBulkUsersByRoleAsync(request);
+        return Ok(result);
+    }
+
+    [HttpDelete("{id}")]
+    [Authorize(Roles = "HR_ADMIN")]
+    [ProducesResponseType(typeof(ApiResponse<string>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<object>), 404)]
+    public async Task<IActionResult> DeleteUserById(string id)
+    {
+        var result = await _usersService.DeleteUserByIdAsync(id);
+        if (result.StatusCode != "200")
+        {
+            return NotFound(result);
+        }
+
+        return Ok(result);
+    }
+
+    [HttpDelete("bulk/role/{role}")]
+    [Authorize(Roles = "HR_ADMIN")]
+    [ProducesResponseType(typeof(ApiResponse<string>), 200)]
+    public async Task<IActionResult> DeleteBulkUsersByRole(string role)
+    {
+        var result = await _usersService.DeleteBulkUsersByRoleAsync(role);
+        return Ok(result);
+    }
 }
