@@ -28,11 +28,14 @@ public sealed class UsersController : ControllerBase
 
     [HttpPost("bulk-upload")]
     [Authorize(Roles = "HR_ADMIN")]
+    [ProducesResponseType(typeof(ApiResponse<string>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<object>), 400)]
     public async Task<IActionResult> UploadBulkUsers([FromBody] UploadBulkUsersRequests request)
     {
-        if (request == null || !request.Users.Any())
+        if (!ModelState.IsValid)
         {
-            return BadRequest(ApiResponse<string>.Failure("Request cannot be null or empty"));
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            return BadRequest(ApiResponse<object>.Failure(string.Join("; ", errors)));
         }
 
         var result = await _usersService.UploadBulkUsersAsync(request);

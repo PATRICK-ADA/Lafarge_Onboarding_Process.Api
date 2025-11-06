@@ -15,8 +15,16 @@ public sealed class AuthController : ControllerBase
 
     [HttpPost("register")]
     [AllowAnonymous]
+    [ProducesResponseType(typeof(ApiResponse<AuthRegisterResponse>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<object>), 400)]
     public async Task<IActionResult> Register([FromBody] AuthRegisterRequest request)
     {
+        if (!ModelState.IsValid)
+        {
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            return BadRequest(ApiResponse<object>.Failure(string.Join("; ", errors)));
+        }
+
         _logger.LogInformation("Registration attempt for email: {Email}", request.Email);
 
         var result = await _authService.RegisterUserAsync(request);
@@ -26,8 +34,17 @@ public sealed class AuthController : ControllerBase
 
     [HttpPost("login")]
     [AllowAnonymous]
+    [ProducesResponseType(typeof(ApiResponse<AuthLoginResponse>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<AuthLoginResponse>), 401)]
+    [ProducesResponseType(typeof(ApiResponse<object>), 400)]
     public async Task<IActionResult> Login([FromBody] AuthLoginRequest request)
     {
+        if (!ModelState.IsValid)
+        {
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+            return BadRequest(ApiResponse<object>.Failure(string.Join("; ", errors)));
+        }
+
         _logger.LogInformation("Login attempt for email: {Email}", request.Email);
 
         var result = await _authService.LoginUserAsync(request);

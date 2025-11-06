@@ -113,7 +113,10 @@ public static class Configurations
     public static WebApplication ConfigureMiddleware(this WebApplication app)
     {
         // Configure the HTTP request pipeline.
-        
+
+        // Custom exception handling middleware
+        app.UseMiddleware<Lafarge_Onboarding.api.Middleware.ExceptionHandlingMiddleware>();
+
            app.UseSwagger();
            app.UseSwaggerUI();
 

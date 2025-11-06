@@ -97,7 +97,7 @@ public sealed class AuthService : IAuthService
             {
                 _logger.LogError("Failed to create user: {Email}. Errors: {Errors}",
                     request.Email, string.Join(", ", result.Errors.Select(e => e.Description)));
-                throw new Exception($"User registration failed: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                throw new InvalidOperationException($"User registration failed: {string.Join(", ", result.Errors.Select(e => e.Description))}");
             }
 
             // Assign role to user
@@ -105,7 +105,7 @@ public sealed class AuthService : IAuthService
             if (!roleResult.Succeeded)
             {
                 _logger.LogError("Failed to assign role {Role} to user: {Email}", request.Role, request.Email);
-                throw new Exception($"Role assignment failed: {string.Join(", ", roleResult.Errors.Select(e => e.Description))}");
+                throw new InvalidOperationException($"Role assignment failed: {string.Join(", ", roleResult.Errors.Select(e => e.Description))}");
             }
 
             _logger.LogInformation("User registered successfully: {UserId}", user.Id);
