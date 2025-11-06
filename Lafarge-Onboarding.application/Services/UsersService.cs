@@ -30,7 +30,7 @@ public sealed class UsersService : IUsersService
 
         return new PaginatedResponse<GetUserResponse>
         {
-            Body = userResponses,
+            Content = userResponses,
             PageNumber = pagination.PageNumber,
             PageSize = pagination.PageSize,
             TotalCount = totalCount
@@ -125,7 +125,7 @@ public sealed class UsersService : IUsersService
 
         return new PaginatedResponse<GetUserResponse>
         {
-            Body = userResponses,
+            Content = userResponses,
             PageNumber = pagination.PageNumber,
             PageSize = pagination.PageSize,
             TotalCount = totalCount
@@ -148,7 +148,7 @@ public sealed class UsersService : IUsersService
 
         return new PaginatedResponse<GetUserResponse>
         {
-            Body = userResponses,
+            Content = userResponses,
             PageNumber = pagination.PageNumber,
             PageSize = pagination.PageSize,
             TotalCount = totalCount

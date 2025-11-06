@@ -43,7 +43,7 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
 
         var response = new PaginatedResponse<DocumentUploadResponse>
         {
-            Body = data,
+            Content = data,
             PageNumber = request.PageNumber,
             PageSize = request.PageSize,
             TotalCount = totalCount

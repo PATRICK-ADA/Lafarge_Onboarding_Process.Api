@@ -109,7 +109,7 @@ public sealed class AuthService : IAuthService
             }
 
             _logger.LogInformation("User registered successfully: {UserId}", user.Id);
-            return new AuthRegisterResponse { Message = "User registered successfully" };
+            return new AuthRegisterResponse { RegisterationStatus = "User registered successfully" };
         }
         catch (Exception ex)
         {
