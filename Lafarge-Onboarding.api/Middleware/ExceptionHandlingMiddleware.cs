@@ -22,6 +22,16 @@ public class ExceptionHandlingMiddleware
         try
         {
             await _next(context);
+            
+            // Handle authentication/authorization responses that don't throw exceptions
+            if (context.Response.StatusCode == 401 && !context.Response.HasStarted)
+            {
+                await HandleUnauthorizedAsync(context);
+            }
+            else if (context.Response.StatusCode == 403 && !context.Response.HasStarted)
+            {
+                await HandleForbiddenAsync(context);
+            }
         }
         catch (Exception ex)
         {
@@ -51,18 +61,41 @@ public class ExceptionHandlingMiddleware
             _ => "An internal error occurred"
         };
 
-        // Check if this is an authentication/authorization error
-        if (context.Response.StatusCode == 401 || context.Response.StatusCode == 403)
-        {
-            statusCode = context.Response.StatusCode;
-            message = statusCode == 401 ? "Unauthorized" : "Forbidden";
-        }
-
         var response = ApiResponse<object>.Failure(message);
 
+        context.Response.Clear();
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = statusCode;
 
+        response.StatusCode = statusCode.ToString();
+
+        var json = JsonSerializer.Serialize(response);
+        await context.Response.WriteAsync(json);
+    }
+
+    private async Task HandleUnauthorizedAsync(HttpContext context)
+    {
+        var response = ApiResponse<object>.Failure("Authentication required. Please provide a valid Bearer token.");
+        
+        context.Response.Clear();
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = 401;
+        
+        response.StatusCode = "401";
+        var json = JsonSerializer.Serialize(response);
+        await context.Response.WriteAsync(json);
+    }
+
+    private async Task HandleForbiddenAsync(HttpContext context)
+    {
+        var response = ApiResponse<object>.Failure("Access forbidden. Insufficient permissions.");
+        
+        context.Response.Clear();
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = 403;
+
+        response.StatusCode = "403";
+        
         var json = JsonSerializer.Serialize(response);
         await context.Response.WriteAsync(json);
     }
