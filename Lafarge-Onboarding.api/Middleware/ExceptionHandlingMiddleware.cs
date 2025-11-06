@@ -51,7 +51,7 @@ public class ExceptionHandlingMiddleware
             _ => "An internal server error occurred"
         };
 
-        var response = ApiResponse<object>.Failure(message);
+        var response = new { Message = message };
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = statusCode;

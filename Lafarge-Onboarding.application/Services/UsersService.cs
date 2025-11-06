@@ -30,14 +30,14 @@ public sealed class UsersService : IUsersService
 
         return new PaginatedResponse<GetUserResponse>
         {
-            Data = userResponses,
+            Body = userResponses,
             PageNumber = pagination.PageNumber,
             PageSize = pagination.PageSize,
             TotalCount = totalCount
         };
     }
 
-    public async Task<ApiResponse<string>> UploadBulkUsersAsync(UploadBulkUsersRequests request)
+    public async Task<string> UploadBulkUsersAsync(UploadBulkUsersRequests request)
     {
         var errors = new List<string>();
         var successCount = 0;
@@ -46,7 +46,7 @@ public sealed class UsersService : IUsersService
         {
             try
             {
-                
+
                 var existingUser = await _userManager.FindByEmailAsync(userRequest.Email);
                 if (existingUser != null)
                 {
@@ -64,10 +64,10 @@ public sealed class UsersService : IUsersService
                     PhoneNumber = userRequest.PhoneNumber,
                     Role = userRequest.Role ?? UserRoles.LocalHire,
                     Department = userRequest.Department,
-                    EmailConfirmed = true 
+                    EmailConfirmed = true
                 };
 
-               
+
                 var tempPassword = Guid.NewGuid().ToString("N").Substring(0, 8) + "Temp!";
 
                 var result = await _userManager.CreateAsync(user, tempPassword);
@@ -77,7 +77,7 @@ public sealed class UsersService : IUsersService
                     continue;
                 }
 
-                // Assign role
+        
                 var roleName = userRequest.Role ?? UserRoles.LocalHire;
                 if (!await _roleManager.RoleExistsAsync(roleName))
                 {
@@ -106,7 +106,7 @@ public sealed class UsersService : IUsersService
             message += $" Errors: {string.Join("; ", errors)}";
         }
 
-        return ApiResponse<string>.Success(message, message);
+        return message;
     }
 
     public async Task<PaginatedResponse<GetUserResponse>> GetUsersByRoleAsync(string role, PaginationRequest pagination)
@@ -125,7 +125,7 @@ public sealed class UsersService : IUsersService
 
         return new PaginatedResponse<GetUserResponse>
         {
-            Data = userResponses,
+            Body = userResponses,
             PageNumber = pagination.PageNumber,
             PageSize = pagination.PageSize,
             TotalCount = totalCount
@@ -148,19 +148,19 @@ public sealed class UsersService : IUsersService
 
         return new PaginatedResponse<GetUserResponse>
         {
-            Data = userResponses,
+            Body = userResponses,
             PageNumber = pagination.PageNumber,
             PageSize = pagination.PageSize,
             TotalCount = totalCount
         };
     }
 
-    public async Task<ApiResponse<GetUserResponse>> GetUserByIdAsync(string id)
+    public async Task<GetUserResponse> GetUserByIdAsync(string id)
     {
         var user = await _usersRepository.GetUserByIdAsync(id);
         if (user == null)
         {
-            return ApiResponse<GetUserResponse>.Failure("User not found");
+            throw new KeyNotFoundException("User not found");
         }
 
         var userResponse = new GetUserResponse
@@ -174,40 +174,38 @@ public sealed class UsersService : IUsersService
             CreatedAt = user.CreatedAt
         };
 
-        return ApiResponse<GetUserResponse>.Success(userResponse, "User retrieved successfully");
+        return userResponse;
     }
 
-    public async Task<ApiResponse<string>> UpdateUserByIdAsync(string id, UpdateUserRequest request)
+    public async Task<string> UpdateUserByIdAsync(string id, UpdateUserRequest request)
     {
         var result = await _usersRepository.UpdateUserAsync(id, request);
         if (!result)
         {
-            return ApiResponse<string>.Failure("User not found");
+            throw new KeyNotFoundException("User not found");
         }
-
-        return ApiResponse<string>.Success("User updated successfully", "User updated successfully");
+        return "User updated successfully";
     }
 
-    public async Task<ApiResponse<string>> UpdateBulkUsersByRoleAsync(UpdateBulkUsersRequest request)
+    public async Task<string> UpdateBulkUsersByRoleAsync(UpdateBulkUsersRequest request)
     {
         var count = await _usersRepository.UpdateUsersByRoleAsync(request.Role, request);
-        return ApiResponse<string>.Success($"{count} users updated successfully", $"{count} users updated successfully");
+        return $"{count} users updated successfully";
     }
 
-    public async Task<ApiResponse<string>> DeleteUserByIdAsync(string id)
+    public async Task<string> DeleteUserByIdAsync(string id)
     {
         var result = await _usersRepository.DeleteUserAsync(id);
         if (!result)
         {
-            return ApiResponse<string>.Failure("User not found");
+            throw new KeyNotFoundException("User not found");
         }
-
-        return ApiResponse<string>.Success("User deleted successfully", "User deleted successfully");
+        return $"User deleted successfully";
     }
 
-    public async Task<ApiResponse<string>> DeleteBulkUsersByRoleAsync(string role)
+    public async Task<string> DeleteBulkUsersByRoleAsync(string role)
     {
         var count = await _usersRepository.DeleteUsersByRoleAsync(role);
-        return ApiResponse<string>.Success($"{count} users deleted successfully", $"{count} users deleted successfully");
+        return $"{count} users deleted successfully";
     }
 }

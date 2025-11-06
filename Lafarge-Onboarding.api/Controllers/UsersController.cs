@@ -23,7 +23,7 @@ public sealed class UsersController : ControllerBase
         };
 
         var result = await _usersService.GetUsersAsync(pagination);
-        return Ok(ApiResponse<PaginatedResponse<GetUserResponse>>.Success(result, "Users retrieved successfully"));
+        return Ok(ApiResponse<PaginatedResponse<GetUserResponse>>.Success(result));
     }
 
     [HttpPost("bulk-upload")]
@@ -39,7 +39,7 @@ public sealed class UsersController : ControllerBase
         }
 
         var result = await _usersService.UploadBulkUsersAsync(request);
-        return Ok(result);
+        return Ok(ApiResponse<string>.Success(result));
     }
 
     [HttpGet("by-role/{role}")]
@@ -53,7 +53,7 @@ public sealed class UsersController : ControllerBase
         };
 
         var result = await _usersService.GetUsersByRoleAsync(role, pagination);
-        return Ok(ApiResponse<PaginatedResponse<GetUserResponse>>.Success(result, $"Users with role '{role}' retrieved successfully"));
+        return Ok(ApiResponse<PaginatedResponse<GetUserResponse>>.Success(result));
     }
 
     [HttpGet("by-name/{name}")]
@@ -67,7 +67,7 @@ public sealed class UsersController : ControllerBase
         };
 
         var result = await _usersService.GetUsersByNameAsync(name, pagination);
-        return Ok(ApiResponse<PaginatedResponse<GetUserResponse>>.Success(result, $"Users with name containing '{name}' retrieved successfully"));
+        return Ok(ApiResponse<PaginatedResponse<GetUserResponse>>.Success(result));
     }
 
     [HttpGet("{id}")]
@@ -75,12 +75,7 @@ public sealed class UsersController : ControllerBase
     public async Task<IActionResult> GetUserById(string id)
     {
         var result = await _usersService.GetUserByIdAsync(id);
-        if (result.Data == null)
-        {
-            return NotFound(result);
-        }
-
-        return Ok(result);
+        return Ok(ApiResponse<GetUserResponse>.Success(result));
     }
 
     [HttpPut("{id}")]
@@ -96,13 +91,8 @@ public sealed class UsersController : ControllerBase
             return BadRequest(ApiResponse<object>.Failure(string.Join("; ", errors)));
         }
 
-        var result = await _usersService.UpdateUserByIdAsync(id, request);
-        if (result.StatusCode != "200")
-        {
-            return NotFound(result);
-        }
-
-        return Ok(result);
+        await _usersService.UpdateUserByIdAsync(id, request);
+        return Ok(ApiResponse<string>.Success("User updated successfully"));
     }
 
     [HttpPut("bulk/role")]
@@ -118,7 +108,7 @@ public sealed class UsersController : ControllerBase
         }
 
         var result = await _usersService.UpdateBulkUsersByRoleAsync(request);
-        return Ok(result);
+        return Ok(ApiResponse<string>.Success(result));
     }
 
     [HttpDelete("{id}")]
@@ -127,13 +117,8 @@ public sealed class UsersController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), 404)]
     public async Task<IActionResult> DeleteUserById(string id)
     {
-        var result = await _usersService.DeleteUserByIdAsync(id);
-        if (result.StatusCode != "200")
-        {
-            return NotFound(result);
-        }
-
-        return Ok(result);
+        await _usersService.DeleteUserByIdAsync(id);
+        return Ok(ApiResponse<string>.Success("User deleted successfully"));
     }
 
     [HttpDelete("bulk/role/{role}")]
@@ -142,6 +127,6 @@ public sealed class UsersController : ControllerBase
     public async Task<IActionResult> DeleteBulkUsersByRole(string role)
     {
         var result = await _usersService.DeleteBulkUsersByRoleAsync(role);
-        return Ok(result);
+        return Ok(ApiResponse<string>.Success(result));
     }
 }

@@ -43,7 +43,7 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
 
         var response = new PaginatedResponse<DocumentUploadResponse>
         {
-            Data = data,
+            Body = data,
             PageNumber = request.PageNumber,
             PageSize = request.PageSize,
             TotalCount = totalCount
@@ -121,7 +121,7 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
             _logger.LogInformation("Created uploads directory: {UploadsPath}", uploadsPath);
         }
 
-        // Generate unique filename to avoid conflicts
+        
         var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
         var filePath = Path.Combine(uploadsPath, uniqueFileName);
 
@@ -241,8 +241,7 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
         return await Task.Run(() =>
         {
             _logger.LogInformation("DOC file extraction attempted (not implemented): {FilePath}", filePath);
-            // DOC files are older format - for simplicity, we'll treat them as binary
-            // In production, you might need additional libraries or conversion
+           
             _logger.LogWarning("DOC file format extraction requires additional processing. File: {FileName}", Path.GetFileName(filePath));
             return "DOC file format extraction requires additional processing. File: " + Path.GetFileName(filePath);
         });

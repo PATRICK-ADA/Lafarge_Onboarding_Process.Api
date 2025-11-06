@@ -6,12 +6,12 @@ public class ApiResponse<T>
     public T? Data { get; set; }
     public string? StatusCode { get; set; } = "200";
 
-    public static ApiResponse<T> Success(T data, string message = "Operation successful")
+    public static ApiResponse<T> Success(T data)
     {
         return new ApiResponse<T>
         {
-            Message = message,
             Data = data,
+            Message = "Request Successful",
             StatusCode = "200"
         };
     }

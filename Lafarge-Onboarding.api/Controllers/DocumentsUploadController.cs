@@ -37,7 +37,7 @@ public sealed class DocumentsUploadController : ControllerBase
 
         var response = await _uploadService.ProcessDocumentUploadAsync(request.ContentBodyUpload, userId, request.ContentHeading, request.ContentSubHeading, request.ImageUpload);
 
-        return Ok(ApiResponse<DocumentUploadResponse>.Success(response, "File uploaded successfully."));
+        return Ok(ApiResponse<DocumentUploadResponse>.Success(response));
     }
 
     [HttpPost("upload/bulk")]
@@ -60,7 +60,7 @@ public sealed class DocumentsUploadController : ControllerBase
         var contentSubHeading = requests.FirstOrDefault()?.ContentSubHeading ?? string.Empty;
         var responses = await _uploadService.ProcessDocumentsBulkAsync(files, userId, contentHeading, contentSubHeading);
 
-        return Ok(ApiResponse<IEnumerable<DocumentUploadResponse>>.Success(responses, "Bulk upload completed successfully."));
+        return Ok(ApiResponse<IEnumerable<DocumentUploadResponse>>.Success(responses));
     }
 
     [HttpGet("all")]
@@ -71,7 +71,7 @@ public sealed class DocumentsUploadController : ControllerBase
 
         var response = await _uploadService.GetAllDocumentsPaginatedAsync(request);
 
-        return Ok(ApiResponse<PaginatedResponse<DocumentUploadResponse>>.Success(response, "Documents retrieved successfully."));
+        return Ok(ApiResponse<PaginatedResponse<DocumentUploadResponse>>.Success(response));
     }
 
     [HttpGet("{id}")]
@@ -98,7 +98,7 @@ public sealed class DocumentsUploadController : ControllerBase
             ContentSubHeading = document.ContentSubHeading
         };
 
-        return Ok(ApiResponse<DocumentUploadResponse>.Success(response, "Document retrieved successfully."));
+        return Ok(ApiResponse<DocumentUploadResponse>.Success(response));
     }
 
 }

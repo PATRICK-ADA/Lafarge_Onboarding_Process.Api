@@ -2,7 +2,7 @@ namespace Lafarge_Onboarding.domain.OnboardingResponses;
 
 public class PaginatedResponse<T>
 {
-    public IEnumerable<T> Data { get; set; } = new List<T>();
+    public IEnumerable<T> Body { get; set; } = new List<T>();
     public int PageNumber { get; set; }
     public int PageSize { get; set; }
     public int TotalCount { get; set; }

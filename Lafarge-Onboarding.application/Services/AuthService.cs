@@ -167,7 +167,7 @@ public sealed class AuthService : IAuthService
             return false;
         }
 
-        // Ensure role exists
+        
         if (!await _roleManager.RoleExistsAsync(roleName))
         {
             var role = new Role

@@ -29,7 +29,7 @@ public sealed class AuthController : ControllerBase
 
         var result = await _authService.RegisterUserAsync(request);
         _logger.LogInformation("User registered successfully: {Email}", request.Email);
-        return Ok(ApiResponse<AuthRegisterResponse>.Success(result, "User registered successfully"));
+        return Ok(ApiResponse<AuthRegisterResponse>.Success(result));
     }
 
     [HttpPost("login")]
@@ -55,6 +55,6 @@ public sealed class AuthController : ControllerBase
         }
 
         _logger.LogInformation("Login successful for user: {UserId}", result.User.Id);
-        return Ok(ApiResponse<AuthLoginResponse>.Success(result, "Login successful"));
+        return Ok(ApiResponse<AuthLoginResponse>.Success(result));
     }
 }

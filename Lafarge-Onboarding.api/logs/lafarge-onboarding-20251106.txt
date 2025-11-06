@@ -205,3 +205,42 @@ System.InvalidOperationException: User registration failed: Passwords must have 
    at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
    at Lafarge_Onboarding.api.Middleware.ExceptionHandlingMiddleware.InvokeAsync(HttpContext context) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Middleware/ExceptionHandlingMiddleware.cs:line 24
 HttpContext context) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Middleware/ExceptionHandlingMiddleware.cs:line 24
+2025-11-06 22:00:21.147 +01:00 [INF] Login attempt for email: patada306@gmail.com <s:Lafarge_Onboarding.api.Controllers.AuthController>
+2025-11-06 22:00:21.201 +01:00 [INF] Processing login request for email: patada3062025-11-06 22:00:21.201 +01:00 [INF] Processing login request for e2025-11-06 22:00:21.203 +02025-11-06 22:00:21.203 +01:00 [INF] Validating credentials for email: patada306@gmail.com
+2025-11-06 22:00:22.221 +01:00 [WRN] User not found for email: patada306@gmail.com
+2025-11-06 22:00:22.222 +01:00 [WRN] Invalid login credentials for email: patada306@gmail.com
+2025-11-06 22:00:22.222 +01:00 [WRN] Invalid login attempt for email: patada306@gmail.com
+2025-11-06 22:01:28.715 +01:00 [INF] Registration attempt for email: patada306@gmail.com
+2025-11-06 22:01:28.716 +01:00 [INF] Registering new user with email: patada306@gmail.com
+2025-11-06 22:01:29.070 +01:00 [INF] User registered successfully: f2c505f6-b468-4d4d-8496-b80b2f4e09ee
+2025-11-06 22:01:29.071 +01:00 [INF] User registered successfully: patada306@gmail.com
+[INF] Registering new user with email: patada306@gmail.com <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-06 22:01:29.070 +01:00 [INF] User registered successfully: f2c505f6-b468-4d4d-8496-b80b2f4e09ee <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-06 22:01:29.071 +01:00 [INF] User registered successfully: patada306@gmail.com <s:Lafarge_Onboarding.api.Controllers.AuthController>
+2025-11-06 22:39:05.329 +01:00 [INF] Login attempt for email: patada306@gmail.com <s:Lafarge_Onboarding.api.Controllers.AuthController>
+2025-11-06 22:39:05.379 +01:00 [INF] Processing login request for email: patada3062025-11-06 22:39:05.379 +01:00 [INF] Processing login request for e2025-11-06 22:39:05.380 +02025-11-06 22:39:05.380 +01:00 [INF] Validating credentials for email: patada306@gmail.com
+2025-11-06 22:39:06.497 +01:00 [INF] Credentials validated successfully for user: f2c505f6-b468-4d4d-8496-b80b2f4e09ee
+2025-11-06 22:39:06.499 +01:00 [INF] Generating JWT token for user: f2c505f6-b468-4d4d-8496-b80b2f4e09ee
+2025-11-06 22:39:06.560 +01:00 [INF] JWT token generated successfully for user: f2c505f6-b468-4d4d-8496-b80b2f4e09ee
+2025-11-06 22:39:06.561 +01:00 [INF] Login successful for user: f2c505f6-b468-4d4d-8496-b80b2f4e09ee
+2025-11-06 22:39:06.561 +01:00 [INF] Login successful for user: f2c505f6-b468-4d4d-8496-b80b2f4e09ee
+2025-11-06 22:40:43.844 +01:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2025-11-06 22:40:43.845 +01:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2025-11-06 22:44:56.669 +01:00 [INF] Bulk document upload request received, request count: 0
+2025-11-06 22:44:56.671 +01:00 [INF] Processing bulk upload for user: 89af2253-851d-476a-b8a3-2c2770950f94
+2025-11-06 22:44:56.674 +01:00 [INF] Bulk document upload request received, file count: 0
+2025-11-06 22:44:56.675 +01:00 [INF] Bulk document upload completed. Processed 0 documents
+Query>
+2025-11-06 22:44:56.669 +01:00 [INF] Bulk document upload request received, request count: 0 <s:Lafarge_Onboarding.api.Controllers.DocumentsUploadController>
+2025-11-06 22:44:56.671 +01:00 [INF] Processing bulk upload for user: 89af2253-851d-476a-b8a3-2c2770950f94 <s:Lafarge_Onboarding.api.Controllers.DocumentsUploadController>
+2025-11-06 22:44:56.674 +01:00 [INF] Bulk document upload request received, file count: 0 <s:Lafarge_Onboarding.application.Services.DocumentsUploadService>
+2025-11-06 22:44:56.675 +01:00 [INF] Bulk document upload completed. Processed 0 documents <s:Lafarge_Onboarding.application.Services.DocumentsUploadService>
+2025-11-06 22:52:54.141 +01:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased. <s:Microsoft.EntityFrameworkCore.Query>
+2025-11-06 22:52:54.179 +01:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased. 2025-11-06 22:52:54.179 +01:00 [WRN] The2025-11-06 22:56:17.567 +01:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as t2025-11-06 22:56:17.567 +01:00 [WRN] The query uses a row limiting operator ('Sk2025-11-06 22:56:17.568 +01:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 2025-11-06 22:56:17.568 +01:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operato2025-11-06 22:57:14.746 +01:00 [INF] Login attempt for email: patada306@gmail.com <s:Lafarge_Onboarding.api.Controllers.AuthController>
+2025-11-06 22:57:14.748 +01:00 [INF] Processing login request for email: patada306@gmail.com <s:Lafarge_Onboarding.application.Services.AuthService202025-11-06 22:57:14.749 +01:00 [INF] Validating credentials for email: patada306@gmail.com 2025-11-06 22:57:14.749 +01:00 [INF] Validating credenti2025-11-06 22:57:14.877 +01:00 [INF2025-11-06 22:57:14.877 +01:00 [INF] Credentials validated successfully for user: f2c505f6-b468-4d4d-8496-b80b2f4e09ee
+2025-11-06 22:57:14.879 +01:00 [INF] Generating JWT token for user: f2c505f6-b468-4d4d-8496-b80b2f4e09ee
+2025-11-06 22:57:14.926 +01:00 [INF] JWT token generated successfully for user: f2c505f6-b468-4d4d-8496-b80b2f4e09ee
+2025-11-06 22:57:14.927 +01:00 [INF] Login successful for user: f2c505f6-b468-4d4d-8496-b80b2f4e09ee
+2025-11-06 22:57:14.927 +01:00 [INF] Login successful for user: f2c505f6-b468-4d4d-8496-b80b2f4e09ee
+5f6-b468-4d4d-8496-b80b2f4e09ee <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-06 22:57:14.927 +01:00 [INF] Login successful for user: f2c505f6-b468-4d4d-8496-b80b2f4e09ee <s:Lafarge_Onboarding.api.Controllers.AuthController>
