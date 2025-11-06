@@ -127,47 +127,26 @@ public static class Configurations
     }
 
     static string BuildConnectionString(IConfiguration configuration)
-{
+    {
     // Try environment variables first (for production)
-    var host = Environment.GetEnvironmentVariable("DATABASE_HOST");
-    var port = Environment.GetEnvironmentVariable("DB_PORT");
+    var connectionName = Environment.GetEnvironmentVariable("DB_CONNECTION_NAME");
     var database = Environment.GetEnvironmentVariable("DB_NAME");
     var username = Environment.GetEnvironmentVariable("DB_USER");
     var password = Environment.GetEnvironmentVariable("POSTGRES_PWD");
-    var connectionName = Environment.GetEnvironmentVariable("DB_CONNECTION_NAME");
 
-    // If DB_CONNECTION_NAME is set, use Cloud SQL socket connection
-    if (!string.IsNullOrEmpty(connectionName))
-    {
-        database = database ?? configuration["Database:DB_NAME"] ?? "lafarge_onboarding_db";
-        username = username ?? configuration["Database:DB_USER"] ?? "postgres";
-        password = password ?? configuration["Database:POSTGRES_PWD"] ?? "placeholder-password";
 
-        // Use Cloud SQL socket path
-        return $"Host=/cloudsql/{connectionName};Database={database};Username={username};Password={password};Pooling=true;MinPoolSize=5;MaxPoolSize=20;ConnectionLifetime=300;";
-    }
 
-    // If all environment variables are present, build TCP connection string
-    if (!string.IsNullOrEmpty(host) && !string.IsNullOrEmpty(port) &&
-        !string.IsNullOrEmpty(database) && !string.IsNullOrEmpty(username) &&
-        !string.IsNullOrEmpty(password))
-    {
-        return $"Host={host};Port={port};Database={database};Username={username};Password={password};Pooling=true;MinPoolSize=5;MaxPoolSize=20;ConnectionLifetime=300;";
-    }
+        // If DB_CONNECTION_NAME is set, use Cloud SQL socket connection
+        if (!string.IsNullOrEmpty(connectionName))
+        {
+            database = database ?? configuration["Database:DB_NAME"] ?? "lafarge_onboarding_db";
+            username = username ?? configuration["Database:DB_USER"] ?? "postgres";
+            password = password ?? configuration["Database:POSTGRES_PWD"] ?? "placeholder-password";
 
-    // Fallback to appsettings.json configuration values
-    host = configuration["Database:DATABASE_HOST"] ?? "localhost";
-    port = configuration["Database:DB_PORT"] ?? "5432";
-    database = configuration["Database:DB_NAME"] ?? "lafarge_onboarding_db";
-    username = configuration["Database:DB_USER"] ?? "postgres";
-    password = configuration["Database:POSTGRES_PWD"] ?? "placeholder-password";
-
-    // Final fallback to DefaultConnection
-    if (password == "placeholder-password")
-    {
+            return $"Host=/cloudsql/{connectionName};Database={database};Username={username};Password={password};Pooling=true;MinPoolSize=5;MaxPoolSize=20;ConnectionLifetime=300;";
+        }
         return configuration.GetConnectionString("DefaultConnection")!;
     }
 
-    return $"Host={host};Port={port};Database={database};Username={username};Password={password};Pooling=true;MinPoolSize=5;MaxPoolSize=20;ConnectionLifetime=300;";
   }
-}
+
