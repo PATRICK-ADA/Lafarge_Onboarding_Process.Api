@@ -28,9 +28,10 @@ public static class Configurations
                         .AllowAnyHeader();
                 });
         });
-        
+
         // Register application services
         builder.Services.AddApplicationServices();
+        
         // Register infrastructure services
         builder.Services.AddInfrastructureServices();
 

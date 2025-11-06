@@ -1,6 +1,6 @@
 namespace Lafarge_Onboarding.domain.OnboardingRequests;
 
-public class DocumentUploadRequest
+public sealed class DocumentUploadRequest
 {
     public string? ContentHeading { get; set; }
     public string? ContentSubHeading { get; set; }

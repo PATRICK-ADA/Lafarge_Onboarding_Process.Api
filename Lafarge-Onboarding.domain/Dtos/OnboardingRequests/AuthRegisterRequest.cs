@@ -1,6 +1,6 @@
 namespace Lafarge_Onboarding.domain.OnboardingRequests;
 
-public class AuthRegisterRequest
+public sealed  class AuthRegisterRequest
 {
     public string Email { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
