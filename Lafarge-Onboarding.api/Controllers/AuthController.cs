@@ -25,10 +25,8 @@ public sealed class AuthController : ControllerBase
             return BadRequest(ApiResponse<object>.Failure(string.Join("; ", errors)));
         }
 
-        _logger.LogInformation("Registration attempt for email: {Email}", request.Email);
-
         var result = await _authService.RegisterUserAsync(request);
-        _logger.LogInformation("User registered successfully: {Email}", request.Email);
+    
         return Ok(ApiResponse<AuthRegisterResponse>.Success(result));
     }
 
@@ -45,16 +43,12 @@ public sealed class AuthController : ControllerBase
             return BadRequest(ApiResponse<object>.Failure(string.Join("; ", errors)));
         }
 
-        _logger.LogInformation("Login attempt for email: {Email}", request.Email);
-
         var result = await _authService.LoginUserAsync(request);
         if (result == null)
         {
-            _logger.LogWarning("Invalid login attempt for email: {Email}", request.Email);
             return Unauthorized(ApiResponse<AuthLoginResponse>.Failure("Invalid credentials"));
         }
 
-        _logger.LogInformation("Login successful for user: {UserId}", result.User.Id);
         return Ok(ApiResponse<AuthLoginResponse>.Success(result));
     }
 }

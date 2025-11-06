@@ -39,7 +39,7 @@ public class ExceptionHandlingMiddleware
             InvalidOperationException => (int)HttpStatusCode.BadRequest,
             KeyNotFoundException => (int)HttpStatusCode.NotFound,
             UnauthorizedAccessException => (int)HttpStatusCode.Unauthorized,
-            _ => (int)HttpStatusCode.InternalServerError
+            _ => (int)HttpStatusCode.BadRequest
         };
 
         var message = exception switch
@@ -48,10 +48,17 @@ public class ExceptionHandlingMiddleware
             InvalidOperationException => exception.Message,
             KeyNotFoundException => "Resource not found",
             UnauthorizedAccessException => "Unauthorized access",
-            _ => "An internal server error occurred"
+            _ => "An internal error occurred"
         };
 
-        var response = new { Message = message };
+        // Check if this is an authentication/authorization error
+        if (context.Response.StatusCode == 401 || context.Response.StatusCode == 403)
+        {
+            statusCode = context.Response.StatusCode;
+            message = statusCode == 401 ? "Unauthorized" : "Forbidden";
+        }
+
+        var response = ApiResponse<object>.Failure(message);
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = statusCode;
