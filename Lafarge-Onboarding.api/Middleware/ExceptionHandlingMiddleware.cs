@@ -61,13 +61,11 @@ public class ExceptionHandlingMiddleware
             _ => "An internal error occurred"
         };
 
-        var response = ApiResponse<object>.Failure(message);
+        var response = ApiResponse<object>.Failure(message, statusCode.ToString());
 
         context.Response.Clear();
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = statusCode;
-
-        response.StatusCode = statusCode.ToString();
 
         var json = JsonSerializer.Serialize(response);
         await context.Response.WriteAsync(json);
