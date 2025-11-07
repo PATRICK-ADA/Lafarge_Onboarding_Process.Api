@@ -49,6 +49,7 @@ public class ExceptionHandlingMiddleware
             InvalidOperationException => (int)HttpStatusCode.BadRequest,
             KeyNotFoundException => (int)HttpStatusCode.NotFound,
             UnauthorizedAccessException => (int)HttpStatusCode.Unauthorized,
+            
             _ => (int)HttpStatusCode.InternalServerError
         };
 
