@@ -187,10 +187,57 @@ public sealed class UsersService : IUsersService
         return "User updated successfully";
     }
 
-    public async Task<string> UpdateBulkUsersByRoleAsync(UpdateBulkUsersRequest request)
+    public async Task<string> UpdateBulkUsersAsync(UpdateBulkUsersRequest request)
     {
-        var count = await _usersRepository.UpdateUsersByRoleAsync(request.Role, request);
-        return $"{count} users updated successfully";
+        var errors = new List<string>();
+        var successCount = 0;
+
+        foreach (var userItem in request.Users)
+        {
+            try
+            {
+                // Validate user exists
+                var existingUser = await _usersRepository.GetUserByIdAsync(userItem.Id);
+                if (existingUser == null)
+                {
+                    errors.Add($"User with ID {userItem.Id} does not exist");
+                    continue;
+                }
+
+                // Update user
+                var updateRequest = new UpdateUserRequest
+                {
+                    Name = userItem.Name,
+                    Email = userItem.Email,
+                    PhoneNumber = userItem.PhoneNumber,
+                    Role = userItem.Role,
+                    Department = userItem.Department,
+                    OnboardingStatus = userItem.OnboardingStatus,
+                    IsActive = userItem.IsActive
+                };
+
+                var result = await _usersRepository.UpdateUserAsync(userItem.Id, updateRequest);
+                if (!result)
+                {
+                    errors.Add($"Failed to update user with ID {userItem.Id}");
+                    continue;
+                }
+
+                successCount++;
+            }
+            catch (Exception ex)
+            {
+                errors.Add($"Error updating user with ID {userItem.Id}: {ex.Message}");
+            }
+        }
+
+        var message = $"{successCount} users updated successfully.";
+        if (errors.Any())
+        {
+            message += $" Errors: {string.Join("; ", errors)}";
+        }
+
+        return message;
     }
 
     public async Task<string> DeleteUserByIdAsync(string id)

@@ -111,29 +111,60 @@ public sealed class UsersRepository : IUsersRepository
         return true;
     }
 
-    public async Task<int> UpdateUsersByRoleAsync(string role, UpdateBulkUsersRequest request)
+    public async Task<int> UpdateBulkUsersAsync(IEnumerable<UpdateUserItem> users)
     {
-        var users = await _context.Users.Where(u => u.Role == role).ToListAsync();
-        foreach (var user in users)
+        var successCount = 0;
+        foreach (var userItem in users)
         {
-            if (!string.IsNullOrEmpty(request.Department))
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userItem.Id);
+            if (user == null)
             {
-                user.Department = request.Department;
+                continue; // Skip if user not found, validation should be done at service level
             }
 
-            if (!string.IsNullOrEmpty(request.OnboardingStatus))
+            if (!string.IsNullOrEmpty(userItem.Name))
             {
-                user.OnboardingStatus = request.OnboardingStatus;
+                var nameParts = userItem.Name.Split(' ', 2);
+                user.FirstName = nameParts[0];
+                user.LastName = nameParts.Length > 1 ? nameParts[1] : "";
             }
 
-            if (request.IsActive.HasValue)
+            if (!string.IsNullOrEmpty(userItem.Email))
             {
-                user.IsActive = request.IsActive.Value;
+                user.Email = userItem.Email;
+                user.UserName = userItem.Email;
             }
+
+            if (!string.IsNullOrEmpty(userItem.PhoneNumber))
+            {
+                user.PhoneNumber = userItem.PhoneNumber;
+            }
+
+            if (!string.IsNullOrEmpty(userItem.Role))
+            {
+                user.Role = userItem.Role;
+            }
+
+            if (!string.IsNullOrEmpty(userItem.Department))
+            {
+                user.Department = userItem.Department;
+            }
+
+            if (!string.IsNullOrEmpty(userItem.OnboardingStatus))
+            {
+                user.OnboardingStatus = userItem.OnboardingStatus;
+            }
+
+            if (userItem.IsActive.HasValue)
+            {
+                user.IsActive = userItem.IsActive.Value;
+            }
+
+            successCount++;
         }
 
         await _context.SaveChangesAsync();
-        return users.Count;
+        return successCount;
     }
 
     public async Task<bool> DeleteUserAsync(string id)

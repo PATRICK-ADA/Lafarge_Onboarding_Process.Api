@@ -26,7 +26,7 @@ public sealed class UsersController : ControllerBase
         return Ok(ApiResponse<PaginatedResponse<GetUserResponse>>.Success(result));
     }
 
-    [HttpPost("bulk-upload")]
+    [HttpPost("bulk-create")]
     [Authorize(Roles = "HR_ADMIN")]
     [ProducesResponseType(typeof(ApiResponse<string>), 200)]
     [ProducesResponseType(typeof(ApiResponse<object>), 400)]
@@ -42,7 +42,7 @@ public sealed class UsersController : ControllerBase
         return Ok(ApiResponse<string>.Success(result));
     }
 
-    [HttpGet("by-role/{role}")]
+    [HttpGet("get-by-role/{role}")]
     [Authorize(Roles = "HR_ADMIN")]
     public async Task<IActionResult> GetUsersByRole(string role, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
@@ -56,7 +56,7 @@ public sealed class UsersController : ControllerBase
         return Ok(ApiResponse<PaginatedResponse<GetUserResponse>>.Success(result));
     }
 
-    [HttpGet("by-name/{name}")]
+    [HttpGet("get-by-name/{name}")]
     [Authorize(Roles = "HR_ADMIN")]
     public async Task<IActionResult> GetUsersByName(string name, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
     {
@@ -70,7 +70,7 @@ public sealed class UsersController : ControllerBase
         return Ok(ApiResponse<PaginatedResponse<GetUserResponse>>.Success(result));
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("get-user/{id}")]
     [Authorize(Roles = "HR_ADMIN")]
     public async Task<IActionResult> GetUserById(string id)
     {
@@ -78,7 +78,7 @@ public sealed class UsersController : ControllerBase
         return Ok(ApiResponse<GetUserResponse>.Success(result));
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("update-user/{id}")]
     [Authorize(Roles = "HR_ADMIN")]
     [ProducesResponseType(typeof(ApiResponse<string>), 200)]
     [ProducesResponseType(typeof(ApiResponse<object>), 400)]
@@ -95,11 +95,11 @@ public sealed class UsersController : ControllerBase
         return Ok(ApiResponse<string>.Success("User updated successfully"));
     }
 
-    [HttpPut("bulk/role")]
+    [HttpPut("update-bulk-users")]
     [Authorize(Roles = "HR_ADMIN")]
     [ProducesResponseType(typeof(ApiResponse<string>), 200)]
     [ProducesResponseType(typeof(ApiResponse<object>), 400)]
-    public async Task<IActionResult> UpdateBulkUsersByRole([FromBody] UpdateBulkUsersRequest request)
+    public async Task<IActionResult> UpdateBulkUsers([FromBody] UpdateBulkUsersRequest request)
     {
         if (!ModelState.IsValid)
         {
@@ -107,11 +107,11 @@ public sealed class UsersController : ControllerBase
             return BadRequest(ApiResponse<object>.Failure(string.Join("; ", errors)));
         }
 
-        var result = await _usersService.UpdateBulkUsersByRoleAsync(request);
+        var result = await _usersService.UpdateBulkUsersAsync(request);
         return Ok(ApiResponse<string>.Success(result));
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("delete-user/{id}")]
     [Authorize(Roles = "HR_ADMIN")]
     [ProducesResponseType(typeof(ApiResponse<string>), 200)]
     [ProducesResponseType(typeof(ApiResponse<object>), 404)]
@@ -121,7 +121,7 @@ public sealed class UsersController : ControllerBase
         return Ok(ApiResponse<string>.Success("User deleted successfully"));
     }
 
-    [HttpDelete("bulk/role/{role}")]
+    [HttpDelete("delete-bulk-users/{role}")]
     [Authorize(Roles = "HR_ADMIN")]
     [ProducesResponseType(typeof(ApiResponse<string>), 200)]
     public async Task<IActionResult> DeleteBulkUsersByRole(string role)

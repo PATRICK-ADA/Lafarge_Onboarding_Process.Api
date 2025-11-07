@@ -40,7 +40,7 @@ public sealed class DocumentsUploadController : ControllerBase
         return Ok(ApiResponse<DocumentUploadResponse>.Success(response));
     }
 
-    [HttpPost("upload/bulk")]
+    [HttpPost("upload-bulk")]
     [Authorize(Roles = "HR_ADMIN")]
     public async Task<IActionResult> UploadBulkDocuments([FromForm] List<DocumentUploadRequest> requests)
     {
@@ -74,7 +74,7 @@ public sealed class DocumentsUploadController : ControllerBase
         return Ok(ApiResponse<PaginatedResponse<DocumentUploadResponse>>.Success(response));
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("get-document/{id}")]
     [Authorize]
     public async Task<IActionResult> GetDocumentById(int id)
     {

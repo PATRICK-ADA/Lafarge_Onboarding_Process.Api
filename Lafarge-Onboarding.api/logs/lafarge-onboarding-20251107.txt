@@ -28,3 +28,12 @@ System.InvalidOperationException: User registration failed: Passwords must have 
 plication.Services.AuthService>
 2025-11-07 00:08:15.315 +01:00 [WRN] User not found for email: user@example.com <s:Lafarge_Onboarding.application.Services.AuthService>
 2025-11-07 00:08:15.315 +01:00 [WRN] Invalid login credentials for email: user@example.com <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-07 00:40:46.263 +01:00 [INF] Registering new user with email: donpat646@gmail.com <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-07 00:40:48.157 +01:00 [INF] User registered successfully: 0fe00bf3-0332-46d9-8ad62025-11-07 00:40:48.157 +01:00 [INF] User registered successfully: 0fe2025-11-07 00:41:32.681 +01:00 [IN2025-11-07 00:41:32.681 +01:00 [INF] Processing login request for email: donpat646@gmail.com
+2025-11-07 00:41:32.684 +01:00 [INF] Validating credentials for email: donpat646@gmail.com
+2025-11-07 00:41:32.893 +01:00 [INF] Credentials validated successfully for user: 0fe00bf3-0332-46d9-8ad6-d5792fc3b400
+2025-11-07 00:41:32.895 +01:00 [INF] Generating JWT token for user: 0fe00bf3-0332-46d9-8ad6-d5792fc3b400
+2025-11-07 00:41:32.969 +01:00 [INF] JWT token generated successfully for user: 0fe00bf3-0332-46d9-8ad6-d5792fc3b400
+2025-11-07 00:41:32.970 +01:00 [INF] Login successful for user: 0fe00bf3-0332-46d9-8ad6-d5792fc3b400
+00 [INF] JWT token generated successfully for user: 0fe00bf3-0332-46d9-8ad6-d5792fc3b400 <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-07 00:41:32.970 +01:00 [INF] Login successful for user: 0fe00bf3-0332-46d9-8ad6-d5792fc3b400 <s:Lafarge_Onboarding.application.Services.AuthService>
