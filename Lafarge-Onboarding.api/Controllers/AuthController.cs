@@ -46,7 +46,7 @@ public sealed class AuthController : ControllerBase
         var result = await _authService.LoginUserAsync(request);
         if (result == null)
         {
-            return BadRequest(ApiResponse<AuthLoginResponse>.Failure("Invalid credentials"));
+            return Unauthorized(ApiResponse<AuthLoginResponse>.Failure("Invalid credentials", 401.ToString()));
         }
 
         return Ok(ApiResponse<AuthLoginResponse>.Success(result));

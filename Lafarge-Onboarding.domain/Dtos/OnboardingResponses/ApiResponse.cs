@@ -5,6 +5,7 @@ public class ApiResponse<T>
     public string? Message { get; set; } = string.Empty;
     public T? Data { get; set; }
     public string? StatusCode { get; set; } = "200";
+    public bool RequestSuccessful { get; set; } = true;
 
     public static ApiResponse<T> Success(T data)
     {
@@ -12,7 +13,8 @@ public class ApiResponse<T>
         {
             Data = data,
             Message = "Request Successful",
-            StatusCode = "200"
+            StatusCode = "200",
+            RequestSuccessful = true
         };
     }
 
@@ -22,7 +24,8 @@ public class ApiResponse<T>
         {
             Message = message,
             Data = default,
-            StatusCode = statusCode
+            StatusCode = statusCode,
+            RequestSuccessful = false
         };
     }
 }

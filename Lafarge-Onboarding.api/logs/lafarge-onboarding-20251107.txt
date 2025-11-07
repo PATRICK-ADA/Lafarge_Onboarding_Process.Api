@@ -37,3 +37,15 @@ plication.Services.AuthService>
 2025-11-07 00:41:32.970 +01:00 [INF] Login successful for user: 0fe00bf3-0332-46d9-8ad6-d5792fc3b400
 00 [INF] JWT token generated successfully for user: 0fe00bf3-0332-46d9-8ad6-d5792fc3b400 <s:Lafarge_Onboarding.application.Services.AuthService>
 2025-11-07 00:41:32.970 +01:00 [INF] Login successful for user: 0fe00bf3-0332-46d9-8ad6-d5792fc3b400 <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-07 10:39:08.022 +01:00 [INF] Processing login request for email: user@example.com <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-07 10:39:08.092 +01:00 [INF] Validating credentials for email: user@example.com <s2025-11-07 10:39:08.092 +01:00 [INF] Validating creden2025-11-07 10:39:09.565 +01:00 [WR2025-11-07 10:39:09.565 +01:00 [WRN] User not found for email: user@example.com
+2025-11-07 10:39:09.566 +01:00 [WRN] Invalid login credentials for email: user@example.com
+ail: user@example.com <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-07 22:40:22.257 +01:00 [INF] Processing login request for email: user@example.com <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-07 22:40:22.311 +01:00 [INF] Validating credentials for email: user@example.com <s2025-11-07 22:40:22.311 +01:00 [INF] Validating creden2025-11-07 22:40:23.323 +01:00 [WR2025-11-07 22:40:23.323 +01:00 [WRN] User not found for email: user@example.com
+2025-11-07 22:40:23.323 +01:00 [WRN] Invalid login credentials for email: user@example.com
+ail: user@example.com <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-07 22:46:45.766 +01:00 [INF] Processing login request for email: user@example.com <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-07 22:46:45.815 +01:00 [INF] Validating credentials for email: user@example.com <s2025-11-07 22:46:45.815 +01:00 [INF] Validating creden2025-11-07 22:46:46.806 +01:00 [WR2025-11-07 22:46:46.806 +01:00 [WRN] User not found for email: user@example.com
+2025-11-07 22:46:46.806 +01:00 [WRN] Invalid login credentials for email: user@example.com
+ail: user@example.com <s:Lafarge_Onboarding.application.Services.AuthService>
