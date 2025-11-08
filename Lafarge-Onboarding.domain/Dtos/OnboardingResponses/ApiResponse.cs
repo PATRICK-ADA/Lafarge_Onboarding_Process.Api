@@ -6,6 +6,7 @@ public class ApiResponse<T>
     public T? Data { get; set; }
     public string? StatusCode { get; set; } = "200";
     public bool RequestSuccessful { get; set; } = true;
+    public DateTime TimeStamp { get; set; }
 
     public static ApiResponse<T> Success(T data)
     {
@@ -14,18 +15,20 @@ public class ApiResponse<T>
             Data = data,
             Message = "Request Successful",
             StatusCode = "200",
-            RequestSuccessful = true
+            RequestSuccessful = true,
+            TimeStamp = DateTime.UtcNow
         };
     }
 
-    public static ApiResponse<T> Failure(string message, string statusCode = "400")
+    public static ApiResponse<T> Failure(string message = "Request Failed", string statusCode = "400")
     {
         return new ApiResponse<T>
         {
             Message = message,
             Data = default,
             StatusCode = statusCode,
-            RequestSuccessful = false
+            RequestSuccessful = false,
+            TimeStamp = DateTime.UtcNow
         };
     }
 }
