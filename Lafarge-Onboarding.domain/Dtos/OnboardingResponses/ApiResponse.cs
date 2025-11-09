@@ -27,7 +27,7 @@ public class ApiResponse<T>
         return new ApiResponse<T>
         {
             Message = message,
-            Result = typeof(T) is null ? (T)(object)"Failure" : default,
+            Result = (T)(object)"Failure!"!,
             StatusCode = statusCode,
             IsSuccessful = false,
             TimeStamp = DateTime.UtcNow
