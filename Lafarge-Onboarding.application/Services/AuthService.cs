@@ -6,17 +6,20 @@ public sealed class AuthService : IAuthService
     private readonly RoleManager<Role> _roleManager;
     private readonly IConfiguration _configuration;
     private readonly ILogger<AuthService> _logger;
+    private readonly IEmailService _emailService;
 
     public AuthService(
         UserManager<Users> userManager,
         RoleManager<Role> roleManager,
         IConfiguration configuration,
-        ILogger<AuthService> logger)
+        ILogger<AuthService> logger,
+        IEmailService emailService)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _configuration = configuration;
         _logger = logger;
+        _emailService = emailService;
     }
 
     public async Task<string> GenerateJwtToken(Users user)
@@ -167,7 +170,7 @@ public sealed class AuthService : IAuthService
             return false;
         }
 
-        
+
         if (!await _roleManager.RoleExistsAsync(roleName))
         {
             var role = new Role
@@ -192,5 +195,72 @@ public sealed class AuthService : IAuthService
 
         _logger.LogInformation("Role {Role} assigned successfully to user: {UserId}", roleName, userId);
         return true;
+    }
+
+    public async Task<ApiResponse<string>> ForgotPasswordAsync(ForgotPasswordRequest request)
+    {
+        _logger.LogInformation("Processing forgot password request for email: {Email}", request.Email);
+
+        try
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                _logger.LogWarning("User not found for email: {Email}", request.Email);
+                return ApiResponse<string>.Failure("User not found", "404");
+            }
+
+            // Generate password reset token
+            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            _logger.LogInformation("Generated reset token for user: {UserId}", user.Id);
+
+            // Send password reset email
+            var emailSent = await _emailService.SendPasswordResetEmailAsync(request.Email, resetToken);
+            if (!emailSent)
+            {
+                _logger.LogError("Failed to send password reset email to {Email}", request.Email);
+                return ApiResponse<string>.Failure("Failed to send reset email");
+            }
+
+            _logger.LogInformation("Password reset email sent successfully to {Email}", request.Email);
+            return ApiResponse<string>.Success("Password reset email sent successfully");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error during forgot password process for email: {Email}", request.Email);
+            return ApiResponse<string>.Failure("An error occurred while processing your request");
+        }
+    }
+
+    public async Task<ApiResponse<string>> ResetPasswordAsync(ResetPasswordRequest request)
+    {
+        _logger.LogInformation("Processing reset password request for email: {Email}", request.Email);
+
+        try
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                _logger.LogWarning("User not found for email: {Email}", request.Email);
+                return ApiResponse<string>.Failure("User not found", "404");
+            }
+
+            // Reset password using token
+            var result = await _userManager.ResetPasswordAsync(user, request.Token, request.NewPassword);
+            if (!result.Succeeded)
+            {
+                _logger.LogError("Failed to reset password for user: {UserId}. Errors: {Errors}",
+                    user.Id, string.Join(", ", result.Errors.Select(e => e.Description)));
+                return ApiResponse<string>.Failure("Invalid or expired reset token");
+            }
+
+            _logger.LogInformation("Password reset successfully for user: {UserId}", user.Id);
+            return ApiResponse<string>.Success("Password reset successfully");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error during reset password process for email: {Email}", request.Email);
+            return ApiResponse<string>.Failure("An error occurred while resetting your password");
+        }
     }
 }

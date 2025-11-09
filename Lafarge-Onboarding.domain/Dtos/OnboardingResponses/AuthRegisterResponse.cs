@@ -1,6 +1,6 @@
 namespace Lafarge_Onboarding.domain.OnboardingResponses;
 
-public class AuthRegisterResponse
+public sealed record AuthRegisterResponse
 {
-    public string RegisterationStatus { get; set; } = "User registered successfully";
+    public string RegisterationStatus { get; init; } = "User registered successfully";
 }

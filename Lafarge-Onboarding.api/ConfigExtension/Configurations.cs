@@ -31,9 +31,12 @@ public static class Configurations
 
         // Register application services
         builder.Services.AddApplicationServices();
-        
+
         // Register infrastructure services
         builder.Services.AddInfrastructureServices();
+
+        // Add HttpClient for email service
+        builder.Services.AddHttpClient();
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>

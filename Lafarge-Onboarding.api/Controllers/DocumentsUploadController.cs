@@ -44,23 +44,16 @@ public sealed class DocumentsUploadController : ControllerBase
     [Authorize(Roles = "HR_ADMIN")]
     public async Task<IActionResult> UploadBulkDocuments([FromForm] List<DocumentUploadRequest> requests)
     {
-        _logger.LogInformation("Bulk document upload request received, request count: {RequestCount}", requests.Count);
 
-        // Get the authenticated user's ID
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userId))
-        {
-            _logger.LogWarning("Unauthorized bulk upload attempt - no user ID found");
-            return Unauthorized(ApiResponse<IEnumerable<DocumentUploadResponse>>.Failure("User not authenticated"));
-        }
-        _logger.LogInformation("Processing bulk upload for user: {UserId}", userId);
 
         var files = requests.Where(r => r.ContentBodyUpload != null).Select(r => r.ContentBodyUpload!).ToList();
         var contentHeading = requests.FirstOrDefault()?.ContentHeading ?? string.Empty;
         var contentSubHeading = requests.FirstOrDefault()?.ContentSubHeading ?? string.Empty;
-        var responses = await _uploadService.ProcessDocumentsBulkAsync(files, userId, contentHeading, contentSubHeading);
+        var responses = await _uploadService.ProcessDocumentsBulkAsync(files, userId!, contentHeading, contentSubHeading);
 
-        return Ok(ApiResponse<IEnumerable<DocumentUploadResponse>>.Success(responses));
+        return string.IsNullOrEmpty(userId) ? Unauthorized(ApiResponse<IEnumerable<DocumentUploadResponse>>.Failure("User not authenticated")) :
+               Ok(ApiResponse<IEnumerable<DocumentUploadResponse>>.Success(responses));
     }
 
     [HttpGet("all")]
@@ -78,18 +71,11 @@ public sealed class DocumentsUploadController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetDocumentById(int id)
     {
-        _logger.LogInformation("Get document by ID request received. ID: {DocumentId}", id);
-
         var document = await _uploadService.GetDocumentByIdAsync(id);
-        if (document == null)
+        
+          var response = new DocumentUploadResponse
         {
-            _logger.LogWarning("Document not found. ID: {DocumentId}", id);
-            return NotFound(ApiResponse<DocumentUploadResponse>.Failure("Document not found."));
-        }
-
-        var response = new DocumentUploadResponse
-        {
-            BodyContentFileType = document.FileName,
+            BodyContentFileType = document!.FileName,
             BodyFilePath = document.FilePath,
             BodyContent = document.Content,
             ImageFilePath = document.ImageFilePath,
@@ -97,8 +83,11 @@ public sealed class DocumentsUploadController : ControllerBase
             ContentHeading = document.ContentHeading,
             ContentSubHeading = document.ContentSubHeading
         };
-
-        return Ok(ApiResponse<DocumentUploadResponse>.Success(response));
+        
+        return document == null ?
+            NotFound(ApiResponse<DocumentUploadResponse>.Failure("Document not found.")) :
+            Ok(ApiResponse<DocumentUploadResponse>.Success(response));
     }
 
 }
+      

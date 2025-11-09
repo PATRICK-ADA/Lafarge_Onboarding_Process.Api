@@ -74,27 +74,38 @@ public class ExceptionHandlingMiddleware
 
     private async Task HandleUnauthorizedAsync(HttpContext context)
     {
-        var response = ApiResponse<object>.Failure("Authentication required. Please provide a valid Bearer token.");
-        
+        var response = new ApiResponse<object>
+        {
+            Message = "Authentication required. Please provide a valid Bearer token.",
+            Result = "Failure!",
+            StatusCode = "401",
+            IsSuccessful = false,
+            TimeStamp = DateTime.UtcNow
+        };
+
         context.Response.Clear();
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = 401;
-        
-        response.StatusCode = "401";
+
         var json = JsonSerializer.Serialize(response);
         await context.Response.WriteAsync(json);
     }
 
     private async Task HandleForbiddenAsync(HttpContext context)
     {
-        var response = ApiResponse<object>.Failure("Access forbidden. Insufficient permissions.");
-        
+        var response = new ApiResponse<object>
+        {
+            Message = "Access forbidden. Insufficient permissions.",
+            Result = "Failure!",
+            StatusCode = "403",
+            IsSuccessful = false,
+            TimeStamp = DateTime.UtcNow
+        };
+
         context.Response.Clear();
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = 403;
 
-        response.StatusCode = "403";
-        
         var json = JsonSerializer.Serialize(response);
         await context.Response.WriteAsync(json);
     }

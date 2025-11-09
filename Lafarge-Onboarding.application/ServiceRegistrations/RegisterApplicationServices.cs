@@ -9,6 +9,7 @@ public static class RegisterApplicationServices
         services.AddScoped<IDocumentsUploadService, Lafarge_Onboarding.application.Services.DocumentsUploadService>();
         services.AddScoped<IAuthService, Lafarge_Onboarding.application.Services.AuthService>();
         services.AddScoped<IUsersService, Lafarge_Onboarding.application.Services.UsersService>();
+        services.AddScoped<IEmailService, Lafarge_Onboarding.application.Services.EmailService>();
 
         return services;
     }

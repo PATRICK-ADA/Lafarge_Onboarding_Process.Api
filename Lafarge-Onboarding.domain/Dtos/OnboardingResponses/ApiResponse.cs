@@ -2,13 +2,13 @@ using Microsoft.EntityFrameworkCore.Query;
 
 namespace Lafarge_Onboarding.domain.OnboardingResponses;
 
-public class ApiResponse<T>
+public sealed record ApiResponse<T>
 {
-    public string? Message { get; set; } = string.Empty;
-    public T? Result { get; set; }
-    public string? StatusCode { get; set; } = "200";
-    public bool IsSuccessful { get; set; } = true;
-    public DateTime TimeStamp { get; set; }
+    public string? Message { get; init; } = string.Empty;
+    public T? Result { get; init; }
+    public string? StatusCode { get; init; } = "200";
+    public bool IsSuccessful { get; init; } = true;
+    public DateTime TimeStamp { get; init; }
 
     public static ApiResponse<T> Success(T data)
     {

@@ -2,12 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Lafarge_Onboarding.domain.OnboardingRequests;
 
-public sealed record AuthLoginRequest
+public sealed record ForgotPasswordRequest
 {
     [Required(ErrorMessage = "Email is required")]
     [EmailAddress(ErrorMessage = "Invalid email format")]
     public required string Email { get; init; }
-
-    [Required(ErrorMessage = "Password is required")]
-    public required string Password { get; init; }
 }
