@@ -1,21 +1,23 @@
+using Microsoft.EntityFrameworkCore.Query;
+
 namespace Lafarge_Onboarding.domain.OnboardingResponses;
 
 public class ApiResponse<T>
 {
     public string? Message { get; set; } = string.Empty;
-    public T? Data { get; set; }
+    public T? Result { get; set; }
     public string? StatusCode { get; set; } = "200";
-    public bool RequestSuccessful { get; set; } = true;
+    public bool IsSuccessful { get; set; } = true;
     public DateTime TimeStamp { get; set; }
 
     public static ApiResponse<T> Success(T data)
     {
         return new ApiResponse<T>
         {
-            Data = data,
+            Result = data,
             Message = "Request Successful",
             StatusCode = "200",
-            RequestSuccessful = true,
+            IsSuccessful = true,
             TimeStamp = DateTime.UtcNow
         };
     }
@@ -25,9 +27,9 @@ public class ApiResponse<T>
         return new ApiResponse<T>
         {
             Message = message,
-            Data = default,
+            Result = typeof(T) is null ? (T)(object)"Failure" : default,
             StatusCode = statusCode,
-            RequestSuccessful = false,
+            IsSuccessful = false,
             TimeStamp = DateTime.UtcNow
         };
     }
