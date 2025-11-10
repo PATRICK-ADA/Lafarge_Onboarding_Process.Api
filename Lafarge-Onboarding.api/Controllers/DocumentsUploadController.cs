@@ -14,31 +14,24 @@ public sealed class DocumentsUploadController : ControllerBase
         _logger = logger;
     }
 
+
     [HttpPost("upload")]
     [Authorize(Roles = "HR_ADMIN")]
     public async Task<IActionResult> UploadDocument([FromForm] DocumentUploadRequest request)
     {
-        _logger.LogInformation("Document upload request received");
+    
+      return   request.ContentBodyUpload == null ?
 
-        if (request.ContentBodyUpload == null)
-        {
-            _logger.LogWarning("No file provided in ContentBodyUpload");
-            return BadRequest(ApiResponse<DocumentUploadResponse>.Failure("ContentBodyUpload file is required"));
-        }
+            BadRequest(ApiResponse<DocumentUploadResponse>.Failure("ContentBodyUpload file is required")) :
 
-        // Get the authenticated user's ID
-        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userId))
-        {
-            _logger.LogWarning("Unauthorized upload attempt - no user ID found");
-            return Unauthorized(ApiResponse<DocumentUploadResponse>.Failure("User not authenticated"));
-        }
-        _logger.LogInformation("Processing upload for user: {UserId}", userId);
+         User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value == null ?
+    
+         Unauthorized(ApiResponse<DocumentUploadResponse>.Failure("User not authenticated")) :
 
-        var response = await _uploadService.ProcessDocumentUploadAsync(request.ContentBodyUpload, userId, request.ContentHeading, request.ContentSubHeading, request.ImageUpload);
+        Ok(await _uploadService.ProcessDocumentUploadAsync(request.ContentBodyUpload, User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value, request.ContentHeading, request.ContentSubHeading, request.ImageUpload));
 
-        return Ok(ApiResponse<DocumentUploadResponse>.Success(response));
     }
+
 
     [HttpPost("upload-bulk")]
     [Authorize(Roles = "HR_ADMIN")]
@@ -56,6 +49,7 @@ public sealed class DocumentsUploadController : ControllerBase
                Ok(ApiResponse<IEnumerable<DocumentUploadResponse>>.Success(responses));
     }
 
+
     [HttpGet("all")]
     [Authorize]
     public async Task<IActionResult> GetAllDocuments([FromQuery] PaginationRequest request)
@@ -66,6 +60,8 @@ public sealed class DocumentsUploadController : ControllerBase
 
         return Ok(ApiResponse<PaginatedResponse<DocumentUploadResponse>>.Success(response));
     }
+
+
 
     [HttpGet("get-document/{id}")]
     [Authorize]

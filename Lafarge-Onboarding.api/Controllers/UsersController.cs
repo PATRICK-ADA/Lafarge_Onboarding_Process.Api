@@ -12,6 +12,7 @@ public sealed class UsersController : ControllerBase
         _usersService = usersService;
     }
 
+
     [HttpGet("view-users")]
     [Authorize(Roles = "HR_ADMIN")]
     public async Task<IActionResult> ViewUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
@@ -26,21 +27,20 @@ public sealed class UsersController : ControllerBase
         return Ok(ApiResponse<PaginatedResponse<GetUserResponse>>.Success(result));
     }
 
+
+
     [HttpPost("bulk-create")]
     [Authorize(Roles = "HR_ADMIN")]
     [ProducesResponseType(typeof(ApiResponse<string>), 200)]
     [ProducesResponseType(typeof(ApiResponse<object>), 400)]
     public async Task<IActionResult> UploadBulkUsers([FromBody] UploadBulkUsersRequests request)
     {
-        if (!ModelState.IsValid)
-        {
-            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-            return BadRequest(ApiResponse<object>.Failure(string.Join("; ", errors)));
-        }
-
-        var result = await _usersService.UploadBulkUsersAsync(request);
-        return Ok(ApiResponse<string>.Success(result));
+        return !ModelState.IsValid
+            ? BadRequest(ApiResponse<object>.Failure(string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage))))
+            : Ok(ApiResponse<string>.Success(await _usersService.UploadBulkUsersAsync(request)));
     }
+    
+
 
     [HttpGet("get-by-role/{role}")]
     [Authorize(Roles = "HR_ADMIN")]
@@ -56,6 +56,8 @@ public sealed class UsersController : ControllerBase
         return Ok(ApiResponse<PaginatedResponse<GetUserResponse>>.Success(result));
     }
 
+
+
     [HttpGet("get-by-name/{name}")]
     [Authorize(Roles = "HR_ADMIN")]
     public async Task<IActionResult> GetUsersByName(string name, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
@@ -70,6 +72,7 @@ public sealed class UsersController : ControllerBase
         return Ok(ApiResponse<PaginatedResponse<GetUserResponse>>.Success(result));
     }
 
+
     [HttpGet("get-user/{id}")]
     [Authorize(Roles = "HR_ADMIN")]
     public async Task<IActionResult> GetUserById(string id)
@@ -78,6 +81,9 @@ public sealed class UsersController : ControllerBase
         return Ok(ApiResponse<GetUserResponse>.Success(result));
     }
 
+
+
+
     [HttpPut("update-user/{id}")]
     [Authorize(Roles = "HR_ADMIN")]
     [ProducesResponseType(typeof(ApiResponse<string>), 200)]
@@ -85,15 +91,12 @@ public sealed class UsersController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), 404)]
     public async Task<IActionResult> UpdateUserById(string id, [FromBody] UpdateUserRequest request)
     {
-        if (!ModelState.IsValid)
-        {
-            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-            return BadRequest(ApiResponse<object>.Failure(string.Join("; ", errors)));
-        }
-
-        await _usersService.UpdateUserByIdAsync(id, request);
-        return Ok(ApiResponse<string>.Success("User updated successfully"));
+        return !ModelState.IsValid
+            ? BadRequest(ApiResponse<object>.Failure(string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage))))
+            : Ok(ApiResponse<string>.Success(await _usersService.UpdateUserByIdAsync(id, request)));
     }
+
+
 
     [HttpPut("update-bulk-users")]
     [Authorize(Roles = "HR_ADMIN")]
@@ -101,14 +104,9 @@ public sealed class UsersController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), 400)]
     public async Task<IActionResult> UpdateBulkUsers([FromBody] UpdateBulkUsersRequest request)
     {
-        if (!ModelState.IsValid)
-        {
-            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-            return BadRequest(ApiResponse<object>.Failure(string.Join("; ", errors)));
-        }
-
-        var result = await _usersService.UpdateBulkUsersAsync(request);
-        return Ok(ApiResponse<string>.Success(result));
+       return !ModelState.IsValid
+           ? BadRequest(ApiResponse<object>.Failure(string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage))))
+           : Ok(ApiResponse<string>.Success(await _usersService.UpdateBulkUsersAsync(request)));
     }
 
     [HttpDelete("delete-user/{id}")]
@@ -120,6 +118,7 @@ public sealed class UsersController : ControllerBase
         await _usersService.DeleteUserByIdAsync(id);
         return Ok(ApiResponse<string>.Success("User deleted successfully"));
     }
+
 
     [HttpDelete("delete-bulk-users/{role}")]
     [Authorize(Roles = "HR_ADMIN")]

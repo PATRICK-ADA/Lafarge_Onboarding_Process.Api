@@ -13,22 +13,22 @@ public sealed class AuthController : ControllerBase
         _logger = logger;
     }
 
+
+
     [HttpPost("register")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(ApiResponse<AuthRegisterResponse>), 200)]
     [ProducesResponseType(typeof(ApiResponse<object>), 400)]
     public async Task<IActionResult> Register([FromBody] AuthRegisterRequest request)
     {
-        if (!ModelState.IsValid)
-        {
-            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-            return BadRequest(ApiResponse<object>.Failure(string.Join("; ", errors)));
-        }
+      return !ModelState.IsValid ?
 
-        var result = await _authService.RegisterUserAsync(request);
-    
-        return Ok(ApiResponse<AuthRegisterResponse>.Success(result));
+            BadRequest(ApiResponse<object>.Failure(string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList()))) :
+
+            Ok(ApiResponse<AuthRegisterResponse>.Success(await _authService.RegisterUserAsync(request)));
     }
+
+
 
     [HttpPost("login")]
     [AllowAnonymous]
@@ -37,20 +37,14 @@ public sealed class AuthController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), 400)]
     public async Task<IActionResult> Login([FromBody] AuthLoginRequest request)
     {
-        if (!ModelState.IsValid)
-        {
-            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-            return BadRequest(ApiResponse<object>.Failure(string.Join("; ", errors)));
-        }
-
-        var result = await _authService.LoginUserAsync(request);
-        if (result == null)
-        {
-            return Unauthorized(ApiResponse<AuthLoginResponse>.Failure("Invalid credentials", 401.ToString()));
-        }
-
-        return Ok(ApiResponse<AuthLoginResponse>.Success(result));
+        return !ModelState.IsValid 
+            ? BadRequest(ApiResponse<object>.Failure(string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage))))
+            : (await _authService.LoginUserAsync(request)) == null
+                ? Unauthorized(ApiResponse<AuthLoginResponse>.Failure("Invalid credentials", "401"))
+                : Ok(ApiResponse<AuthLoginResponse>.Success((await _authService.LoginUserAsync(request))!));
     }
+
+
 
     [HttpPost("forgot-password")]
     [AllowAnonymous]
@@ -58,15 +52,12 @@ public sealed class AuthController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), 400)]
     public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
     {
-        if (!ModelState.IsValid)
-        {
-            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-            return BadRequest(ApiResponse<object>.Failure(string.Join("; ", errors)));
-        }
-
-        var result = await _authService.ForgotPasswordAsync(request);
-        return Ok(result);
+        return !ModelState.IsValid ?
+            BadRequest(ApiResponse<object>.Failure(string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList()))) :
+            Ok(ApiResponse<object>.Success(await _authService.ForgotPasswordAsync(request)));
     }
+
+
 
     [HttpPost("reset-password")]
     [AllowAnonymous]
@@ -74,13 +65,9 @@ public sealed class AuthController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), 400)]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
     {
-        if (!ModelState.IsValid)
-        {
-            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-            return BadRequest(ApiResponse<object>.Failure(string.Join("; ", errors)));
-        }
-
-        var result = await _authService.ResetPasswordAsync(request);
-        return Ok(result);
+        return !ModelState.IsValid ?
+            BadRequest(ApiResponse<object>.Failure(string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList()))) :
+            Ok(ApiResponse<object>.Success(await _authService.ResetPasswordAsync(request)));
     }
 }
+    
