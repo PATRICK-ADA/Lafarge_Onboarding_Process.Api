@@ -10,12 +10,12 @@ public sealed record ApiResponse<T>
     public bool IsSuccessful { get; init; } = true;
     public DateTime TimeStamp { get; init; }
 
-    public static ApiResponse<T> Success(T data)
+    public static ApiResponse<T> Success(T data, string message = "Request Successful")
     {
         return new ApiResponse<T>
         {
-            Result = data,
-            Message = "Request Successful",
+            Result = data ?? (T)(object)"Success!"!,
+            Message = message,
             StatusCode = "200",
             IsSuccessful = true,
             TimeStamp = DateTime.UtcNow
