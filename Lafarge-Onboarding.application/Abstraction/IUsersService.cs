@@ -3,7 +3,7 @@ namespace Lafarge_Onboarding.application.Abstraction;
 public interface IUsersService
 {
     Task<PaginatedResponse<GetUserResponse>> GetUsersAsync(PaginationRequest pagination);
-    Task<string> UploadBulkUsersAsync(UploadBulkUsersRequests request);
+    Task<string> UploadBulkUsersAsync(IFormFile file);
     Task<PaginatedResponse<GetUserResponse>> GetUsersByRoleAsync(string role, PaginationRequest pagination);
     Task<PaginatedResponse<GetUserResponse>> GetUsersByNameAsync(string name, PaginationRequest pagination);
     Task<GetUserResponse> GetUserByIdAsync(string id);

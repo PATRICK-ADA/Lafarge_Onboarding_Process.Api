@@ -533,3 +533,9 @@
 /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/obj/Debug/net8.0/Lafarge-Onboarding.api.pdb
 /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/obj/Debug/net8.0/Lafarge-Onboarding.api.genruntimeconfig.cache
 /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/obj/Debug/net8.0/ref/Lafarge-Onboarding.api.dll
+/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/bin/Debug/net8.0/ClosedXML.dll
+/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/bin/Debug/net8.0/CsvHelper.dll
+/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/bin/Debug/net8.0/ExcelNumberFormat.dll
+/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/bin/Debug/net8.0/Irony.dll
+/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/bin/Debug/net8.0/SixLabors.Fonts.dll
+/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/bin/Debug/net8.0/XLParser.dll

@@ -92,20 +92,6 @@ public sealed class UsersRepository : IUsersRepository
             user.Role = request.Role;
         }
 
-        if (!string.IsNullOrEmpty(request.Department))
-        {
-            user.Department = request.Department;
-        }
-
-        if (!string.IsNullOrEmpty(request.OnboardingStatus))
-        {
-            user.OnboardingStatus = request.OnboardingStatus;
-        }
-
-        if (request.IsActive.HasValue)
-        {
-            user.IsActive = request.IsActive.Value;
-        }
 
         await _context.SaveChangesAsync();
         return true;
@@ -145,20 +131,6 @@ public sealed class UsersRepository : IUsersRepository
                 user.Role = userItem.Role;
             }
 
-            if (!string.IsNullOrEmpty(userItem.Department))
-            {
-                user.Department = userItem.Department;
-            }
-
-            if (!string.IsNullOrEmpty(userItem.OnboardingStatus))
-            {
-                user.OnboardingStatus = userItem.OnboardingStatus;
-            }
-
-            if (userItem.IsActive.HasValue)
-            {
-                user.IsActive = userItem.IsActive.Value;
-            }
 
             successCount++;
         }

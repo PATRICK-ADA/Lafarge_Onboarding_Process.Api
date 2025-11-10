@@ -20,8 +20,10 @@ public sealed record AuthRegisterRequest
     [Required(ErrorMessage = "LastName is required")]
     public required string LastName { get; init; }
 
-    public string? Department { get; init; }
+    public string? PhoneNumber { get; init; }
 
     [Required(ErrorMessage = "Role is required")]
     public required string Role { get; init; } = UserRoles.LocalHire; // LOCAL_HIRE, EXPAT, VISITOR, HR_ADMIN
+
+    public bool ActiveStatus { get; init; } = true;
 }

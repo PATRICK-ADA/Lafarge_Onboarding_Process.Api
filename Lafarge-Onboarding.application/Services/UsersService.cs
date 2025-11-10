@@ -1,4 +1,8 @@
 
+using CsvHelper;
+using ClosedXML.Excel;
+using System.Globalization;
+
 namespace Lafarge_Onboarding.application.Services;
 
 public sealed class UsersService : IUsersService
@@ -24,7 +28,7 @@ public sealed class UsersService : IUsersService
             Email = u.Email!,
             PhoneNumber = u.PhoneNumber,
             Role = u.Role,
-            Department = u.Department,
+            Department = null,
             CreatedAt = u.CreatedAt
         });
 
@@ -37,16 +41,38 @@ public sealed class UsersService : IUsersService
         };
     }
 
-    public async Task<string> UploadBulkUsersAsync(UploadBulkUsersRequests request)
+    public async Task<string> UploadBulkUsersAsync(IFormFile file)
     {
         var errors = new List<string>();
         var successCount = 0;
 
-        foreach (var userRequest in request.Users)
+        var fileExtension = Path.GetExtension(file.FileName).ToLower();
+        List<CreateUserRequest> userRequests;
+
+        try
+        {
+            if (fileExtension == ".csv")
+            {
+                userRequests = await ParseCsvFileAsync(file);
+            }
+            else if (fileExtension == ".xlsx" || fileExtension == ".xls")
+            {
+                userRequests = await ParseExcelFileAsync(file);
+            }
+            else
+            {
+                throw new InvalidOperationException("Unsupported file type");
+            }
+        }
+        catch (Exception ex)
+        {
+            return $"Error parsing file: {ex.Message}";
+        }
+
+        foreach (var userRequest in userRequests)
         {
             try
             {
-
                 var existingUser = await _userManager.FindByEmailAsync(userRequest.Email);
                 if (existingUser != null)
                 {
@@ -59,14 +85,14 @@ public sealed class UsersService : IUsersService
                 {
                     UserName = userRequest.Email,
                     Email = userRequest.Email,
-                    FirstName = userRequest.Name.Split(' ').FirstOrDefault() ?? "",
-                    LastName = string.Join(" ", userRequest.Name.Split(' ').Skip(1)),
+                    FirstName = userRequest.FirstName,
+                    LastName = userRequest.LastName,
                     PhoneNumber = userRequest.PhoneNumber,
-                    Role = userRequest.Role ?? UserRoles.LocalHire,
-                    Department = userRequest.Department,
+                    StaffProfilePicture = userRequest.StaffProfilePicture,
+                    Role = userRequest.Role,
+                    ActiveStatus = userRequest.ActiveStatus,
                     EmailConfirmed = true
                 };
-
 
                 var tempPassword = Guid.NewGuid().ToString("N").Substring(0, 8) + "Temp!";
 
@@ -77,8 +103,7 @@ public sealed class UsersService : IUsersService
                     continue;
                 }
 
-        
-                var roleName = userRequest.Role ?? UserRoles.LocalHire;
+                var roleName = userRequest.Role;
                 if (!await _roleManager.RoleExistsAsync(roleName))
                 {
                     var role = new Role { Name = roleName, Description = $"{roleName} role" };
@@ -109,6 +134,64 @@ public sealed class UsersService : IUsersService
         return message;
     }
 
+    private async Task<List<CreateUserRequest>> ParseCsvFileAsync(IFormFile file)
+    {
+        var userRequests = new List<CreateUserRequest>();
+
+        using var reader = new StreamReader(file.OpenReadStream());
+        using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+        await csv.ReadAsync();
+        csv.ReadHeader();
+
+        while (await csv.ReadAsync())
+        {
+            var userRequest = new CreateUserRequest
+            {
+                FirstName = csv.GetField<string>("First Name"),
+                LastName = csv.GetField<string>("Last Name"),
+                Email = csv.GetField<string>("Email"),
+                PhoneNumber = csv.GetField<string>("Phone Number"),
+                ActiveStatus = bool.TryParse(csv.GetField<string>("Active Status"), out var activeStatus) ? activeStatus : true,
+                StaffProfilePicture = csv.GetField<string>("Staff Profile Picture (Base64)"),
+                Role = csv.GetField<string>("Role")
+            };
+
+            userRequests.Add(userRequest);
+        }
+
+        return userRequests;
+    }
+
+    private async Task<List<CreateUserRequest>> ParseExcelFileAsync(IFormFile file)
+    {
+        var userRequests = new List<CreateUserRequest>();
+
+        using var stream = file.OpenReadStream();
+        using var workbook = new XLWorkbook(stream);
+        var worksheet = workbook.Worksheet(1); // Assuming data is in the first worksheet
+
+        var rows = worksheet.RowsUsed().Skip(1); // Skip header row
+
+        foreach (var row in rows)
+        {
+            var userRequest = new CreateUserRequest
+            {
+                FirstName = row.Cell(1).GetValue<string>(), // First Name
+                LastName = row.Cell(2).GetValue<string>(), // Last Name
+                Email = row.Cell(3).GetValue<string>(), // Email
+                PhoneNumber = row.Cell(4).GetValue<string>(), // Phone Number
+                ActiveStatus = bool.TryParse(row.Cell(5).GetValue<string>(), out var activeStatus) ? activeStatus : true, // Active Status
+                StaffProfilePicture = row.Cell(6).GetValue<string>(), // Staff Profile Picture (Base64)
+                Role = row.Cell(7).GetValue<string>() // Role
+            };
+
+            userRequests.Add(userRequest);
+        }
+
+        return userRequests;
+    }
+
     public async Task<PaginatedResponse<GetUserResponse>> GetUsersByRoleAsync(string role, PaginationRequest pagination)
     {
         var (users, totalCount) = await _usersRepository.GetUsersByRoleAsync(role, pagination);
@@ -119,7 +202,6 @@ public sealed class UsersService : IUsersService
             Email = u.Email!,
             PhoneNumber = u.PhoneNumber,
             Role = u.Role,
-            Department = u.Department,
             CreatedAt = u.CreatedAt
         });
 
@@ -142,7 +224,7 @@ public sealed class UsersService : IUsersService
             Email = u.Email!,
             PhoneNumber = u.PhoneNumber,
             Role = u.Role,
-            Department = u.Department,
+            Department = null,
             CreatedAt = u.CreatedAt
         });
 
@@ -170,7 +252,7 @@ public sealed class UsersService : IUsersService
             Email = user.Email!,
             PhoneNumber = user.PhoneNumber,
             Role = user.Role,
-            Department = user.Department,
+            Department = null,
             CreatedAt = user.CreatedAt
         };
 

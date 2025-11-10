@@ -29,15 +29,25 @@ public sealed class UsersController : ControllerBase
 
 
 
-    [HttpPost("bulk-create")]
+    [HttpPost("bulk-users-upload")]
     [Authorize(Roles = "HR_ADMIN")]
     [ProducesResponseType(typeof(ApiResponse<string>), 200)]
     [ProducesResponseType(typeof(ApiResponse<object>), 400)]
-    public async Task<IActionResult> UploadBulkUsers([FromBody] UploadBulkUsersRequests request)
+    public async Task<IActionResult> UploadBulkUsers([FromForm] IFormFile file)
     {
-        return !ModelState.IsValid
-            ? BadRequest(ApiResponse<object>.Failure(string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage))))
-            : Ok(ApiResponse<string>.Success(await _usersService.UploadBulkUsersAsync(request)));
+        if (file == null || file.Length == 0)
+        {
+            return BadRequest(ApiResponse<object>.Failure("File is required"));
+        }
+
+        var allowedExtensions = new[] { ".xlsx", ".xls", ".csv" };
+        var fileExtension = Path.GetExtension(file.FileName).ToLower();
+        if (!allowedExtensions.Contains(fileExtension))
+        {
+            return BadRequest(ApiResponse<object>.Failure("Invalid file type. Only Excel (.xlsx, .xls) and CSV files are allowed."));
+        }
+
+        return Ok(ApiResponse<string>.Success(await _usersService.UploadBulkUsersAsync(file)));
     }
     
 
