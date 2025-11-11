@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
+namespace Lafarge_Onboarding.domain.Dtos.OnboardingRequests;
+
 public sealed record CreateUserRequest
 {
     [Required(ErrorMessage = "Email is required")]
@@ -17,11 +19,7 @@ public sealed record CreateUserRequest
     public string? StaffProfilePicture { get; init; } = string.Empty;
 
     [Required(ErrorMessage = "Role is required")]
-    public required string Role { get; init; } = UserRoles.LocalHire; 
+    public required string Role { get; init; } = UserRoles.LocalHire;
 
     public bool ActiveStatus { get; init; } = true;
-
-   
 }
-
- 

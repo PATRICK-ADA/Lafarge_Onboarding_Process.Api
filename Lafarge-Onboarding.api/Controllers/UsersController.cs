@@ -33,7 +33,7 @@ public sealed class UsersController : ControllerBase
     [Authorize(Roles = "HR_ADMIN")]
     [ProducesResponseType(typeof(ApiResponse<string>), 200)]
     [ProducesResponseType(typeof(ApiResponse<object>), 400)]
-    public async Task<IActionResult> UploadBulkUsers([FromForm] IFormFile file)
+    public async Task<IActionResult> UploadBulkUsers(IFormFile file)
     {
         if (file == null || file.Length == 0)
         {

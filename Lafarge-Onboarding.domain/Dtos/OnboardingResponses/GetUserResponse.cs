@@ -1,3 +1,5 @@
+namespace Lafarge_Onboarding.domain.Dtos.OnboardingResponses;
+
 public sealed record GetUserResponse
 {
     public required string Id { get; init; }

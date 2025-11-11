@@ -1,4 +1,4 @@
-namespace Lafarge_Onboarding.domain.OnboardingResponses;
+namespace Lafarge_Onboarding.domain.Dtos.OnboardingResponses;
 
 public sealed record AuthLoginResponse
 {

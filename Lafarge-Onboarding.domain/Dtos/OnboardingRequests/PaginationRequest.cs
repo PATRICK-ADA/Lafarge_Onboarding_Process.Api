@@ -1,4 +1,4 @@
-namespace Lafarge_Onboarding.domain.OnboardingRequests;
+namespace Lafarge_Onboarding.domain.Dtos.OnboardingRequests;
 
 public sealed record PaginationRequest
 {

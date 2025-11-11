@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore.Query;
 
-namespace Lafarge_Onboarding.domain.OnboardingResponses;
+namespace Lafarge_Onboarding.domain.Dtos.OnboardingResponses;
 
 public sealed record ApiResponse<T>
 {

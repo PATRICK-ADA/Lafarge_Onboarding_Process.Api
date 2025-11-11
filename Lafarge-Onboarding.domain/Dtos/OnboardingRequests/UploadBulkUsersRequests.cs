@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
+namespace Lafarge_Onboarding.domain.Dtos.OnboardingRequests;
+
 public sealed record UploadBulkUsersRequests
 {
     [Required(ErrorMessage = "Users list is required")]

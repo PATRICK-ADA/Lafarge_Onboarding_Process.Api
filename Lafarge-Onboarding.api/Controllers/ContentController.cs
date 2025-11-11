@@ -18,7 +18,7 @@ public sealed class ContentController : ControllerBase
     [Authorize(Roles = "HR_ADMIN")]
     [ProducesResponseType(typeof(ApiResponse<LocalHireInfoResponse>), 200)]
     [ProducesResponseType(typeof(ApiResponse<object>), 400)]
-    public async Task<IActionResult> UploadLocalHireInfo([FromForm] IFormFile file)
+    public async Task<IActionResult> UploadLocalHireInfo(IFormFile file)
     {
         _logger.LogInformation("Local hire info upload request received");
 
