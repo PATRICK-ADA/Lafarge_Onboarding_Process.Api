@@ -10,6 +10,7 @@ public static class RegisterInfrastructureServices
         services.AddScoped<IDocumentsUploadRepository, Lafarge_Onboarding.infrastructure.Repositories.DocumentsUploadRepository>();
         services.AddScoped<IUsersRepository, Lafarge_Onboarding.infrastructure.Repositories.UsersRepository>();
         services.AddScoped<ILocalHireInfoRepository, Lafarge_Onboarding.infrastructure.Repositories.LocalHireInfoRepository>();
+        services.AddScoped<IWelcomeMessageRepository, Lafarge_Onboarding.infrastructure.Repositories.WelcomeMessageRepository>();
 
         return services;
     }

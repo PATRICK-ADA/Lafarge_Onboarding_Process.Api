@@ -9,6 +9,7 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
 
     public DbSet<OnboardingDocument> OnboardingDocuments { get; set; }
     public DbSet<LocalHireInfo> LocalHireInfos { get; set; }
+    public DbSet<WelcomeMessage> WelcomeMessages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -45,6 +46,21 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
             entity.Property(e => e.CountryFacts).HasColumnType("text");
             entity.Property(e => e.InterestingFacts).HasColumnType("text");
             entity.Property(e => e.Holidays).HasColumnType("text");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
+        });
+
+        // Configure WelcomeMessage entity
+        modelBuilder.Entity<WelcomeMessage>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.CeoName).HasMaxLength(200);
+            entity.Property(e => e.CeoTitle).HasMaxLength(200);
+            entity.Property(e => e.CeoImageUrl).HasMaxLength(500);
+            entity.Property(e => e.CeoMessage).HasColumnType("text");
+            entity.Property(e => e.HrName).HasMaxLength(200);
+            entity.Property(e => e.HrTitle).HasMaxLength(200);
+            entity.Property(e => e.HrImageUrl).HasMaxLength(500);
+            entity.Property(e => e.HrMessage).HasColumnType("text");
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
         });
 
