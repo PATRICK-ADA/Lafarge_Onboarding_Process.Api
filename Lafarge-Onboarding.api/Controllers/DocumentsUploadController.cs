@@ -35,18 +35,23 @@ public sealed class DocumentsUploadController : ControllerBase
 
     [HttpPost("upload-bulk")]
     [Authorize(Roles = "HR_ADMIN")]
-    public async Task<IActionResult> UploadBulkDocuments([FromForm] List<DocumentUploadRequest> requests)
+    [ProducesResponseType(typeof(ApiResponse<IEnumerable<DocumentUploadResponse>>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<IEnumerable<DocumentUploadResponse>>), 401)]
+    public async Task<IActionResult> UploadBulkDocuments(
+        [FromForm] List<IFormFile> contentBodyUploads,
+        [FromForm] string contentHeading,
+        [FromForm] string contentSubHeading)
     {
-
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
-        var files = requests.Where(r => r.ContentBodyUpload != null).Select(r => r.ContentBodyUpload!).ToList();
-        var contentHeading = requests.FirstOrDefault()?.ContentHeading ?? string.Empty;
-        var contentSubHeading = requests.FirstOrDefault()?.ContentSubHeading ?? string.Empty;
-        var responses = await _uploadService.ProcessDocumentsBulkAsync(files, userId!, contentHeading, contentSubHeading);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized(ApiResponse<IEnumerable<DocumentUploadResponse>>.Failure("User not authenticated"));
+        }
 
-        return string.IsNullOrEmpty(userId) ? Unauthorized(ApiResponse<IEnumerable<DocumentUploadResponse>>.Failure("User not authenticated")) :
-               Ok(ApiResponse<IEnumerable<DocumentUploadResponse>>.Success(responses));
+        var responses = await _uploadService.ProcessDocumentsBulkAsync(contentBodyUploads, userId, contentHeading, contentSubHeading);
+
+        return Ok(ApiResponse<IEnumerable<DocumentUploadResponse>>.Success(responses));
     }
 
 
