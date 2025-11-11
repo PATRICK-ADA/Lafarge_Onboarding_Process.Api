@@ -41,7 +41,7 @@ public class ExceptionHandlingMiddleware
 
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        _logger.LogError(exception, "An unhandled exception occurred");
+        _logger.LogError(exception, "An unhandled exception occurred. Request: {Method} {Path}, User: {User}", context.Request.Method, context.Request.Path, context.User?.Identity?.Name ?? "Anonymous");
 
         var statusCode = exception switch
         {
