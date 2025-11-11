@@ -1,7 +1,5 @@
 namespace Lafarge_Onboarding.api.Controllers;
 
-using Lafarge_Onboarding.domain.Dtos.OnboardingResponses;
-
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
@@ -24,21 +22,11 @@ public sealed class ContentController : ControllerBase
     {
         _logger.LogInformation("Local hire info upload request received");
 
-        if (file == null || file.Length == 0)
-        {
-            return BadRequest(ApiResponse<object>.Failure("File is required"));
-        }
+        return (file == null || file.Length == 0) ? BadRequest(ApiResponse<object>.Failure("File is required")) :
+            file.FileName.EndsWith(".xlsx") || file.FileName.EndsWith(".xls") || file.FileName.EndsWith(".csv") || file.FileName.EndsWith(".excel") 
+            || file.FileName.EndsWith(".Excel") || file.FileName.EndsWith(".CSV") || file.FileName.EndsWith(".EXCEL") || file.FileName.EndsWith(".XLSX") || file.FileName.EndsWith(".XLS") ? Ok(ApiResponse<LocalHireInfoResponse>.Success(await _localHireInfoService.ExtractAndSaveLocalHireInfoAsync(file))) :
+           BadRequest(ApiResponse<object>.Failure("Invalid file format"));
 
-        try
-        {
-            var result = await _localHireInfoService.ExtractAndSaveLocalHireInfoAsync(file);
-            return Ok(ApiResponse<LocalHireInfoResponse>.Success(result));
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error processing local hire info upload");
-            return BadRequest(ApiResponse<object>.Failure("Error processing file"));
-        }
     }
 
     [HttpGet("get-local-hire-info")]
@@ -49,20 +37,8 @@ public sealed class ContentController : ControllerBase
     {
         _logger.LogInformation("Get local hire info request received");
 
-        try
-        {
             var result = await _localHireInfoService.GetLocalHireInfoAsync();
-            if (result == null)
-            {
-                return NotFound(ApiResponse<object>.Failure("Local hire info not found"));
-            }
-
-            return Ok(ApiResponse<LocalHireInfoResponse>.Success(result));
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error retrieving local hire info");
-            return BadRequest(ApiResponse<object>.Failure("Error retrieving data"));
-        }
+            return result == null ? NotFound(ApiResponse<object>.Failure("Local hire info not found")) : Ok(ApiResponse<LocalHireInfoResponse>.Success(result));
+       
     }
 }
