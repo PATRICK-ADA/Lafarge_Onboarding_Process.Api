@@ -201,66 +201,50 @@ public sealed class AuthService : IAuthService
     {
         _logger.LogInformation("Processing forgot password request for email: {Email}", request.Email);
 
-        try
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null)
         {
-            var user = await _userManager.FindByEmailAsync(request.Email);
-            if (user == null)
-            {
-                _logger.LogWarning("User not found for email: {Email}", request.Email);
-                throw new Exception("User not found");
-            }
-
-            // Generate password reset token
-            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-            _logger.LogInformation("Generated reset token for user: {UserId}", user.Id);
-
-            // Send password reset email
-            var emailSent = await _emailService.SendPasswordResetEmailAsync(request.Email, resetToken);
-            if (!emailSent)
-            {
-                _logger.LogError("Failed to send password reset email to {Email}", request.Email);
-                throw new Exception("Failed to send reset email");
-            }
-
-            _logger.LogInformation("Password reset email sent successfully to {Email}", request.Email);
-            return "Password reset email sent successfully";
+            _logger.LogWarning("User not found for email: {Email}", request.Email);
+            throw new Exception("User not found");
         }
-        catch (Exception ex)
+
+        // Generate password reset token
+        var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+        _logger.LogInformation("Generated reset token for user: {UserId}", user.Id);
+
+        // Send password reset email
+        var emailSent = await _emailService.SendPasswordResetEmailAsync(request.Email, resetToken);
+        if (!emailSent)
         {
-            _logger.LogError(ex, "Error during forgot password process for email: {Email}", request.Email);
-            throw;
+            _logger.LogError("Failed to send password reset email to {Email}", request.Email);
+            throw new Exception("Failed to send reset email");
         }
+
+        _logger.LogInformation("Password reset email sent successfully to {Email}", request.Email);
+        return "Password reset email sent successfully";
     }
 
     public async Task<string> ResetPasswordAsync(ResetPasswordRequest request)
     {
         _logger.LogInformation("Processing reset password request for email: {Email}", request.Email);
 
-        try
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null)
         {
-            var user = await _userManager.FindByEmailAsync(request.Email);
-            if (user == null)
-            {
-                _logger.LogWarning("User not found for email: {Email}", request.Email);
-                throw new Exception("User not found");
-            }
-
-            // Reset password using token
-            var result = await _userManager.ResetPasswordAsync(user, request.Token, request.NewPassword);
-            if (!result.Succeeded)
-            {
-                _logger.LogError("Failed to reset password for user: {UserId}. Errors: {Errors}",
-                    user.Id, string.Join(", ", result.Errors.Select(e => e.Description)));
-                throw new Exception("Invalid or expired reset token");
-            }
-
-            _logger.LogInformation("Password reset successfully for user: {UserId}", user.Id);
-            return "Password reset successfully";
+            _logger.LogWarning("User not found for email: {Email}", request.Email);
+            throw new Exception("User not found");
         }
-        catch (Exception ex)
+
+        // Reset password using token
+        var result = await _userManager.ResetPasswordAsync(user, request.Token, request.NewPassword);
+        if (!result.Succeeded)
         {
-            _logger.LogError(ex, "Error during reset password process for email: {Email}", request.Email);
-            throw;
+            _logger.LogError("Failed to reset password for user: {UserId}. Errors: {Errors}",
+                user.Id, string.Join(", ", result.Errors.Select(e => e.Description)));
+            throw new Exception("Invalid or expired reset token");
         }
+
+        _logger.LogInformation("Password reset successfully for user: {UserId}", user.Id);
+        return "Password reset successfully";
     }
 }

@@ -57,15 +57,8 @@ public sealed class AuthController : ControllerBase
             return BadRequest(ApiResponse<object>.Failure(string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList())));
         }
 
-        try
-        {
-            var result = await _authService.ForgotPasswordAsync(request);
-            return Ok(ApiResponse<string>.Success(result));
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ApiResponse<object>.Failure(ex.Message));
-        }
+        var result = await _authService.ForgotPasswordAsync(request);
+        return Ok(ApiResponse<string>.Success(result));
     }
 
 
@@ -81,15 +74,8 @@ public sealed class AuthController : ControllerBase
             return BadRequest(ApiResponse<object>.Failure(string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList())));
         }
 
-        try
-        {
-            var result = await _authService.ResetPasswordAsync(request);
-            return Ok(ApiResponse<string>.Success(result));
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ApiResponse<object>.Failure(ex.Message));
-        }
+        var result = await _authService.ResetPasswordAsync(request);
+        return Ok(ApiResponse<string>.Success(result));
     }
 }
     
