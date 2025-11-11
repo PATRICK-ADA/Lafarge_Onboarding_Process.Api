@@ -8,6 +8,7 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
     }
 
     public DbSet<OnboardingDocument> OnboardingDocuments { get; set; }
+    public DbSet<LocalHireInfo> LocalHireInfos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -24,6 +25,27 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
             entity.Property(e => e.ContentSubHeading).HasMaxLength(500);
             entity.Property(e => e.UploadedBy).HasMaxLength(100);
             entity.Property(e => e.UploadedAt).HasDefaultValueSql("NOW()");
+        });
+
+        // Configure LocalHireInfo entity
+        modelBuilder.Entity<LocalHireInfo>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.WhoWeAre).HasColumnType("text");
+            entity.Property(e => e.FootprintSummary).HasColumnType("text");
+            entity.Property(e => e.Plants).HasColumnType("text");
+            entity.Property(e => e.ReadyMix).HasColumnType("text");
+            entity.Property(e => e.Depots).HasColumnType("text");
+            entity.Property(e => e.CultureSummary).HasColumnType("text");
+            entity.Property(e => e.Pillars).HasColumnType("text");
+            entity.Property(e => e.Innovation).HasColumnType("text");
+            entity.Property(e => e.HuaxinSpirit).HasColumnType("text");
+            entity.Property(e => e.RespectfulWorkplaces).HasColumnType("text");
+            entity.Property(e => e.Introduction).HasColumnType("text");
+            entity.Property(e => e.CountryFacts).HasColumnType("text");
+            entity.Property(e => e.InterestingFacts).HasColumnType("text");
+            entity.Property(e => e.Holidays).HasColumnType("text");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
         });
 
         // Configure custom Users entity

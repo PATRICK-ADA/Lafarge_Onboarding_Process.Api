@@ -12,3 +12,8 @@ global using System.Security.Claims;
 global using System.Text;
 global using Microsoft.Extensions.DependencyInjection;
 global using System.Text.Json;
+global using CsvHelper;
+global using ClosedXML.Excel;
+global using System.Globalization;
+global using System.Text.Json;
+global using Lafarge_Onboarding.domain.Dtos.OnboardingResponses;
