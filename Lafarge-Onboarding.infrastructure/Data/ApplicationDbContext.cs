@@ -10,6 +10,8 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
     public DbSet<OnboardingDocument> OnboardingDocuments { get; set; }
     public DbSet<LocalHireInfo> LocalHireInfos { get; set; }
     public DbSet<WelcomeMessage> WelcomeMessages { get; set; }
+    public DbSet<OnboardingPlan> OnboardingPlans { get; set; }
+    public DbSet<Etiquette> Etiquettes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -61,6 +63,26 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
             entity.Property(e => e.HrTitle).HasMaxLength(200);
             entity.Property(e => e.HrImageUrl).HasMaxLength(500);
             entity.Property(e => e.HrMessage).HasColumnType("text");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
+        });
+
+        // Configure OnboardingPlan entity
+        modelBuilder.Entity<OnboardingPlan>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.BuddyDetails).HasColumnType("text");
+            entity.Property(e => e.BuddyActivities).HasColumnType("text");
+            entity.Property(e => e.ChecklistSummary).HasColumnType("text");
+            entity.Property(e => e.Timeline).HasColumnType("text");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
+        });
+
+        // Configure Etiquette entity
+        modelBuilder.Entity<Etiquette>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.RegionalInfo).HasColumnType("text");
+            entity.Property(e => e.FirstImpression).HasColumnType("text");
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
         });
 

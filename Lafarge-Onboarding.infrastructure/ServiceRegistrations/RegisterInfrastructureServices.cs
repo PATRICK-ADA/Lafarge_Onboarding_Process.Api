@@ -11,6 +11,8 @@ public static class RegisterInfrastructureServices
         services.AddScoped<IUsersRepository, Lafarge_Onboarding.infrastructure.Repositories.UsersRepository>();
         services.AddScoped<ILocalHireInfoRepository, Lafarge_Onboarding.infrastructure.Repositories.LocalHireInfoRepository>();
         services.AddScoped<IWelcomeMessageRepository, Lafarge_Onboarding.infrastructure.Repositories.WelcomeMessageRepository>();
+        services.AddScoped<IOnboardingPlanRepository, Lafarge_Onboarding.infrastructure.Repositories.OnboardingPlanRepository>();
+        services.AddScoped<IEtiquetteRepository, Lafarge_Onboarding.infrastructure.Repositories.EtiquetteRepository>();
 
         return services;
     }
