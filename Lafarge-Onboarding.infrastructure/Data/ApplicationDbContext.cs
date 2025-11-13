@@ -12,6 +12,8 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
     public DbSet<WelcomeMessage> WelcomeMessages { get; set; }
     public DbSet<OnboardingPlan> OnboardingPlans { get; set; }
     public DbSet<Etiquette> Etiquettes { get; set; }
+    public DbSet<Contact> Contacts { get; set; }
+    public DbSet<AllContact> AllContacts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -83,6 +85,25 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
             entity.HasKey(e => e.Id);
             entity.Property(e => e.RegionalInfo).HasColumnType("text");
             entity.Property(e => e.FirstImpression).HasColumnType("text");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
+        });
+
+        // Configure Contact entity
+        modelBuilder.Entity<Contact>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Name).HasMaxLength(200);
+            entity.Property(e => e.Email).HasMaxLength(200);
+            entity.Property(e => e.Phone).HasMaxLength(50);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
+        });
+
+        // Configure AllContact entity
+        modelBuilder.Entity<AllContact>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Category).HasMaxLength(50);
+            entity.Property(e => e.Data).HasColumnType("text");
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
         });
 
