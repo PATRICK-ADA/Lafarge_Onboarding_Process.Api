@@ -16,3 +16,5 @@ global using CsvHelper;
 global using ClosedXML.Excel;
 global using System.Globalization;
 global using DocumentFormat.OpenXml.Packaging;
+global using Users = Lafarge_Onboarding.domain.Entities.Users;
+global using DocumentFormat.OpenXml.Spreadsheet;
