@@ -44,7 +44,7 @@ public sealed class ContentController : ControllerBase
         _logger.LogInformation("Get local hire info request received");
 
             var result = await _localHireInfoService.GetLocalHireInfoAsync();
-            return result == null ? NotFound(ApiResponse<object>.Failure("Local hire info not found")) : Ok(ApiResponse<LocalHireInfoResponse>.Success(result));
+            return result == null ? NotFound(ApiResponse<object>.Failure("Local hire info not found", "404")) : Ok(ApiResponse<LocalHireInfoResponse>.Success(result));
 
     }
 
@@ -74,7 +74,7 @@ public sealed class ContentController : ControllerBase
         _logger.LogInformation("Get welcome messages request received");
 
         var result = await _welcomeMessageService.GetWelcomeMessagesAsync();
-        return result == null ? NotFound(ApiResponse<object>.Failure("Welcome messages not found")) : Ok(ApiResponse<WelcomeMessageResponse>.Success(result));
+        return result == null ? NotFound(ApiResponse<object>.Failure("Welcome messages not found", "404")) : Ok(ApiResponse<WelcomeMessageResponse>.Success(result));
     }
 
     [HttpPost("upload-onboarding-plan")]
@@ -103,7 +103,7 @@ public sealed class ContentController : ControllerBase
         _logger.LogInformation("Get onboarding plan request received");
 
         var result = await _onboardingPlanService.GetOnboardingPlanAsync();
-        return result == null ? NotFound(ApiResponse<object>.Failure("Onboarding plan not found")) : Ok(ApiResponse<OnboardingPlanResponse>.Success(result));
+        return result == null ? NotFound(ApiResponse<object>.Failure("Onboarding plan not found", "404")) : Ok(ApiResponse<OnboardingPlanResponse>.Success(result));
     }
 
     [HttpPost("upload-etiquette")]
@@ -132,6 +132,6 @@ public sealed class ContentController : ControllerBase
         _logger.LogInformation("Get etiquette request received");
 
         var result = await _etiquetteService.GetEtiquetteAsync();
-        return result == null ? NotFound(ApiResponse<object>.Failure("Etiquette not found")) : Ok(ApiResponse<EtiquetteResponse>.Success(result));
+        return result == null ? NotFound(ApiResponse<object>.Failure("Etiquette not found", "404")) : Ok(ApiResponse<EtiquetteResponse>.Success(result));
     }
 }

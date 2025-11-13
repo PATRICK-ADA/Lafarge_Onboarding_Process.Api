@@ -26,7 +26,7 @@ public sealed class DocumentsUploadController : ControllerBase
 
          User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value == null ?
     
-         Unauthorized(ApiResponse<DocumentUploadResponse>.Failure("User not authenticated")) :
+         Unauthorized(ApiResponse<DocumentUploadResponse>.Failure("User not authenticated", "401")) :
 
         Ok(await _uploadService.ProcessDocumentUploadAsync(request.ContentBodyUpload, User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value, request.ContentHeading, request.ContentSubHeading, request.ImageUpload));
 
@@ -46,7 +46,7 @@ public sealed class DocumentsUploadController : ControllerBase
 
         if (string.IsNullOrEmpty(userId))
         {
-            return Unauthorized(ApiResponse<IEnumerable<DocumentUploadResponse>>.Failure("User not authenticated"));
+            return Unauthorized(ApiResponse<IEnumerable<DocumentUploadResponse>>.Failure("User not authenticated", "401"));
         }
 
         var responses = await _uploadService.ProcessDocumentsBulkAsync(contentBodyUploads, userId, contentHeading, contentSubHeading);
@@ -86,7 +86,7 @@ public sealed class DocumentsUploadController : ControllerBase
         };
         
         return document == null ?
-            NotFound(ApiResponse<DocumentUploadResponse>.Failure("Document not found.")) :
+            NotFound(ApiResponse<DocumentUploadResponse>.Failure("Document not found.", "404")) :
             Ok(ApiResponse<DocumentUploadResponse>.Success(response));
     }
 
