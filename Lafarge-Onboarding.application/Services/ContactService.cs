@@ -49,6 +49,13 @@ public sealed class ContactService : IContactService
         return dtos;
     }
 
+    public async Task DeleteAllContactsAsync()
+    {
+        _logger.LogInformation("Deleting all local contacts");
+        await _repository.DeleteAllAsync();
+        _logger.LogInformation("All local contacts deleted successfully");
+    }
+
     private async Task<List<ContactDto>> ParseContactsFromFileAsync(IFormFile file)
     {
         var extension = Path.GetExtension(file.FileName).ToLower();

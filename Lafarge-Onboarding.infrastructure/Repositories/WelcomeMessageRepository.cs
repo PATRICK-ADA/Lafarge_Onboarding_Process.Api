@@ -28,4 +28,14 @@ public sealed class WelcomeMessageRepository : IWelcomeMessageRepository
         _context.WelcomeMessages.Update(welcomeMessage);
         await _context.SaveChangesAsync();
     }
+
+    public async Task DeleteLatestAsync()
+    {
+        var latest = await GetLatestAsync();
+        if (latest != null)
+        {
+            _context.WelcomeMessages.Remove(latest);
+            await _context.SaveChangesAsync();
+        }
+    }
 }

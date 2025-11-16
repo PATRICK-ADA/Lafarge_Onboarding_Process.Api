@@ -1,0 +1,26 @@
+-- Complete script to reset and seed Content controller tables with dummy data
+-- Run this script to clean all existing data and insert fresh dummy data
+
+-- First, truncate all Content controller tables
+TRUNCATE TABLE "LocalHireInfos" RESTART IDENTITY CASCADE;
+TRUNCATE TABLE "WelcomeMessages" RESTART IDENTITY CASCADE;
+TRUNCATE TABLE "OnboardingPlans" RESTART IDENTITY CASCADE;
+TRUNCATE TABLE "Etiquettes" RESTART IDENTITY CASCADE;
+
+-- Now insert dummy data for all Content controller endpoints
+
+-- Data for local-hire-info-upload endpoint (LocalHireInfos table)
+INSERT INTO "LocalHireInfos" ("WhoWeAre", "FootprintSummary", "Plants", "ReadyMix", "Depots", "CultureSummary", "Pillars", "Innovation", "HuaxinSpirit", "RespectfulWorkplaces", "Introduction", "CountryFacts", "InterestingFacts", "Holidays", "CreatedAt") VALUES
+('Lafarge is a world leader in building materials, with top-ranking positions in its Cement, Aggregates and Concrete businesses.', 'Lafarge operates in 64 countries with 63,000 employees worldwide.', '["Plant A - Cement Production", "Plant B - Cement Production", "Plant C - Grinding Station"]', '["ReadyMix Plant 1", "ReadyMix Plant 2", "ReadyMix Plant 3"]', 'Distribution depots located across major cities for efficient delivery.', 'Our culture is built on innovation, sustainability, and customer focus.', '["Safety First", "Innovation", "Sustainability", "Customer Focus"]', '["Digital transformation initiatives", "Sustainable cement production", "Advanced concrete technologies"]', '["Teamwork", "Excellence", "Innovation", "Integrity"]', 'We foster an inclusive environment where every voice is heard and respected.', 'Welcome to Lafarge! We are excited to have you join our global team.', '[{"Label":"Population","Value":"1.4 billion"}, {"Label":"GDP","Value":"$14.3 trillion"}, {"Label":"Major industries","Value":"Manufacturing, Technology"}]', '["Home to the Great Wall", "Four distinct seasons", "Rich cultural heritage"]', '[{"Date":"Jan 1","Name":"Chinese New Year"}, {"Date":"October 1","Name":"National Day"}, {"Date":"Mid-Autumn","Name":"Mid-Autumn Festival"}]', NOW());
+
+-- Data for upload-welcome-messages endpoint (WelcomeMessages table)
+INSERT INTO "WelcomeMessages" ("CeoName", "CeoTitle", "CeoImageUrl", "CeoMessage", "HrName", "HrTitle", "HrImageUrl", "HrMessage", "CreatedAt") VALUES
+('Pierre Dupont', 'Chief Executive Officer', 'https://example.com/ceo-image.jpg', 'Welcome to Lafarge! I am thrilled to welcome you to our global family. Your expertise and passion will contribute greatly to our mission of building a better world through sustainable construction solutions.', 'Marie Laurent', 'Director of Human Resources', 'https://example.com/hr-image.jpg', 'Congratulations on joining Lafarge! We are committed to supporting your professional growth and ensuring you have all the resources needed for a successful onboarding experience.', NOW());
+
+-- Data for upload-onboarding-plan endpoint (OnboardingPlans table)
+INSERT INTO "OnboardingPlans" ("BuddyDetails", "BuddyActivities", "ChecklistSummary", "Timeline", "CreatedAt") VALUES
+('Your buddy is John Smith, Senior Project Manager with 5 years of experience at Lafarge. Contact: john.smith@lafarge.com', '["Office tour and introductions", "Lunch with team members", "One-on-one mentoring sessions", "Project shadowing opportunities"]', 'Complete all mandatory training modules, review company policies, and schedule introductory meetings with key stakeholders.', '[{"Period":"Week 1","Tasks":["HR paperwork and IT setup","Complete mandatory training modules"],"SubTasks":["Set up email and access","Review company policies"]}, {"Period":"Week 2","Tasks":["Department orientation and training","Schedule introductory meetings"],"SubTasks":["Meet with department head","Attend team building session"]}, {"Period":"Week 3","Tasks":["Project assignment and team integration"],"SubTasks":["Begin project work","Regular check-ins with buddy"]}, {"Period":"Month 1-3","Tasks":["Ongoing mentoring and performance reviews"],"SubTasks":["Monthly performance discussions","Career development planning"]}]', NOW());
+
+-- Data for upload-etiquette endpoint (Etiquettes table)
+INSERT INTO "Etiquettes" ("RegionalInfo", "FirstImpression", "CreatedAt") VALUES
+('[{"Title":"Lafarge Presence","Regions":[{"Title":"Business Cards","Content":"Business cards are exchanged with both hands"}, {"Title":"Punctuality","Content":"Punctuality is highly valued in business meetings"}, {"Title":"Gift Giving","Content":"Gift giving is common but should be modest"}, {"Title":"Topics to Avoid","Content":"Avoid discussing sensitive topics like politics initially"}]}]', '[{"Title":"Greetings","Content":"Use formal greetings and titles until invited to do otherwise"}, {"Title":"Body Language","Content":"Maintain eye contact during conversations"}, {"Title":"Dress Code","Content":"Dress professionally for business meetings"}, {"Title":"Preparation","Content":"Be prepared and research your counterparts beforehand"}]', NOW());

@@ -6,4 +6,5 @@ public interface ILocalHireInfoService
 {
     Task<LocalHireInfoResponse> ExtractAndSaveLocalHireInfoAsync(IFormFile file);
     Task<LocalHireInfoResponse?> GetLocalHireInfoAsync();
+    Task DeleteLatestAsync();
 }

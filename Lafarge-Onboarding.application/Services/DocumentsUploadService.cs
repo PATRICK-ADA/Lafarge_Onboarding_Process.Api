@@ -199,9 +199,29 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
         };
     }
 
+    public async Task<string> ExtractTextFromDocumentAsync(IFormFile file)
+    {
+        var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+        return extension switch
+        {
+            ".txt" => await ExtractTextFromTxtAsync(file),
+            ".docx" => await ExtractTextFromDocxAsync(file),
+            ".doc" => await ExtractTextFromDocAsync(file),
+            ".pdf" => await ExtractTextFromPdfAsync(file),
+            _ => string.Empty // For images and other files, return empty or handle differently
+        };
+    }
+
     private async Task<string> ExtractTextFromTxtAsync(string filePath)
     {
         return await File.ReadAllTextAsync(filePath);
+    }
+
+    private async Task<string> ExtractTextFromTxtAsync(IFormFile file)
+    {
+        using var reader = new StreamReader(file.OpenReadStream());
+        return await reader.ReadToEndAsync();
     }
 
     private async Task<string> ExtractTextFromDocxAsync(string filePath)
@@ -220,9 +240,9 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
                         return string.Empty;
                     }
 
-                    var text = body.Descendants<DocumentFormat.OpenXml.Wordprocessing.Text>()
-                        .Select(t => t.Text)
-                        .Aggregate((current, next) => current + " " + next);
+                    var paragraphs = body.Descendants<DocumentFormat.OpenXml.Wordprocessing.Paragraph>();
+                    var text = string.Join("\n", paragraphs.Select(p =>
+                        string.Join("", p.Descendants<DocumentFormat.OpenXml.Wordprocessing.Text>().Select(t => t.Text))));
 
                     _logger.LogInformation("DOCX text extraction completed successfully. Characters extracted: {CharCount}", text?.Length ?? 0);
                     return text ?? string.Empty;
@@ -236,14 +256,58 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
         });
     }
 
+    private async Task<string> ExtractTextFromDocxAsync(IFormFile file)
+    {
+        return await Task.Run(() =>
+        {
+            _logger.LogInformation("Starting DOCX text extraction for file: {FileName}", file.FileName);
+            try
+            {
+                using (var stream = file.OpenReadStream())
+                using (var document = DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(stream, false))
+                {
+                    var body = document.MainDocumentPart?.Document.Body;
+                    if (body == null)
+                    {
+                        _logger.LogWarning("DOCX document has no body content: {FileName}", file.FileName);
+                        return string.Empty;
+                    }
+
+                    var paragraphs = body.Descendants<DocumentFormat.OpenXml.Wordprocessing.Paragraph>();
+                    var text = string.Join("\n", paragraphs.Select(p =>
+                        string.Join("", p.Descendants<DocumentFormat.OpenXml.Wordprocessing.Text>().Select(t => t.Text))));
+
+                    _logger.LogInformation("DOCX text extraction completed successfully. Characters extracted: {CharCount}", text?.Length ?? 0);
+                    return text ?? string.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error extracting DOCX content from file: {FileName}", file.FileName);
+                return $"Error extracting DOCX content: {ex.Message}";
+            }
+        });
+    }
+
     private async Task<string> ExtractTextFromDocAsync(string filePath)
     {
         return await Task.Run(() =>
         {
             _logger.LogInformation("DOC file extraction attempted (not implemented): {FilePath}", filePath);
-           
+
             _logger.LogWarning("DOC file format extraction requires additional processing. File: {FileName}", Path.GetFileName(filePath));
             return "DOC file format extraction requires additional processing. File: " + Path.GetFileName(filePath);
+        });
+    }
+
+    private async Task<string> ExtractTextFromDocAsync(IFormFile file)
+    {
+        return await Task.Run(() =>
+        {
+            _logger.LogInformation("DOC file extraction attempted (not implemented): {FileName}", file.FileName);
+
+            _logger.LogWarning("DOC file format extraction requires additional processing. File: {FileName}", file.FileName);
+            return "DOC file format extraction requires additional processing. File: " + file.FileName;
         });
     }
 
@@ -267,6 +331,32 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error extracting PDF content from file: {FilePath}", filePath);
+                return $"Error extracting PDF content: {ex.Message}";
+            }
+        });
+    }
+
+    private async Task<string> ExtractTextFromPdfAsync(IFormFile file)
+    {
+        return await Task.Run(() =>
+        {
+            _logger.LogInformation("Starting PDF text extraction for file: {FileName}", file.FileName);
+            try
+            {
+                using (var stream = file.OpenReadStream())
+                using (var pdf = UglyToad.PdfPig.PdfDocument.Open(stream))
+                {
+                    var pages = pdf.GetPages().ToList();
+                    _logger.LogInformation("PDF has {PageCount} pages", pages.Count);
+
+                    var text = string.Join(" ", pages.Select(page => page.Text));
+                    _logger.LogInformation("PDF text extraction completed successfully. Characters extracted: {CharCount}", text.Length);
+                    return text;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error extracting PDF content from file: {FileName}", file.FileName);
                 return $"Error extracting PDF content: {ex.Message}";
             }
         });

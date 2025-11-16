@@ -5,4 +5,5 @@ public interface IOnboardingPlanRepository
     Task AddAsync(OnboardingPlan onboardingPlan);
     Task<OnboardingPlan?> GetLatestAsync();
     Task UpdateAsync(OnboardingPlan onboardingPlan);
+    Task DeleteLatestAsync();
 }

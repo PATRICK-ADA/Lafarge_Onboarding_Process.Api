@@ -1,0 +1,562 @@
+2025-11-16 00:05:08.765 +01:00 [INF] Registering new user with email: patada306@gmail.com <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-16 00:05:08.780 +01:00 [ERR] Failed to create user: patada306@gmail.com. Errors: P2025-11-16 00:05:08.780 +01:00 [ERR] Failed to create user: patada306@gmail.com. Errors: Passwords must have at least one digit ('0'-'9')., Passwords must have 2025-11-16 00:05:08.781 +01:00 [ER2025-11-16 00:05:08.781 +01:00 [ERR] Error during user registration for email: patada306@gmail.com
+System.InvalidOperationException: User registration failed: Passwords must have at least one digit ('0'-'9')., Passwords must have at least one uppercase ('A'-'Z').
+   at Lafarge_Onboarding.application.Services.AuthService.RegisterUserAsync(AuthRegisterRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/AuthService.cs:line 103
+2025-11-16 00:05:08.784 +01:00 [ERR] An unhandled exception occurred. Request: POST /api/Auth/register, User: Anonymous
+System.InvalidOperationException: User registration failed: Passwords must have at least one digit ('0'-'9')., Passwords must have at least one uppercase ('A'-'Z').
+   at Lafarge_Onboarding.application.Services.AuthService.RegisterUserAsync(AuthRegisterRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/AuthService.cs:line 103
+   at Lafarge_Onboarding.api.Controllers.AuthController.Register(AuthRegisterRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Controllers/AuthController.cs:line 24
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Lafarge_Onboarding.api.Middleware.ExceptionHandlingMiddleware.InvokeAsync(HttpContext context) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Middleware/ExceptionHandlingMiddleware.cs:line 24
+2025-11-16 00:05:51.034 +01:00 [INF] Registering new user with email: patada306@gmail.com
+2025-11-16 00:05:51.682 +01:00 [INF] User registered successfully: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-16 00:06:19.571 +01:00 [INF] Registering new user with email: patada306@gmail.com
+2025-11-16 00:06:19.695 +01:00 [ERR] Failed to create user: patada306@gmail.com. Errors: Username 'patada306@gmail.com' is already taken.
+2025-11-16 00:06:19.695 +01:00 [ERR] Error during user registration for email: patada306@gmail.com
+System.InvalidOperationException: User registration failed: Username 'patada306@gmail.com' is already taken.
+   at Lafarge_Onboarding.application.Services.AuthService.RegisterUserAsync(AuthRegisterRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/AuthService.cs:line 103
+2025-11-16 00:06:19.696 +01:00 [ERR] An unhandled exception occurred. Request: POST /api/Auth/register, User: Anonymous
+System.InvalidOperationException: User registration failed: Username 'patada306@gmail.com' is already taken.
+   at Lafarge_Onboarding.application.Services.AuthService.RegisterUserAsync(AuthRegisterRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/AuthService.cs:line 103
+   at Lafarge_Onboarding.api.Controllers.AuthController.Register(AuthRegisterRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Controllers/AuthController.cs:line 24
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Lafarge_Onboarding.api.Middleware.ExceptionHandlingMiddleware.InvokeAsync(HttpContext context) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Middleware/ExceptionHandlingMiddleware.cs:line 24
+2025-11-16 00:06:48.926 +01:00 [INF] Processing login request for email: patada306@gmail.com
+2025-11-16 00:06:48.926 +01:00 [INF] Validating credentials for email: patada306@gmail.com
+2025-11-16 00:06:49.034 +01:00 [INF] Credentials validated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-16 00:06:49.036 +01:00 [INF] Generating JWT token for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-16 00:06:49.110 +01:00 [INF] JWT token generated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-16 00:06:49.111 +01:00 [INF] Login successful for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-16 00:06:49.112 +01:00 [INF] Processing login request for email: patada306@gmail.com
+2025-11-16 00:06:49.112 +01:00 [INF] Validating credentials for email: patada306@gmail.com
+2025-11-16 00:06:49.208 +01:00 [INF] Credentials validated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-16 00:06:49.209 +01:00 [INF] Generating JWT token for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-16 00:06:49.212 +01:00 [INF] JWT token generated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-16 00:06:49.212 +01:00 [INF] Login successful for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-16 00:08:57.514 +01:00 [INF] Local hire info upload request received
+2025-11-16 00:09:10.331 +01:00 [INF] Local hire info upload request received
+ 00:06:49.112 +01:00 [INF] Processing login request for email: patada306@gmail.com <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-16 00:06:49.112 +01:00 [INF] Validating credentials for email: patada306@gmail.com <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-16 00:06:49.208 +01:00 [INF] Credentials validated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7 <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-16 00:06:49.209 +01:00 [INF] Generating JWT token for user: 2a00a351-5183-4390-8f59-ff935f05e5e7 <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-16 00:06:49.212 +01:00 [INF] JWT token generated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7 <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-16 00:06:49.212 +01:00 [INF] Login successful for user: 2a00a351-5183-4390-8f59-ff935f05e5e7 <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-16 00:08:57.514 +01:00 [INF] Local hire info upload request received <s:Lafarge_Onboarding.api.Controllers.ContentController>
+2025-11-16 00:09:10.331 +01:00 [INF] Local hire info upload request received <s:Lafarge_Onboarding.api.Controllers.ContentController>
+2025-11-16 00:30:07.873 +01:00 [INF] Local hire info upload request received <s:Lafarge_Onboarding.api.Controllers.ContentController>
+2025-11-16 00:30:07.933 +01:00 [INF] Starting local hire info extraction from2025-11-16 00:30:07.933 +01:00 [INF] Starting local hire info extraction from file: local-hir2025-11-16 02025-11-16 00:30:07.959 +01:00 [INF] Starting DOCX text extraction for file: local-hire-info.docx
+2025-11-16 00:30:07.967 +01:00 [ERR] Error extracting DOCX content from file: local-hire-info.docx
+System.IO.FileNotFoundException: Could not find file '/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/local-hire-info.docx'.
+File name: '/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/local-hire-info.docx'
+   at Interop.ThrowExceptionForIoErrno(ErrorInfo errorInfo, String path, Boolean isDirError)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String path, OpenFlags flags, Int32 mode, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, UnixFileMode openPermissions, Int64& fileLength, UnixFileMode& filePermissions, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, Int64 preallocationSize)
+   at System.IO.File.Open(String path, FileMode mode, FileAccess access, FileShare share)
+   at DocumentFormat.OpenXml.Features.FilePackageFeature.CreateStream(String path, PackageOpenMode openMode)
+   at DocumentFormat.OpenXml.Features.FilePackageFeature..ctor(String path, PackageOpenMode mode)
+   at DocumentFormat.OpenXml.Builder.OpenXmlPackageBuilderExtensions.Open[TPackage](IPackageFactory`1 builder, String file, PackageOpenMode mode)
+   at DocumentFormat.OpenXml.Builder.OpenXmlPackageBuilderExtensions.Open[TPackage](IPackageFactory`1 builder, String file, Boolean isEditing)
+   at DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(String path, Boolean isEditable, OpenSettings openSettings)
+   at DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(String path, Boolean isEditable)
+   at Lafarge_Onboarding.application.Services.DocumentsUploadService.<>c__DisplayClass11_0.<ExtractTextFromDocxAsync>b__0() in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/DocumentsUploadService.cs:line 214
+2025-11-16 00:30:07.982 +01:00 [INF] Text extracted successfully. Length: 145
+2025-11-16 00:30:09.407 +01:00 [INF] Local hire info saved successfully with ID: 1
+2025-11-16 00:30:43.236 +01:00 [INF] Get local hire info request received
+2025-11-16 00:30:43.238 +01:00 [INF] Retrieving latest local hire info
+2025-11-16 00:30:43.562 +01:00 [INF] Local hire info retrieved successfully
+2025-11-16 00:31:27.700 +01:00 [INF] Local hire info upload request received
+2025-11-16 00:31:27.701 +01:00 [INF] Starting local hire info extraction from file: local-hire-info.docx
+2025-11-16 00:31:27.701 +01:00 [INF] Starting DOCX text extraction for file: local-hire-info.docx
+2025-11-16 00:31:27.702 +01:00 [ERR] Error extracting DOCX content from file: local-hire-info.docx
+System.IO.FileNotFoundException: Could not find file '/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/local-hire-info.docx'.
+File name: '/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/local-hire-info.docx'
+   at Interop.ThrowExceptionForIoErrno(ErrorInfo errorInfo, String path, Boolean isDirError)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String path, OpenFlags flags, Int32 mode, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, UnixFileMode openPermissions, Int64& fileLength, UnixFileMode& filePermissions, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, Int64 preallocationSize)
+   at System.IO.File.Open(String path, FileMode mode, FileAccess access, FileShare share)
+   at DocumentFormat.OpenXml.Features.FilePackageFeature.CreateStream(String path, PackageOpenMode openMode)
+   at DocumentFormat.OpenXml.Features.FilePackageFeature..ctor(String path, PackageOpenMode mode)
+   at DocumentFormat.OpenXml.Builder.OpenXmlPackageBuilderExtensions.Open[TPackage](IPackageFactory`1 builder, String file, PackageOpenMode mode)
+   at DocumentFormat.OpenXml.Builder.OpenXmlPackageBuilderExtensions.Open[TPackage](IPackageFactory`1 builder, String file, Boolean isEditing)
+   at DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(String path, Boolean isEditable, OpenSettings openSettings)
+   at DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(String path, Boolean isEditable)
+   at Lafarge_Onboarding.application.Services.DocumentsUploadService.<>c__DisplayClass11_0.<ExtractTextFromDocxAsync>b__0() in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/DocumentsUploadService.cs:line 214
+2025-11-16 00:31:27.703 +01:00 [INF] Text extracted successfully. Length: 145
+2025-11-16 00:31:27.733 +01:00 [INF] Local hire info saved successfully with ID: 2
+2025-11-16 00:32:45.062 +01:00 [INF] Local hire info upload request received
+2025-11-16 00:32:45.063 +01:00 [INF] Starting local hire info extraction from file: local-hire-info.docx
+2025-11-16 00:32:45.063 +01:00 [INF] Starting DOCX text extraction for file: local-hire-info.docx
+2025-11-16 00:32:45.064 +01:00 [ERR] Error extracting DOCX content from file: local-hire-info.docx
+System.IO.FileNotFoundException: Could not find file '/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/local-hire-info.docx'.
+File name: '/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/local-hire-info.docx'
+   at Interop.ThrowExceptionForIoErrno(ErrorInfo errorInfo, String path, Boolean isDirError)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String path, OpenFlags flags, Int32 mode, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, UnixFileMode openPermissions, Int64& fileLength, UnixFileMode& filePermissions, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, Int64 preallocationSize)
+   at System.IO.File.Open(String path, FileMode mode, FileAccess access, FileShare share)
+   at DocumentFormat.OpenXml.Features.FilePackageFeature.CreateStream(String path, PackageOpenMode openMode)
+   at DocumentFormat.OpenXml.Features.FilePackageFeature..ctor(String path, PackageOpenMode mode)
+   at DocumentFormat.OpenXml.Builder.OpenXmlPackageBuilderExtensions.Open[TPackage](IPackageFactory`1 builder, String file, PackageOpenMode mode)
+   at DocumentFormat.OpenXml.Builder.OpenXmlPackageBuilderExtensions.Open[TPackage](IPackageFactory`1 builder, String file, Boolean isEditing)
+   at DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(String path, Boolean isEditable, OpenSettings openSettings)
+   at DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(String path, Boolean isEditable)
+   at Lafarge_Onboarding.application.Services.DocumentsUploadService.<>c__DisplayClass11_0.<ExtractTextFromDocxAsync>b__0() in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/DocumentsUploadService.cs:line 214
+2025-11-16 00:32:45.065 +01:00 [INF] Text extracted successfully. Length: 145
+2025-11-16 00:32:45.076 +01:00 [INF] Local hire info saved successfully with ID: 3
+2025-11-16 00:33:04.181 +01:00 [INF] Local hire info upload request received
+2025-11-16 00:33:04.182 +01:00 [INF] Starting local hire info extraction from file: local-hire-info.docx
+2025-11-16 00:33:04.182 +01:00 [INF] Starting DOCX text extraction for file: local-hire-info.docx
+2025-11-16 00:33:04.183 +01:00 [ERR] Error extracting DOCX content from file: local-hire-info.docx
+System.IO.FileNotFoundException: Could not find file '/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/local-hire-info.docx'.
+File name: '/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/local-hire-info.docx'
+   at Interop.ThrowExceptionForIoErrno(ErrorInfo errorInfo, String path, Boolean isDirError)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String path, OpenFlags flags, Int32 mode, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, UnixFileMode openPermissions, Int64& fileLength, UnixFileMode& filePermissions, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, Int64 preallocationSize)
+   at System.IO.File.Open(String path, FileMode mode, FileAccess access, FileShare share)
+   at DocumentFormat.OpenXml.Features.FilePackageFeature.CreateStream(String path, PackageOpenMode openMode)
+   at DocumentFormat.OpenXml.Features.FilePackageFeature..ctor(String path, PackageOpenMode mode)
+   at DocumentFormat.OpenXml.Builder.OpenXmlPackageBuilderExtensions.Open[TPackage](IPackageFactory`1 builder, String file, PackageOpenMode mode)
+   at DocumentFormat.OpenXml.Builder.OpenXmlPackageBuilderExtensions.Open[TPackage](IPackageFactory`1 builder, String file, Boolean isEditing)
+   at DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(String path, Boolean isEditable, OpenSettings openSettings)
+   at DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(String path, Boolean isEditable)
+   at Lafarge_Onboarding.application.Services.DocumentsUploadService.<>c__DisplayClass11_0.<ExtractTextFromDocxAsync>b__0() in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/DocumentsUploadService.cs:line 214
+2025-11-16 00:33:04.184 +01:00 [INF] Text extracted successfully. Length: 145
+2025-11-16 00:33:04.193 +01:00 [INF] Local hire info saved successfully with ID: 4
+2025-11-16 00:37:14.066 +01:00 [INF] Local hire info upload request received
+2025-11-16 00:37:14.067 +01:00 [INF] Starting local hire info extraction from file: Etiquette.docx
+2025-11-16 00:37:14.067 +01:00 [INF] Starting DOCX text extraction for file: Etiquette.docx
+2025-11-16 00:37:14.068 +01:00 [ERR] Error extracting DOCX content from file: Etiquette.docx
+System.IO.FileNotFoundException: Could not find file '/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Etiquette.docx'.
+File name: '/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Etiquette.docx'
+   at Interop.ThrowExceptionForIoErrno(ErrorInfo errorInfo, String path, Boolean isDirError)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String path, OpenFlags flags, Int32 mode, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, UnixFileMode openPermissions, Int64& fileLength, UnixFileMode& filePermissions, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, Int64 preallocationSize)
+   at System.IO.File.Open(String path, FileMode mode, FileAccess access, FileShare share)
+   at DocumentFormat.OpenXml.Features.FilePackageFeature.CreateStream(String path, PackageOpenMode openMode)
+   at DocumentFormat.OpenXml.Features.FilePackageFeature..ctor(String path, PackageOpenMode mode)
+   at DocumentFormat.OpenXml.Builder.OpenXmlPackageBuilderExtensions.Open[TPackage](IPackageFactory`1 builder, String file, PackageOpenMode mode)
+   at DocumentFormat.OpenXml.Builder.OpenXmlPackageBuilderExtensions.Open[TPackage](IPackageFactory`1 builder, String file, Boolean isEditing)
+   at DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(String path, Boolean isEditable, OpenSettings openSettings)
+   at DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(String path, Boolean isEditable)
+   at Lafarge_Onboarding.application.Services.DocumentsUploadService.<>c__DisplayClass11_0.<ExtractTextFromDocxAsync>b__0() in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/DocumentsUploadService.cs:line 214
+2025-11-16 00:37:14.069 +01:00 [INF] Text extracted successfully. Length: 139
+2025-11-16 00:37:14.262 +01:00 [INF] Local hire info saved successfully with ID: 5
+2025-11-16 00:38:45.441 +01:00 [INF] Upload etiquette request received
+2025-11-16 00:38:45.444 +01:00 [INF] Starting etiquette extraction from file: Etiquette.docx
+2025-11-16 00:38:45.445 +01:00 [INF] Starting DOCX text extraction for file: Etiquette.docx
+2025-11-16 00:38:45.446 +01:00 [ERR] Error extracting DOCX content from file: Etiquette.docx
+System.IO.FileNotFoundException: Could not find file '/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Etiquette.docx'.
+File name: '/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Etiquette.docx'
+   at Interop.ThrowExceptionForIoErrno(ErrorInfo errorInfo, String path, Boolean isDirError)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String path, OpenFlags flags, Int32 mode, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, UnixFileMode openPermissions, Int64& fileLength, UnixFileMode& filePermissions, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, Int64 preallocationSize)
+   at System.IO.File.Open(String path, FileMode mode, FileAccess access, FileShare share)
+   at DocumentFormat.OpenXml.Features.FilePackageFeature.CreateStream(String path, PackageOpenMode openMode)
+   at DocumentFormat.OpenXml.Features.FilePackageFeature..ctor(String path, PackageOpenMode mode)
+   at DocumentFormat.OpenXml.Builder.OpenXmlPackageBuilderExtensions.Open[TPackage](IPackageFactory`1 builder, String file, PackageOpenMode mode)
+   at DocumentFormat.OpenXml.Builder.OpenXmlPackageBuilderExtensions.Open[TPackage](IPackageFactory`1 builder, String file, Boolean isEditing)
+   at DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(String path, Boolean isEditable, OpenSettings openSettings)
+   at DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(String path, Boolean isEditable)
+   at Lafarge_Onboarding.application.Services.DocumentsUploadService.<>c__DisplayClass11_0.<ExtractTextFromDocxAsync>b__0() in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/DocumentsUploadService.cs:line 214
+2025-11-16 00:38:45.449 +01:00 [INF] Text extracted successfully. Length: 139
+2025-11-16 00:38:45.492 +01:00 [INF] Etiquette saved successfully with ID: 1
+2025-11-16 00:39:40.208 +01:00 [INF] Upload etiquette request received
+2025-11-16 00:39:40.209 +01:00 [INF] Starting etiquette extraction from file: Etiquette.docx
+2025-11-16 00:39:40.209 +01:00 [INF] Starting DOCX text extraction for file: Etiquette.docx
+2025-11-16 00:39:40.209 +01:00 [ERR] Error extracting DOCX content from file: Etiquette.docx
+System.IO.FileNotFoundException: Could not find file '/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Etiquette.docx'.
+File name: '/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Etiquette.docx'
+   at Interop.ThrowExceptionForIoErrno(ErrorInfo errorInfo, String path, Boolean isDirError)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String path, OpenFlags flags, Int32 mode, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, UnixFileMode openPermissions, Int64& fileLength, UnixFileMode& filePermissions, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, Int64 preallocationSize)
+   at System.IO.File.Open(String path, FileMode mode, FileAccess access, FileShare share)
+   at DocumentFormat.OpenXml.Features.FilePackageFeature.CreateStream(String path, PackageOpenMode openMode)
+   at DocumentFormat.OpenXml.Features.FilePackageFeature..ctor(String path, PackageOpenMode mode)
+   at DocumentFormat.OpenXml.Builder.OpenXmlPackageBuilderExtensions.Open[TPackage](IPackageFactory`1 builder, String file, PackageOpenMode mode)
+   at DocumentFormat.OpenXml.Builder.OpenXmlPackageBuilderExtensions.Open[TPackage](IPackageFactory`1 builder, String file, Boolean isEditing)
+   at DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(String path, Boolean isEditable, OpenSettings openSettings)
+   at DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(String path, Boolean isEditable)
+   at Lafarge_Onboarding.application.Services.DocumentsUploadService.<>c__DisplayClass11_0.<ExtractTextFromDocxAsync>b__0() in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/DocumentsUploadService.cs:line 214
+2025-11-16 00:39:40.210 +01:00 [INF] Text extracted successfully. Length: 139
+2025-11-16 00:39:40.216 +01:00 [INF] Etiquette saved successfully with ID: 2
+nboarding.application.Services.DocumentsUploadService>
+2025-11-16 00:39:40.209 +01:00 [ERR] Error extracting DOCX content from file: Etiquette.docx <s:Lafarge_Onboarding.application.Services.DocumentsUploadService>
+System.IO.FileNotFoundException: Could not find file '/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Etiquette.docx'.
+File name: '/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Etiquette.docx'
+   at Interop.ThrowExceptionForIoErrno(ErrorInfo errorInfo, String path, Boolean isDirError)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String path, OpenFlags flags, Int32 mode, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+   at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, UnixFileMode openPermissions, Int64& fileLength, UnixFileMode& filePermissions, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+   at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+   at System.IO.FileStream..ctor(String path, FileMode mode, FileAccess access, FileShare share, Int32 bufferSize, FileOptions options, Int64 preallocationSize)
+   at System.IO.File.Open(String path, FileMode mode, FileAccess access, FileShare share)
+   at DocumentFormat.OpenXml.Features.FilePackageFeature.CreateStream(String path, PackageOpenMode openMode)
+   at DocumentFormat.OpenXml.Features.FilePackageFeature..ctor(String path, PackageOpenMode mode)
+   at DocumentFormat.OpenXml.Builder.OpenXmlPackageBuilderExtensions.Open[TPackage](IPackageFactory`1 builder, String file, PackageOpenMode mode)
+   at DocumentFormat.OpenXml.Builder.OpenXmlPackageBuilderExtensions.Open[TPackage](IPackageFactory`1 builder, String file, Boolean isEditing)
+   at DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(String path, Boolean isEditable, OpenSettings openSettings)
+   at DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(String path, Boolean isEditable)
+   at Lafarge_Onboarding.application.Services.DocumentsUploadService.<>c__DisplayClass11_0.<ExtractTextFromDocxAsync>b__0() in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/DocumentsUploadService.cs:line 214
+2025-11-16 00:39:40.210 +01:00 [INF] Text extracted successfully. Length: 139 <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 00:39:40.216 +01:00 [INF] Etiquette saved successfully with ID: 2 <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 00:55:59.743 +01:00 [INF] Upload etiquette request received <s:Lafarge_Onboarding.api.Controllers.ContentController>
+2025-11-16 00:55:59.787 +01:00 [INF] Starting etiquette extraction from2025-11-16 00:55:59.787 +01:00 [INF] Starting etiquette extraction from file: Etiqu2025-11-162025-11-16 00:55:59.796 +01:00 [INF] Starting DOCX text extraction for file: Etiquette.docx
+2025-11-16 00:56:00.050 +01:00 [INF] DOCX text extraction completed successfully. Characters extracted: 4381
+2025-11-16 00:56:00.054 +01:00 [INF] Text extracted successfully. Length: 4381
+2025-11-16 00:56:00.977 +01:00 [INF] Etiquette saved successfully with ID: 3
+2025-11-16 00:56:11.817 +01:00 [INF] Get etiquette request received
+2025-11-16 00:56:11.817 +01:00 [INF] Retrieving latest etiquette
+2025-11-16 00:56:12.030 +01:00 [INF] Etiquette retrieved successfully
+2025-11-16 01:01:21.181 +01:00 [INF] Local hire info upload request received
+2025-11-16 01:01:21.182 +01:00 [INF] Starting local hire info extraction from file: local-hire-info.docx
+2025-11-16 01:01:21.182 +01:00 [INF] Starting DOCX text extraction for file: local-hire-info.docx
+2025-11-16 01:01:21.204 +01:00 [INF] DOCX text extraction completed successfully. Characters extracted: 7193
+2025-11-16 01:01:21.205 +01:00 [INF] Text extracted successfully. Length: 7193
+2025-11-16 01:01:21.373 +01:00 [INF] Local hire info saved successfully with ID: 6
+roller>
+2025-11-16 01:01:21.182 +01:00 [INF] Starting local hire info extraction from file: local-hire-info.docx <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-16 01:01:21.182 +01:00 [INF] Starting DOCX text extraction for file: local-hire-info.docx <s:Lafarge_Onboarding.application.Services.DocumentsUploadService>
+2025-11-16 01:01:21.204 +01:00 [INF] DOCX text extraction completed successfully. Characters extracted: 7193 <s:Lafarge_Onboarding.application.Services.DocumentsUploadService>
+2025-11-16 01:01:21.205 +01:00 [INF] Text extracted successfully. Length: 7193 <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-16 01:01:21.373 +01:00 [INF] Local hire info saved successfully with ID: 6 <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-16 01:25:13.599 +01:00 [INF] Local hire info upload request received <s:Lafarge_Onboarding.api.Controllers.ContentController>
+2025-11-16 01:25:13.651 +01:00 [INF] Starting local hire info extraction from2025-11-16 01:25:13.651 +01:00 [INF] Starting local hire info extraction from file: local-hir2025-11-16 02025-11-16 01:25:13.661 +01:00 [INF] Starting DOCX text extraction for file: local-hire-info.docx
+2025-11-16 01:25:13.886 +01:00 [INF] DOCX text extraction completed successfully. Characters extracted: 7172
+2025-11-16 01:25:13.896 +01:00 [INF] Text extracted successfully. Length: 7172
+2025-11-16 01:25:13.896 +01:00 [DBG] Extracted text preview:  1. WHO WE ARE  
+Lafarge Africa PIc is a Member of Huaxin Cement Co. Ltd - founded in 1907 and incorporated in China. Huaxin is listed on the Shanghai and on the Hong Kong stock exchanges, and is among the 10 largest cement groups in the world. In addition to cement, Huaxin operates aggregates and ready-mixed concrete as well as waste management businesses, and has its own cement and waste pre-/co-processing equipment manufacturing with proprietary technology. Huaxin is recognised among the worl...
+2025-11-16 01:25:13.898 +01:00 [DBG] Found heading '1. WHO WE ARE' at line 0: '1. WHO WE ARE'
+2025-11-16 01:25:13.901 +01:00 [DBG] Stopping extraction for '1. WHO WE ARE' at line 4 due to: '2. LAFARGE AFRICA FOOTPRINT'
+2025-11-16 01:25:13.901 +01:00 [DBG] Extracted content for '1. WHO WE ARE': 'Lafarge Africa PIc is a Member of Huaxin Cement Co. Ltd - founded in 1907 and incorporated in China....'
+2025-11-16 01:25:13.901 +01:00 [DBG] Found heading '2. LAFARGE AFRICA FOOTPRINT' at line 4: '2. LAFARGE AFRICA FOOTPRINT'
+2025-11-16 01:25:13.901 +01:00 [DBG] Stopping extraction for '2. LAFARGE AFRICA FOOTPRINT' at line 5 due to: 'Lafarge Africa operates across multiple regions in Nigeria through a network of cement plants, ready-mix sites, and depots.'
+2025-11-16 01:25:13.902 +01:00 [DBG] Extracted content for '2. LAFARGE AFRICA FOOTPRINT': ''
+2025-11-16 01:25:13.904 +01:00 [DBG] Found heading 'Depots' at line 5: 'Lafarge Africa operates across multiple regions in Nigeria through a network of cement plants, ready-mix sites, and depots.'
+2025-11-16 01:25:13.904 +01:00 [DBG] Stopping extraction for 'Depots' at line 6 due to: 'Cement Plants'
+2025-11-16 01:25:13.904 +01:00 [DBG] Extracted content for 'Depots': ''
+2025-11-16 01:25:13.905 +01:00 [DBG] Found heading '3. LAFARGE AFRICA CULTURE' at line 22: '3. LAFARGE AFRICA CULTURE'
+2025-11-16 01:25:13.905 +01:00 [DBG] Stopping extraction for '3. LAFARGE AFRICA CULTURE' at line 23 due to: 'Our vision is to be a building solutions company renowned for creating a greener planet through innovation and operational excellence. This vision is —anchored by a culture built to deliver it. Lafarge Africa’s culture is built on innovation, operational excellence, and strong behavioral pillars that define how we work together and lead change.'
+2025-11-16 01:25:13.905 +01:00 [DBG] Extracted content for '3. LAFARGE AFRICA CULTURE': ''
+2025-11-16 01:25:13.905 +01:00 [DBG] Found heading 'Respectful Workplaces' at line 39: 'Respectful Workplaces'
+2025-11-16 01:25:13.906 +01:00 [DBG] Stopping extraction for 'Respectful Workplaces' at line 40 due to: 'Lafarge Africa is committed to a culture of dignity and inclusion. Our Respectful Workplaces Framework ensures that all employees are treated fairly, communication remains civil, and differences are valued.'
+2025-11-16 01:25:13.906 +01:00 [DBG] Extracted content for 'Respectful Workplaces': ''
+2025-11-16 01:25:13.906 +01:00 [DBG] Found heading '1.1. General introduction' at line 45: '1.1. General introduction'
+2025-11-16 01:25:13.906 +01:00 [DBG] Stopping extraction for '1.1. General introduction' at line 47 due to: 'Country:'
+2025-11-16 01:25:13.907 +01:00 [DBG] Extracted content for '1.1. General introduction': 'Nigeria officially the Federal Republic of Nigeria, is a country in West Africa. It is situated betw...'
+2025-11-16 01:25:13.908 +01:00 [INF] Parsed data - WhoWeAre: 'Lafarge Africa PIc is a Member of Huaxin Cement Co. Ltd - founded in 1907 and incorporated in China. Huaxin is listed on the Shanghai and on the Hong Kong stock exchanges, and is among the 10 largest cement groups in the world. In addition to cement, Huaxin operates aggregates and ready-mixed concrete as well as waste management businesses, and has its own cement and waste pre-/co-processing equipment manufacturing with proprietary technology. Huaxin is recognised among the world's top manufacturing enterprises and most valuable brands.. With plants in Ewekoro and Sagamu in the South-West, Mfamosing in the South-South and Ashaka in the North-East of Nigeria, Lafarge Africa Plc currently has an installed cement production capacity of 10.5MTPA and has plans to grow in the near term. Lafarge Africa’s Readymix business in Nigeria produces quality and innovative concrete and aggregates solutions from various locations with plants currently located in Lagos, Abuja, Port-Harcourt and Ewekoro.', FootprintSummary: ''
+2025-11-16 01:25:14.870 +01:00 [INF] Local hire info saved successfully with ID: 7
+2025-11-16 01:27:24.953 +01:00 [INF] Get local hire info request received
+2025-11-16 01:27:24.954 +01:00 [INF] Retrieving latest local hire info
+2025-11-16 01:27:25.169 +01:00 [INF] Local hire info retrieved successfully
+2025-11-16 01:29:05.964 +01:00 [INF] Upload etiquette request received
+2025-11-16 01:29:05.966 +01:00 [INF] Starting etiquette extraction from file: Etiquette.docx
+2025-11-16 01:29:05.966 +01:00 [INF] Starting DOCX text extraction for file: Etiquette.docx
+2025-11-16 01:29:06.015 +01:00 [INF] DOCX text extraction completed successfully. Characters extracted: 4336
+2025-11-16 01:29:06.020 +01:00 [INF] Text extracted successfully. Length: 4336
+2025-11-16 01:29:06.050 +01:00 [INF] Etiquette saved successfully with ID: 4
+2025-11-16 02:03:22.236 +01:00 [INF] Upload onboarding plan request received
+2025-11-16 02:03:22.238 +01:00 [INF] Starting onboarding plan extraction from file: OnboardingPlans.docx
+2025-11-16 02:03:22.238 +01:00 [INF] Starting DOCX text extraction for file: OnboardingPlans.docx
+2025-11-16 02:03:22.249 +01:00 [INF] DOCX text extraction completed successfully. Characters extracted: 2371
+2025-11-16 02:03:22.255 +01:00 [INF] Text extracted successfully. Length: 2371
+2025-11-16 02:03:22.404 +01:00 [INF] Onboarding plan saved successfully with ID: 1
+-Harcourt and Ewekoro.', FootprintSummary: '' <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-16 01:25:14.870 +01:00 [INF] Local hire info saved successfully with ID: 7 <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-16 01:27:24.953 +01:00 [INF] Get local hire info request received <s:Lafarge_Onboarding.api.Controllers.ContentController>
+2025-11-16 01:27:24.954 +01:00 [INF] Retrieving latest local hire info <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-16 01:27:25.169 +01:00 [INF] Local hire info retrieved successfully <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-16 01:29:05.964 +01:00 [INF] Upload etiquette request received <s:Lafarge_Onboarding.api.Controllers.ContentController>
+2025-11-16 01:29:05.966 +01:00 [INF] Starting etiquette extraction from file: Etiquette.docx <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 01:29:05.966 +01:00 [INF] Starting DOCX text extraction for file: Etiquette.docx <s:Lafarge_Onboarding.application.Services.DocumentsUploadService>
+2025-11-16 01:29:06.015 +01:00 [INF] DOCX text extraction completed successfully. Characters extracted: 4336 <s:Lafarge_Onboarding.application.Services.DocumentsUploadService>
+2025-11-16 01:29:06.020 +01:00 [INF] Text extracted successfully. Length: 4336 <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 01:29:06.050 +01:00 [INF] Etiquette saved successfully with ID: 4 <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 02:03:22.236 +01:00 [INF] Upload onboarding plan request received <s:Lafarge_Onboarding.api.Controllers.ContentController>
+2025-11-16 02:03:22.238 +01:00 [INF] Starting onboarding plan extraction from file: OnboardingPlans.docx <s:Lafarge_Onboarding.application.Services.OnboardingPlanService>
+2025-11-16 02:03:22.238 +01:00 [INF] Starting DOCX text extraction for file: OnboardingPlans.docx <s:Lafarge_Onboarding.application.Services.DocumentsUploadService>
+2025-11-16 02:03:22.249 +01:00 [INF] DOCX text extraction completed successfully. Characters extracted: 2371 <s:Lafarge_Onboarding.application.Services.DocumentsUploadService>
+2025-11-16 02:03:22.255 +01:00 [INF] Text extracted successfully. Length: 2371 <s:Lafarge_Onboarding.application.Services.OnboardingPlanService>
+2025-11-16 02:03:22.404 +01:00 [INF] Onboarding plan saved successfully with ID: 1 <s:Lafarge_Onboarding.application.Services.OnboardingPlanService>
+2025-11-16 02:13:38.212 +01:00 [INF] Upload onboarding plan request received <s:Lafarge_Onboarding.api.Controllers.ContentController>
+2025-11-16 02:13:38.256 +01:00 [INF] Starting onboarding plan extraction from2025-11-16 02:13:38.256 +01:00 [INF] Starting onboarding plan extraction from file: Onboarding2025-11-16 2025-11-16 02:13:38.265 +01:00 [INF] Starting DOCX text extraction for file: OnboardingPlans.docx
+2025-11-16 02:13:38.475 +01:00 [INF] DOCX text extraction completed successfully. Characters extracted: 2371
+2025-11-16 02:13:38.485 +01:00 [INF] Text extracted successfully. Length: 2371
+2025-11-16 02:13:38.485 +01:00 [DBG] Extracted text preview: YOUR ONBOARDING BUDDY
+You will be assigned an onboarding buddy on your first day in the company who will provide you with day-to-day support. The onboarding buddy acts as a sounding board for you when you need direction or support and is there to assist you in navigating unfamiliar circumstances. You may also want to consult your onboarding buddy on the following topics:
+Giving an overview of the company structure
+Explaining our values, ethics and compliance
+Source of network creation
+Answer day...
+2025-11-16 02:13:38.489 +01:00 [DBG] Found 'YOUR ONBOARDING BUDDY' at line 0: 'YOUR ONBOARDING BUDDY'
+2025-11-16 02:13:38.489 +01:00 [DBG] Stopping buddy activities extraction at line 7 due to: 'NEW HIRE CHECKLIST'
+2025-11-16 02:13:38.489 +01:00 [DBG] Extracted 0 buddy activities
+2025-11-16 02:13:38.491 +01:00 [DBG] Started new timeline period: 'Day One:'
+2025-11-16 02:13:38.491 +01:00 [DBG] Added timeline item: Day One: with 0 tasks and 0 sub-tasks
+2025-11-16 02:13:38.491 +01:00 [DBG] Started new timeline period: 'First week'
+2025-11-16 02:13:38.492 +01:00 [DBG] Added timeline item: First week with 0 tasks and 0 sub-tasks
+2025-11-16 02:13:38.492 +01:00 [DBG] Started new timeline period: 'Within first month'
+2025-11-16 02:13:38.492 +01:00 [DBG] Added timeline item: Within first month with 0 tasks and 0 sub-tasks
+2025-11-16 02:13:38.492 +01:00 [DBG] Started new timeline period: 'Within first three – six months'
+2025-11-16 02:13:38.492 +01:00 [INF] Parsed data - BuddyActivities: 0, TimelineItems: 4
+2025-11-16 02:13:39.445 +01:00 [INF] Onboarding plan saved successfully with ID: 2
+period: 'First week' <s:Lafarge_Onboarding.application.Services.OnboardingPlanService>
+2025-11-16 02:13:38.492 +01:00 [DBG] Added timeline item: First week with 0 tasks and 0 sub-tasks <s:Lafarge_Onboarding.application.Services.OnboardingPlanService>
+2025-11-16 02:13:38.492 +01:00 [DBG] Started new timeline period: 'Within first month' <s:Lafarge_Onboarding.application.Services.OnboardingPlanService>
+2025-11-16 02:13:38.492 +01:00 [DBG] Added timeline item: Within first month with 0 tasks and 0 sub-tasks <s:Lafarge_Onboarding.application.Services.OnboardingPlanService>
+2025-11-16 02:13:38.492 +01:00 [DBG] Started new timeline period: 'Within first three – six months' <s:Lafarge_Onboarding.application.Services.OnboardingPlanService>
+2025-11-16 02:13:38.492 +01:00 [INF] Parsed data - BuddyActivities: 0, TimelineItems: 4 <s:Lafarge_Onboarding.application.Services.OnboardingPlanService>
+2025-11-16 02:13:39.445 +01:00 [INF] Onboarding plan saved successfully with ID: 2 <s:Lafarge_Onboarding.application.Services.OnboardingPlanService>
+2025-11-16 02:43:30.701 +01:00 [INF] Upload onboarding plan request received <s:Lafarge_Onboarding.api.Controllers.ContentController>
+2025-11-16 02:43:30.743 +01:00 [INF] Starting onboarding plan extraction from2025-11-16 02:43:30.743 +01:00 [INF] Starting onboarding plan extraction from file: Onboarding2025-11-16 2025-11-16 02:43:30.752 +01:00 [INF] Starting DOCX text extraction for file: OnboardingPlans.docx
+2025-11-16 02:43:30.961 +01:00 [INF] DOCX text extraction completed successfully. Characters extracted: 2371
+2025-11-16 02:43:30.970 +01:00 [INF] Text extracted successfully. Length: 2371
+2025-11-16 02:43:30.971 +01:00 [DBG] Extracted text preview: YOUR ONBOARDING BUDDY
+You will be assigned an onboarding buddy on your first day in the company who will provide you with day-to-day support. The onboarding buddy acts as a sounding board for you when you need direction or support and is there to assist you in navigating unfamiliar circumstances. You may also want to consult your onboarding buddy on the following topics:
+Giving an overview of the company structure
+Explaining our values, ethics and compliance
+Source of network creation
+Answer day...
+2025-11-16 02:43:30.974 +01:00 [DBG] Found 'YOUR ONBOARDING BUDDY' at line 0: 'YOUR ONBOARDING BUDDY'
+2025-11-16 02:43:30.974 +01:00 [DBG] Found introduction at line 1: 'You will be assigned an onboarding buddy on your first day in the company who will provide you with day-to-day support. The onboarding buddy acts as a sounding board for you when you need direction or support and is there to assist you in navigating unfamiliar circumstances. You may also want to consult your onboarding buddy on the following topics:'
+2025-11-16 02:43:30.974 +01:00 [DBG] Found buddy activity: 'Giving an overview of the company structure'
+2025-11-16 02:43:30.975 +01:00 [DBG] Found buddy activity: 'Explaining our values, ethics and compliance'
+2025-11-16 02:43:30.975 +01:00 [DBG] Found buddy activity: 'Source of network creation'
+2025-11-16 02:43:30.975 +01:00 [DBG] Found buddy activity: 'Answer day-to-day questions (where to park your vehicle, where to go to lunch etc.)'
+2025-11-16 02:43:30.975 +01:00 [DBG] Found buddy activity: 'You will have regular meetings with your onboarding buddy throughout your first ninety days. If you feel you need to talk to someone or seek for information on a specific topic, please do not hesitate to proactively approach your onboarding buddy who will be happy to help you.'
+2025-11-16 02:43:30.975 +01:00 [DBG] Stopping buddy activities extraction at line 7 due to: 'NEW HIRE CHECKLIST'
+2025-11-16 02:43:30.975 +01:00 [DBG] Extracted 5 buddy activities
+2025-11-16 02:43:30.977 +01:00 [DBG] Started new timeline period: 'Day One:'
+2025-11-16 02:43:30.978 +01:00 [DBG] Found task: 'Familiarize yourself with the orientation agenda'
+2025-11-16 02:43:30.978 +01:00 [DBG] Found task: 'Attend HR Orientation and Safety Session'
+2025-11-16 02:43:30.978 +01:00 [DBG] Found task: 'Take an office tour'
+2025-11-16 02:43:30.978 +01:00 [DBG] Found task: 'Review your orientation agenda'
+2025-11-16 02:43:30.978 +01:00 [DBG] Found task: 'Formal introduction to your manager and onboarding buddy'
+2025-11-16 02:43:30.978 +01:00 [DBG] Added timeline item: Day One: with 5 tasks and 0 sub-tasks
+2025-11-16 02:43:30.979 +01:00 [DBG] Started new timeline period: 'First week'
+2025-11-16 02:43:30.979 +01:00 [DBG] Found task: 'Introduction to departmental colleagues'
+2025-11-16 02:43:30.979 +01:00 [DBG] Found task: 'Spend time with your manager to discuss:○ Job description and role objectives for the first few months○ Any immediate training requirements○ Department procedures (i.e. expense, advance and claims office arrangements, working hours, key policies and guidelines)'
+2025-11-16 02:43:30.979 +01:00 [DBG] Found task: 'Begin meetings with key contacts'
+2025-11-16 02:43:30.979 +01:00 [DBG] Found task: 'Visit the customers where necessary'
+2025-11-16 02:43:30.979 +01:00 [DBG] Found task: 'Learn about our online systems: Success Factors, SAP, Google etc.'
+2025-11-16 02:43:30.979 +01:00 [DBG] Found task: 'Complete onboarding survey'
+2025-11-16 02:43:30.979 +01:00 [DBG] Added timeline item: First week with 6 tasks and 0 sub-tasks
+2025-11-16 02:43:30.980 +01:00 [DBG] Started new timeline period: 'Within first month'
+2025-11-16 02:43:30.980 +01:00 [DBG] Found task: 'Continue meetings with key contacts'
+2025-11-16 02:43:30.980 +01:00 [DBG] Found task: 'Introduction to relevant contacts outside your department'
+2025-11-16 02:43:30.980 +01:00 [DBG] Found task: 'Familiarize yourself further with Lafarge programmes e.g. Percipio'
+2025-11-16 02:43:30.980 +01:00 [DBG] Found task: 'Review Lafarge’s business plan and functional objectives'
+2025-11-16 02:43:30.980 +01:00 [DBG] Found task: 'Agree on your performance objectives, development and career plans and document same on relevant systems / management tool form (Success Factors)'
+2025-11-16 02:43:30.980 +01:00 [DBG] Found task: 'Have lunch with colleagues'
+2025-11-16 02:43:30.980 +01:00 [DBG] Found task: 'Complete meeting with manager’s manager (skip level meeting)'
+2025-11-16 02:43:30.980 +01:00 [DBG] Added timeline item: Within first month with 7 tasks and 0 sub-tasks
+2025-11-16 02:43:30.981 +01:00 [DBG] Started new timeline period: 'Within first three – six months'
+2025-11-16 02:43:30.981 +01:00 [DBG] Found task: 'Discuss onboarding process, personal & business expectations'
+2025-11-16 02:43:30.981 +01:00 [DBG] Found task: 'Discuss developmental needs with line manager'
+2025-11-16 02:43:30.981 +01:00 [DBG] Found task: 'Conclude onboarding process'
+2025-11-16 02:43:30.981 +01:00 [DBG] Found task: 'Review and share onboarding experience with your HR Business Partner'
+2025-11-16 02:43:30.982 +01:00 [INF] Parsed data - BuddyActivities: 5, TimelineItems: 4
+2025-11-16 02:43:31.896 +01:00 [INF] Onboarding plan saved successfully with ID: 3
+2025-11-16 02:54:25.595 +01:00 [INF] Upload etiquette request received
+2025-11-16 02:54:25.596 +01:00 [INF] Starting etiquette extraction from file: Etiquette.docx
+2025-11-16 02:54:25.597 +01:00 [INF] Starting DOCX text extraction for file: Etiquette.docx
+2025-11-16 02:54:25.641 +01:00 [INF] DOCX text extraction completed successfully. Characters extracted: 4336
+2025-11-16 02:54:25.642 +01:00 [INF] Text extracted successfully. Length: 4336
+2025-11-16 02:54:25.642 +01:00 [DBG] Extracted text preview: UNDERSTANDING THE REGIONS WHERE WE OPERATE
+
+Category
+South West
+South (Mfamosing)
+North-East (Ashaka)
+Lap Presence
+Lagos, Sagamu, Ewekoro, and series of depots & ReadyMix sites
+Mfamosing Plant, Cross River; Trans-Amadi ReadyMix; series of depots
+Ashaka Plant, Gombe; series of depots
+Major Ethnic Group
+Yoruba are the major tribe in this region, with Lagos considered a cultural melting pot
+Efik and Ibibio languages dominate; English and Pidgin are widely spoken
+Dominated by Fulani and Hausa, with ...
+2025-11-16 02:54:25.643 +01:00 [DBG] Found 'UNDERSTANDING THE REGIONS WHERE WE OPERATE' at line 0: 'UNDERSTANDING THE REGIONS WHERE WE OPERATE'
+2025-11-16 02:54:25.644 +01:00 [DBG] Found 'MAKING A GOOD FIRST IMPRESSION' at line 45: 'MAKING A GOOD FIRST IMPRESSION'
+2025-11-16 02:54:25.644 +01:00 [INF] Parsed data - RegionalInfo count: 0, FirstImpression count: 0
+2025-11-16 02:54:25.859 +01:00 [INF] Etiquette saved successfully with ID: 5
+2025-11-16 02:55:33.501 +01:00 [INF] Get etiquette request received
+2025-11-16 02:55:33.502 +01:00 [INF] Retrieving latest etiquette
+2025-11-16 02:55:33.681 +01:00 [INF] Etiquette retrieved successfully
+nth with 7 tasks and 0 sub-tasks <s:Lafarge_Onboarding.application.Services.OnboardingPlanService>
+2025-11-16 02:43:30.981 +01:00 [DBG] Started new timeline period: 'Within first three – six months' <s:Lafarge_Onboarding.application.Services.OnboardingPlanService>
+2025-11-16 02:43:30.981 +01:00 [DBG] Found task: 'Discuss onboarding process, personal & business expectations' <s:Lafarge_Onboarding.application.Services.OnboardingPlanService>
+2025-11-16 02:43:30.981 +01:00 [DBG] Found task: 'Discuss developmental needs with line manager' <s:Lafarge_Onboarding.application.Services.OnboardingPlanService>
+2025-11-16 02:43:30.981 +01:00 [DBG] Found task: 'Conclude onboarding process' <s:Lafarge_Onboarding.application.Services.OnboardingPlanService>
+2025-11-16 02:43:30.981 +01:00 [DBG] Found task: 'Review and share onboarding experience with your HR Business Partner' <s:Lafarge_Onboarding.application.Services.OnboardingPlanService>
+2025-11-16 02:43:30.982 +01:00 [INF] Parsed data - BuddyActivities: 5, TimelineItems: 4 <s:Lafarge_Onboarding.application.Services.OnboardingPlanService>
+2025-11-16 02:43:31.896 +01:00 [INF] Onboarding plan saved successfully with ID: 3 <s:Lafarge_Onboarding.application.Services.OnboardingPlanService>
+2025-11-16 02:54:25.595 +01:00 [INF] Upload etiquette request received <s:Lafarge_Onboarding.api.Controllers.ContentController>
+2025-11-16 02:54:25.596 +01:00 [INF] Starting etiquette extraction from file: Etiquette.docx <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 02:54:25.597 +01:00 [INF] Starting DOCX text extraction for file: Etiquette.docx <s:Lafarge_Onboarding.application.Services.DocumentsUploadService>
+2025-11-16 02:54:25.641 +01:00 [INF] DOCX text extraction completed successfully. Characters extracted: 4336 <s:Lafarge_Onboarding.application.Services.DocumentsUploadService>
+2025-11-16 02:54:25.642 +01:00 [INF] Text extracted successfully. Length: 4336 <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 02:54:25.642 +01:00 [DBG] Extracted text preview: UNDERSTANDING THE REGIONS WHERE WE OPERATE
+
+Category
+South West
+South (Mfamosing)
+North-East (Ashaka)
+Lap Presence
+Lagos, Sagamu, Ewekoro, and series of depots & ReadyMix sites
+Mfamosing Plant, Cross River; Trans-Amadi ReadyMix; series of depots
+Ashaka Plant, Gombe; series of depots
+Major Ethnic Group
+Yoruba are the major tribe in this region, with Lagos considered a cultural melting pot
+Efik and Ibibio languages dominate; English and Pidgin are widely spoken
+Dominated by Fulani and Hausa, with ... <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 02:54:25.643 +01:00 [DBG] Found 'UNDERSTANDING THE REGIONS WHERE WE OPERATE' at line 0: 'UNDERSTANDING THE REGIONS WHERE WE OPERATE' <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 02:54:25.644 +01:00 [DBG] Found 'MAKING A GOOD FIRST IMPRESSION' at line 45: 'MAKING A GOOD FIRST IMPRESSION' <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 02:54:25.644 +01:00 [INF] Parsed data - RegionalInfo count: 0, FirstImpression count: 0 <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 02:54:25.859 +01:00 [INF] Etiquette saved successfully with ID: 5 <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 02:55:33.501 +01:00 [INF] Get etiquette request received <s:Lafarge_Onboarding.api.Controllers.ContentController>
+2025-11-16 02:55:33.502 +01:00 [INF] Retrieving latest etiquette <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 02:55:33.681 +01:00 [INF] Etiquette retrieved successfully <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:27:59.253 +01:00 [INF] Upload etiquette request received <s:Lafarge_Onboarding.api.Controllers.ContentController>
+2025-11-16 03:27:59.298 +01:00 [INF] Starting etiquette extraction from2025-11-16 03:27:59.298 +01:00 [INF] Starting etiquette extraction from file: Etiqu2025-11-162025-11-16 03:27:59.306 +01:00 [INF] Starting DOCX text extraction for file: Etiquette.docx
+2025-11-16 03:27:59.550 +01:00 [INF] DOCX text extraction completed successfully. Characters extracted: 4336
+2025-11-16 03:27:59.554 +01:00 [INF] Text extracted successfully. Length: 4336
+2025-11-16 03:27:59.555 +01:00 [DBG] Extracted text preview: UNDERSTANDING THE REGIONS WHERE WE OPERATE
+
+Category
+South West
+South (Mfamosing)
+North-East (Ashaka)
+Lap Presence
+Lagos, Sagamu, Ewekoro, and series of depots & ReadyMix sites
+Mfamosing Plant, Cross River; Trans-Amadi ReadyMix; series of depots
+Ashaka Plant, Gombe; series of depots
+Major Ethnic Group
+Yoruba are the major tribe in this region, with Lagos considered a cultural melting pot
+Efik and Ibibio languages dominate; English and Pidgin are widely spoken
+Dominated by Fulani and Hausa, with ...
+2025-11-16 03:27:59.556 +01:00 [DBG] Found 'UNDERSTANDING THE REGIONS WHERE WE OPERATE' at line 0: 'UNDERSTANDING THE REGIONS WHERE WE OPERATE'
+2025-11-16 03:27:59.557 +01:00 [DBG] Found column headers: 
+2025-11-16 03:27:59.557 +01:00 [DBG] Parsed 0 regional info items
+2025-11-16 03:27:59.558 +01:00 [DBG] Found 'MAKING A GOOD FIRST IMPRESSION' at line 45: 'MAKING A GOOD FIRST IMPRESSION'
+2025-11-16 03:27:59.559 +01:00 [DBG] Added first impression item: Greetings
+2025-11-16 03:27:59.560 +01:00 [DBG] Added first impression item: Body Language & Gestures
+2025-11-16 03:27:59.560 +01:00 [DBG] Added first impression item: Warmth & Hospitality
+2025-11-16 03:27:59.560 +01:00 [DBG] Added first impression item: Expressive Communication Style
+2025-11-16 03:27:59.560 +01:00 [DBG] Added first impression item: Work Relationships
+2025-11-16 03:27:59.560 +01:00 [DBG] Added first impression item: Religion Matters
+2025-11-16 03:27:59.560 +01:00 [DBG] Added first impression item: Humor & Storytelling
+2025-11-16 03:27:59.561 +01:00 [DBG] Parsed 7 first impression items
+2025-11-16 03:27:59.561 +01:00 [INF] Parsed data - RegionalInfo count: 0, FirstImpression count: 7
+2025-11-16 03:28:00.465 +01:00 [INF] Etiquette saved successfully with ID: 6
+ & Hospitality <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:27:59.560 +01:00 [DBG] Added first impression item: Expressive Communication Style <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:27:59.560 +01:00 [DBG] Added first impression item: Work Relationships <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:27:59.560 +01:00 [DBG] Added first impression item: Religion Matters <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:27:59.560 +01:00 [DBG] Added first impression item: Humor & Storytelling <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:27:59.561 +01:00 [DBG] Parsed 7 first impression items <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:27:59.561 +01:00 [INF] Parsed data - RegionalInfo count: 0, FirstImpression count: 7 <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:28:00.465 +01:00 [INF] Etiquette saved successfully with ID: 6 <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:46:37.091 +01:00 [INF] Upload etiquette request received <s:Lafarge_Onboarding.api.Controllers.ContentController>
+2025-11-16 03:46:37.140 +01:00 [INF] Starting etiquette extraction from2025-11-16 03:46:37.140 +01:00 [INF] Starting etiquette extraction from file: Etiqu2025-11-162025-11-16 03:46:37.150 +01:00 [INF] Starting DOCX text extraction for file: Etiquette.docx
+2025-11-16 03:46:37.405 +01:00 [INF] DOCX text extraction completed successfully. Characters extracted: 4336
+2025-11-16 03:46:37.414 +01:00 [INF] Text extracted successfully. Length: 4336
+2025-11-16 03:46:37.415 +01:00 [DBG] Extracted text preview: UNDERSTANDING THE REGIONS WHERE WE OPERATE
+
+Category
+South West
+South (Mfamosing)
+North-East (Ashaka)
+Lap Presence
+Lagos, Sagamu, Ewekoro, and series of depots & ReadyMix sites
+Mfamosing Plant, Cross River; Trans-Amadi ReadyMix; series of depots
+Ashaka Plant, Gombe; series of depots
+Major Ethnic Group
+Yoruba are the major tribe in this region, with Lagos considered a cultural melting pot
+Efik and Ibibio languages dominate; English and Pidgin are widely spoken
+Dominated by Fulani and Hausa, with ...
+2025-11-16 03:46:37.416 +01:00 [DBG] Found 'UNDERSTANDING THE REGIONS WHERE WE OPERATE' at line 0: 'UNDERSTANDING THE REGIONS WHERE WE OPERATE'
+2025-11-16 03:46:37.417 +01:00 [DBG] Found category 'Lap Presence' with 3 data lines
+2025-11-16 03:46:37.417 +01:00 [DBG] Found category 'Major Ethnic Group' with 3 data lines
+2025-11-16 03:46:37.417 +01:00 [DBG] Found category 'Major Religion' with 3 data lines
+2025-11-16 03:46:37.417 +01:00 [DBG] Found category 'Major Language' with 3 data lines
+2025-11-16 03:46:37.417 +01:00 [DBG] Found category 'Cuisine & Popular Foods' with 3 data lines
+2025-11-16 03:46:37.417 +01:00 [DBG] Found category 'Economic Activities / Industries' with 3 data lines
+2025-11-16 03:46:37.417 +01:00 [DBG] Found category 'Social Etiquette & Values' with 3 data lines
+2025-11-16 03:46:37.418 +01:00 [DBG] Found category 'Dress & Traditional Attire' with 3 data lines
+2025-11-16 03:46:37.418 +01:00 [DBG] Found category 'Climate & Geography' with 3 data lines
+2025-11-16 03:46:37.418 +01:00 [DBG] Found category 'Communication Style' with 3 data lines
+2025-11-16 03:46:37.418 +01:00 [DBG] Created regional info item: Lap Presence
+2025-11-16 03:46:37.418 +01:00 [DBG] Created regional info item: Major Ethnic Group
+2025-11-16 03:46:37.419 +01:00 [DBG] Created regional info item: Major Religion
+2025-11-16 03:46:37.419 +01:00 [DBG] Created regional info item: Major Language
+2025-11-16 03:46:37.419 +01:00 [DBG] Created regional info item: Cuisine & Popular Foods
+2025-11-16 03:46:37.419 +01:00 [DBG] Created regional info item: Economic Activities / Industries
+2025-11-16 03:46:37.419 +01:00 [DBG] Created regional info item: Social Etiquette & Values
+2025-11-16 03:46:37.419 +01:00 [DBG] Created regional info item: Dress & Traditional Attire
+2025-11-16 03:46:37.419 +01:00 [DBG] Created regional info item: Climate & Geography
+2025-11-16 03:46:37.419 +01:00 [DBG] Created regional info item: Communication Style
+2025-11-16 03:46:37.420 +01:00 [DBG] Parsed 10 regional info items
+2025-11-16 03:46:37.420 +01:00 [DBG] Found 'MAKING A GOOD FIRST IMPRESSION' at line 45: 'MAKING A GOOD FIRST IMPRESSION'
+2025-11-16 03:46:37.422 +01:00 [DBG] Added first impression item: Greetings
+2025-11-16 03:46:37.422 +01:00 [DBG] Added first impression item: Body Language & Gestures
+2025-11-16 03:46:37.423 +01:00 [DBG] Added first impression item: Warmth & Hospitality
+2025-11-16 03:46:37.423 +01:00 [DBG] Added first impression item: Expressive Communication Style
+2025-11-16 03:46:37.423 +01:00 [DBG] Added first impression item: Work Relationships
+2025-11-16 03:46:37.423 +01:00 [DBG] Added first impression item: Religion Matters
+2025-11-16 03:46:37.423 +01:00 [DBG] Added first impression item: Humor & Storytelling
+2025-11-16 03:46:37.423 +01:00 [DBG] Parsed 7 first impression items
+2025-11-16 03:46:37.424 +01:00 [INF] Parsed data - RegionalInfo count: 10, FirstImpression count: 7
+2025-11-16 03:46:38.347 +01:00 [INF] Etiquette saved successfully with ID: 7
+ng.application.Services.EtiquetteService>
+2025-11-16 03:46:37.419 +01:00 [DBG] Created regional info item: Dress & Traditional Attire <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:46:37.419 +01:00 [DBG] Created regional info item: Climate & Geography <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:46:37.419 +01:00 [DBG] Created regional info item: Communication Style <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:46:37.420 +01:00 [DBG] Parsed 10 regional info items <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:46:37.420 +01:00 [DBG] Found 'MAKING A GOOD FIRST IMPRESSION' at line 45: 'MAKING A GOOD FIRST IMPRESSION' <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:46:37.422 +01:00 [DBG] Added first impression item: Greetings <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:46:37.422 +01:00 [DBG] Added first impression item: Body Language & Gestures <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:46:37.423 +01:00 [DBG] Added first impression item: Warmth & Hospitality <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:46:37.423 +01:00 [DBG] Added first impression item: Expressive Communication Style <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:46:37.423 +01:00 [DBG] Added first impression item: Work Relationships <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:46:37.423 +01:00 [DBG] Added first impression item: Religion Matters <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:46:37.423 +01:00 [DBG] Added first impression item: Humor & Storytelling <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:46:37.423 +01:00 [DBG] Parsed 7 first impression items <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:46:37.424 +01:00 [INF] Parsed data - RegionalInfo count: 10, FirstImpression count: 7 <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-16 03:46:38.347 +01:00 [INF] Etiquette saved successfully with ID: 7 <s:Lafarge_Onboarding.application.Services.EtiquetteService>

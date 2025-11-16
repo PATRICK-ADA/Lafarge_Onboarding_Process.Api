@@ -26,8 +26,8 @@ public sealed class WelcomeMessageService : IWelcomeMessageService
         }
 
         // Assume first file is CEO, second is HR
-        var ceoText = await _documentService.ExtractTextFromDocumentAsync(files[0].FileName);
-        var hrText = await _documentService.ExtractTextFromDocumentAsync(files[1].FileName);
+        var ceoText = await _documentService.ExtractTextFromDocumentAsync(files[0]);
+        var hrText = await _documentService.ExtractTextFromDocumentAsync(files[1]);
 
         _logger.LogInformation("Texts extracted successfully");
 
@@ -54,6 +54,13 @@ public sealed class WelcomeMessageService : IWelcomeMessageService
         var response = MapToResponse(entity);
         _logger.LogInformation("Welcome messages retrieved successfully");
         return response;
+    }
+
+    public async Task DeleteLatestAsync()
+    {
+        _logger.LogInformation("Deleting latest welcome messages");
+        await _repository.DeleteLatestAsync();
+        _logger.LogInformation("Latest welcome messages deleted successfully");
     }
 
     private WelcomeMessageResponse ParseWelcomeMessages(string ceoText, string hrText)

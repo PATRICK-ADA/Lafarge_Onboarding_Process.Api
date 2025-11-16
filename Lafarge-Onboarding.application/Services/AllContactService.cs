@@ -20,7 +20,7 @@ public sealed class AllContactService : IAllContactService
     {
         _logger.LogInformation("Starting all contacts extraction from file: {FileName}", file.FileName);
 
-        var extractedText = await _documentService.ExtractTextFromDocumentAsync(file.FileName);
+        var extractedText = await _documentService.ExtractTextFromDocumentAsync(file);
         _logger.LogInformation("Text extracted successfully. Length: {Length}", extractedText.Length);
 
         var parsedData = ParseAllContacts(extractedText);
@@ -42,6 +42,13 @@ public sealed class AllContactService : IAllContactService
 
         _logger.LogInformation("All contacts retrieved successfully");
         return response;
+    }
+
+    public async Task DeleteAllContactsAsync()
+    {
+        _logger.LogInformation("Deleting all contacts");
+        await _repository.DeleteAllAsync();
+        _logger.LogInformation("All contacts deleted successfully");
     }
 
     private AllContactsResponse ParseAllContacts(string text)

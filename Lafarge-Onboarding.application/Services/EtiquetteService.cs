@@ -21,10 +21,13 @@ public sealed class EtiquetteService : IEtiquetteService
         _logger.LogInformation("Starting etiquette extraction from file: {FileName}", file.FileName);
 
         // Extract text from the uploaded file
-        var extractedText = await _documentService.ExtractTextFromDocumentAsync(file.FileName);
+        var extractedText = await _documentService.ExtractTextFromDocumentAsync(file);
         _logger.LogInformation("Text extracted successfully. Length: {Length}", extractedText.Length);
+        _logger.LogDebug("Extracted text preview: {Preview}", extractedText.Length > 500 ? extractedText.Substring(0, 500) + "..." : extractedText);
 
         var parsedData = ParseEtiquette(extractedText);
+        _logger.LogInformation("Parsed data - RegionalInfo count: {RegionalCount}, FirstImpression count: {FirstImpressionCount}",
+            parsedData.RegionalInfo.Count, parsedData.FirstImpression.Count);
 
         var entity = MapToEntity(parsedData);
         await _repository.AddAsync(entity);
@@ -49,89 +52,210 @@ public sealed class EtiquetteService : IEtiquetteService
         return response;
     }
 
+    public async Task DeleteLatestAsync()
+    {
+        _logger.LogInformation("Deleting latest etiquette");
+        await _repository.DeleteLatestAsync();
+        _logger.LogInformation("Latest etiquette deleted successfully");
+    }
+
     private EtiquetteResponse ParseEtiquette(string text)
     {
         var response = new EtiquetteResponse();
 
+        // Split text into lines for processing
+        var lines = text.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                       .Select(line => line.Trim())
+                       .Where(line => !string.IsNullOrWhiteSpace(line))
+                       .ToArray();
+
         // Parse Regional Info
-        response.RegionalInfo = ParseRegionalInfo(text);
+        response.RegionalInfo = ParseRegionalInfo(lines);
 
         // Parse First Impression
-        response.FirstImpression = ParseFirstImpression(text);
+        response.FirstImpression = ParseFirstImpression(lines);
 
         return response;
     }
 
-    private List<RegionalInfoItem> ParseRegionalInfo(string text)
+    private List<RegionalInfoItem> ParseRegionalInfo(string[] lines)
     {
         var regionalInfo = new List<RegionalInfoItem>();
-        var lines = text.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-        RegionalInfoItem? currentItem = null;
-        Region? currentRegion = null;
+        var startIndex = -1;
 
-        foreach (var line in lines)
+        // Find the "UNDERSTANDING THE REGIONS WHERE WE OPERATE" heading
+        for (int i = 0; i < lines.Length; i++)
         {
-            if (line.ToLower().Contains("lafarge presence"))
+            if (lines[i].ToUpper().Contains("UNDERSTANDING THE REGIONS WHERE WE OPERATE"))
             {
-                currentItem = new RegionalInfoItem { Title = "Lafarge Presence", Regions = new List<Region>() };
-                regionalInfo.Add(currentItem);
-            }
-            else if (currentItem != null && line.Contains(":") && !line.Trim().StartsWith("-"))
-            {
-                // New region
-                var parts = line.Split(':', 2);
-                if (parts.Length == 2)
-                {
-                    currentRegion = new Region
-                    {
-                        Title = parts[0].Trim(),
-                        Content = parts[1].Trim()
-                    };
-                    currentItem.Regions.Add(currentRegion);
-                }
-            }
-            else if (currentRegion != null && !string.IsNullOrWhiteSpace(line.Trim()))
-            {
-                // Continue content
-                currentRegion.Content += " " + line.Trim();
+                startIndex = i + 1;
+                _logger.LogDebug("Found 'UNDERSTANDING THE REGIONS WHERE WE OPERATE' at line {LineIndex}: '{Line}'", i, lines[i]);
+                break;
             }
         }
 
+        if (startIndex == -1)
+        {
+            _logger.LogWarning("Heading 'UNDERSTANDING THE REGIONS WHERE WE OPERATE' not found in document");
+            return regionalInfo;
+        }
+
+        // Simple table parsing: Category name followed by 3 data lines (one for each region)
+        // Structure: Category -> Data1 -> Data2 -> Data3 -> Category -> Data1 -> Data2 -> Data3 -> ...
+
+        var categories = new List<string>();
+        var allData = new List<List<string>>();
+
+        // Skip headers and find the first category
+        int currentIndex = startIndex;
+        while (currentIndex < lines.Length)
+        {
+            var line = lines[currentIndex].Trim();
+
+            // Stop at next major section
+            if (line.ToUpper().Contains("MAKING A GOOD FIRST IMPRESSION"))
+            {
+                break;
+            }
+
+            // Skip table headers
+            if (line.Equals("Category", StringComparison.OrdinalIgnoreCase) ||
+                line.Equals("South West", StringComparison.OrdinalIgnoreCase) ||
+                line.Equals("South (Mfamosing)", StringComparison.OrdinalIgnoreCase) ||
+                line.Equals("North-East (Ashaka)", StringComparison.OrdinalIgnoreCase) ||
+                string.IsNullOrWhiteSpace(line))
+            {
+                currentIndex++;
+                continue;
+            }
+
+            // Check if this looks like a category (short, no data-like content)
+            if (IsCategoryLine(line))
+            {
+                categories.Add(line);
+                var categoryData = new List<string>();
+
+                // Next 3 lines should be data for the 3 regions
+                for (int j = 1; j <= 3 && currentIndex + j < lines.Length; j++)
+                {
+                    var dataLine = lines[currentIndex + j].Trim();
+                    if (!string.IsNullOrWhiteSpace(dataLine) && !IsCategoryLine(dataLine))
+                    {
+                        categoryData.Add(dataLine);
+                    }
+                    else
+                    {
+                        categoryData.Add("");
+                    }
+                }
+
+                allData.Add(categoryData);
+                _logger.LogDebug("Found category '{Category}' with {DataCount} data lines", line, categoryData.Count);
+                currentIndex += 4; // Skip category + 3 data lines
+            }
+            else
+            {
+                currentIndex++;
+            }
+        }
+
+        // Create RegionalInfoItem for each category
+        for (int i = 0; i < categories.Count && i < allData.Count; i++)
+        {
+            var data = allData[i];
+            var item = new RegionalInfoItem
+            {
+                Title = categories[i],
+                Regions = new List<Region>
+                {
+                    new Region { Title = "South West", Content = data.Count > 0 ? data[0] : "" },
+                    new Region { Title = "South (Mfamosing)", Content = data.Count > 1 ? data[1] : "" },
+                    new Region { Title = "North-East (Ashaka)", Content = data.Count > 2 ? data[2] : "" }
+                }
+            };
+            regionalInfo.Add(item);
+            _logger.LogDebug("Created regional info item: {Title}", item.Title);
+        }
+
+        _logger.LogDebug("Parsed {Count} regional info items", regionalInfo.Count);
         return regionalInfo;
     }
 
-    private List<FirstImpressionItem> ParseFirstImpression(string text)
+    private bool IsCategoryLine(string line)
+    {
+        // Categories are short lines without data-like content
+        if (line.Length > 50) return false;
+        if (line.Contains("Plant") || line.Contains("depot") || line.Contains("tribe") ||
+            line.Contains("language") || line.Contains("Lagos") || line.Contains("Mfamosing") ||
+            line.Contains("Ashaka") || line.Contains("Yoruba") || line.Contains("Efik") ||
+            line.Contains("Fulani")) return false;
+        return true;
+    }
+
+    private List<FirstImpressionItem> ParseFirstImpression(string[] lines)
     {
         var firstImpression = new List<FirstImpressionItem>();
-        var lines = text.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-        FirstImpressionItem? currentItem = null;
+        var startIndex = -1;
 
-        foreach (var line in lines)
+        // Find the "MAKING A GOOD FIRST IMPRESSION" heading
+        for (int i = 0; i < lines.Length; i++)
         {
-            if (line.ToLower().Contains("greetings") || line.ToLower().Contains("body language"))
+            if (lines[i].ToUpper().Contains("MAKING A GOOD FIRST IMPRESSION"))
             {
-                if (currentItem != null)
+                startIndex = i + 1;
+                _logger.LogDebug("Found 'MAKING A GOOD FIRST IMPRESSION' at line {LineIndex}: '{Line}'", i, lines[i]);
+                break;
+            }
+        }
+
+        if (startIndex == -1)
+        {
+            _logger.LogWarning("Heading 'MAKING A GOOD FIRST IMPRESSION' not found in document");
+            return firstImpression;
+        }
+
+        // Collect all non-empty lines after the heading as bullet points
+        for (int i = startIndex; i < lines.Length; i++)
+        {
+            var line = lines[i].Trim();
+
+            if (string.IsNullOrWhiteSpace(line))
+                continue;
+
+            // Check for bullet points (•, -, or just plain text that looks like a bullet)
+            if (line.StartsWith("•") || line.StartsWith("-") || (!line.Contains("MAKING A GOOD") && line.Length > 10))
+            {
+                // Clean the line
+                var cleanLine = line.TrimStart('•', '-', ' ').Trim();
+
+                // Split on colon to separate title and content
+                var colonIndex = cleanLine.IndexOf(':');
+                if (colonIndex > 0)
                 {
-                    firstImpression.Add(currentItem);
+                    var title = cleanLine.Substring(0, colonIndex).Trim();
+                    var content = cleanLine.Substring(colonIndex + 1).Trim();
+
+                    firstImpression.Add(new FirstImpressionItem
+                    {
+                        Title = title,
+                        Content = content
+                    });
+                    _logger.LogDebug("Added first impression item: {Title}", title);
                 }
-                currentItem = new FirstImpressionItem
+                else
                 {
-                    Title = line.Split(':')[0].Trim(),
-                    Content = line.Contains(":") ? line.Split(':', 2)[1].Trim() : ""
-                };
-            }
-            else if (currentItem != null && !string.IsNullOrWhiteSpace(line.Trim()))
-            {
-                // Continue content
-                currentItem.Content += " " + line.Trim();
+                    // If no colon, treat the whole line as title
+                    firstImpression.Add(new FirstImpressionItem
+                    {
+                        Title = cleanLine,
+                        Content = ""
+                    });
+                    _logger.LogDebug("Added first impression item (no content): {Title}", cleanLine);
+                }
             }
         }
 
-        if (currentItem != null)
-        {
-            firstImpression.Add(currentItem);
-        }
-
+        _logger.LogDebug("Parsed {Count} first impression items", firstImpression.Count);
         return firstImpression;
     }
 

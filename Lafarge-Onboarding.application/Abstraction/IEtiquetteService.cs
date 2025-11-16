@@ -6,4 +6,5 @@ public interface IEtiquetteService
 {
     Task<EtiquetteResponse> ExtractAndSaveEtiquetteAsync(IFormFile file);
     Task<EtiquetteResponse?> GetEtiquetteAsync();
+    Task DeleteLatestAsync();
 }

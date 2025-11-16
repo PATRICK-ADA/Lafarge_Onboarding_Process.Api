@@ -73,4 +73,22 @@ public sealed class ContactsController : ControllerBase
         var contacts = await _allContactService.GetAllContactsAsync();
         return Ok(ApiResponse<AllContactsResponse>.Success(contacts));
     }
+
+    [HttpDelete("delete-local")]
+    [Authorize(Roles = "HR_ADMIN")]
+    [ProducesResponseType(typeof(ApiResponse<object>), 200)]
+    public async Task<IActionResult> DeleteLocalContacts()
+    {
+        await _contactService.DeleteAllContactsAsync();
+        return Ok(ApiResponse<object>.Success(null, "Local contacts deleted successfully"));
+    }
+
+    [HttpDelete("delete-all")]
+    [Authorize(Roles = "HR_ADMIN")]
+    [ProducesResponseType(typeof(ApiResponse<object>), 200)]
+    public async Task<IActionResult> DeleteAllContacts()
+    {
+        await _allContactService.DeleteAllContactsAsync();
+        return Ok(ApiResponse<object>.Success(null, "All contacts deleted successfully"));
+    }
 }

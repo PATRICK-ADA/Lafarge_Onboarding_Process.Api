@@ -19,4 +19,10 @@ public sealed class ContactRepository : IContactRepository
     {
         return await _context.Contacts.ToListAsync();
     }
+
+    public async Task DeleteAllAsync()
+    {
+        _context.Contacts.RemoveRange(_context.Contacts);
+        await _context.SaveChangesAsync();
+    }
 }

@@ -29,9 +29,7 @@ public sealed class ContentController : ControllerBase
         _logger.LogInformation("Local hire info upload request received");
 
         return (file == null || file.Length == 0) ? BadRequest(ApiResponse<object>.Failure("File is required")) :
-            file.FileName.EndsWith(".xlsx") || file.FileName.EndsWith(".xls") || file.FileName.EndsWith(".csv") || file.FileName.EndsWith(".excel") 
-            || file.FileName.EndsWith(".Excel") || file.FileName.EndsWith(".CSV") || file.FileName.EndsWith(".EXCEL") || file.FileName.EndsWith(".XLSX") || file.FileName.EndsWith(".XLS") ? Ok(ApiResponse<LocalHireInfoResponse>.Success(await _localHireInfoService.ExtractAndSaveLocalHireInfoAsync(file))) :
-           BadRequest(ApiResponse<object>.Failure("Invalid file format"));
+           Ok(ApiResponse<LocalHireInfoResponse>.Success(await _localHireInfoService.ExtractAndSaveLocalHireInfoAsync(file)));
 
     }
 
@@ -133,5 +131,49 @@ public sealed class ContentController : ControllerBase
 
         var result = await _etiquetteService.GetEtiquetteAsync();
         return result == null ? NotFound(ApiResponse<object>.Failure("Etiquette not found", "404")) : Ok(ApiResponse<EtiquetteResponse>.Success(result));
+    }
+
+    [HttpDelete("delete-local-hire-info")]
+    [Authorize(Roles = "HR_ADMIN")]
+    [ProducesResponseType(typeof(ApiResponse<object>), 200)]
+    public async Task<IActionResult> DeleteLocalHireInfo()
+    {
+        _logger.LogInformation("Delete latest local hire info request received");
+
+        await _localHireInfoService.DeleteLatestAsync();
+        return Ok(ApiResponse<object>.Success(null, "Local hire info deleted successfully"));
+    }
+
+    [HttpDelete("delete-welcome-messages")]
+    [Authorize(Roles = "HR_ADMIN")]
+    [ProducesResponseType(typeof(ApiResponse<object>), 200)]
+    public async Task<IActionResult> DeleteWelcomeMessages()
+    {
+        _logger.LogInformation("Delete latest welcome messages request received");
+
+        await _welcomeMessageService.DeleteLatestAsync();
+        return Ok(ApiResponse<object>.Success(null, "Welcome messages deleted successfully"));
+    }
+
+    [HttpDelete("delete-onboarding-plan")]
+    [Authorize(Roles = "HR_ADMIN")]
+    [ProducesResponseType(typeof(ApiResponse<object>), 200)]
+    public async Task<IActionResult> DeleteOnboardingPlan()
+    {
+        _logger.LogInformation("Delete latest onboarding plan request received");
+
+        await _onboardingPlanService.DeleteLatestAsync();
+        return Ok(ApiResponse<object>.Success(null, "Onboarding plan deleted successfully"));
+    }
+
+    [HttpDelete("delete-etiquette")]
+    [Authorize(Roles = "HR_ADMIN")]
+    [ProducesResponseType(typeof(ApiResponse<object>), 200)]
+    public async Task<IActionResult> DeleteEtiquette()
+    {
+        _logger.LogInformation("Delete latest etiquette request received");
+
+        await _etiquetteService.DeleteLatestAsync();
+        return Ok(ApiResponse<object>.Success(null, "Etiquette deleted successfully"));
     }
 }

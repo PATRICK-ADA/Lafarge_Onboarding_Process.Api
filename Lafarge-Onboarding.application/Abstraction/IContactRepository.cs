@@ -6,4 +6,5 @@ public interface IContactRepository
 {
     Task AddRangeAsync(IEnumerable<Contact> contacts);
     Task<List<Contact>> GetAllAsync();
+    Task DeleteAllAsync();
 }

@@ -28,4 +28,14 @@ public sealed class LocalHireInfoRepository : ILocalHireInfoRepository
         _context.LocalHireInfos.Update(localHireInfo);
         await _context.SaveChangesAsync();
     }
+
+    public async Task DeleteLatestAsync()
+    {
+        var latest = await GetLatestAsync();
+        if (latest != null)
+        {
+            _context.LocalHireInfos.Remove(latest);
+            await _context.SaveChangesAsync();
+        }
+    }
 }

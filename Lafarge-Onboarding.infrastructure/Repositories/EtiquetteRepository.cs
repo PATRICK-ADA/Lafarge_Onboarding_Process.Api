@@ -28,4 +28,14 @@ public sealed class EtiquetteRepository : IEtiquetteRepository
         _context.Etiquettes.Update(etiquette);
         await _context.SaveChangesAsync();
     }
+
+    public async Task DeleteLatestAsync()
+    {
+        var latest = await GetLatestAsync();
+        if (latest != null)
+        {
+            _context.Etiquettes.Remove(latest);
+            await _context.SaveChangesAsync();
+        }
+    }
 }

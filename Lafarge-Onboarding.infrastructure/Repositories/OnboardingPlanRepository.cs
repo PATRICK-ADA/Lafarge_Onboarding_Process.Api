@@ -28,4 +28,14 @@ public sealed class OnboardingPlanRepository : IOnboardingPlanRepository
         _context.OnboardingPlans.Update(onboardingPlan);
         await _context.SaveChangesAsync();
     }
+
+    public async Task DeleteLatestAsync()
+    {
+        var latest = await GetLatestAsync();
+        if (latest != null)
+        {
+            _context.OnboardingPlans.Remove(latest);
+            await _context.SaveChangesAsync();
+        }
+    }
 }
