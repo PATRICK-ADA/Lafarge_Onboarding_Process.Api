@@ -26,7 +26,12 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
         _logger.LogDebug("Extracted text preview: {Preview}", extractedText.Length > 500 ? extractedText.Substring(0, 500) + "..." : extractedText);
 
         var parsedData = ParseLocalHireInfo(extractedText);
-        _logger.LogInformation("Parsed data - WhoWeAre: '{WhoWeAre}', FootprintSummary: '{FootprintSummary}'", parsedData.AboutLafarge.WhoWeAre, parsedData.AboutLafarge.Footprint.Summary);
+        _logger.LogInformation("Parsed data - WhoWeAre: '{WhoWeAre}', FootprintSummary: '{FootprintSummary}'", parsedData.AboutLafarge.WhoWeAre?.Substring(0, Math.Min(50, parsedData.AboutLafarge.WhoWeAre?.Length ?? 0)) + "...", parsedData.AboutLafarge.Footprint.Summary?.Substring(0, Math.Min(50, parsedData.AboutLafarge.Footprint.Summary?.Length ?? 0)) + "...");
+        _logger.LogInformation("Parsed data - Introduction: '{Introduction}', CountryFacts count: {CountryFactsCount}, InterestingFacts count: {InterestingFactsCount}, Holidays count: {HolidaysCount}",
+            parsedData.GeneralIntro.Introduction?.Substring(0, Math.Min(50, parsedData.GeneralIntro.Introduction?.Length ?? 0)) + "...",
+            parsedData.GeneralIntro.CountryFacts.Count,
+            parsedData.GeneralIntro.InterestingFacts.Count,
+            parsedData.GeneralIntro.Holidays.Count);
 
         var entity = MapToEntity(parsedData);
         await _repository.AddAsync(entity);
@@ -136,29 +141,37 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
             if (lines[i].ToUpper().Contains(heading.ToUpper()))
             {
                 startIndex = i + 1;
+                _logger.LogDebug("Found list heading '{Heading}' at line {LineIndex}: '{Line}'", heading, i, lines[i]);
                 break;
             }
         }
 
-        if (startIndex == -1) return new List<string>();
+        if (startIndex == -1)
+        {
+            _logger.LogWarning("List heading '{Heading}' not found in document", heading);
+            return new List<string>();
+        }
 
         var list = new List<string>();
         for (int i = startIndex; i < lines.Length; i++)
         {
             var line = lines[i];
+            _logger.LogDebug("Processing list line {LineIndex}: '{Line}'", i, line);
+
             // Stop at next section
             if (Regex.IsMatch(line, @"^\d+\.\s") || line.ToUpper().Contains("GENERAL INTRODUCTION") ||
                 line.ToUpper().Contains("COUNTRY:") || line.ToUpper().Contains("INTERESTING FACTS") ||
                 line.ToUpper().Contains("NATIONAL HOLIDAYS"))
             {
+                _logger.LogDebug("Stopping list extraction for '{Heading}' at line {LineIndex} due to: '{Line}'", heading, i, line);
                 break;
             }
 
             // Check for bullet points or numbered items
-            if (line.Trim().StartsWith("•") || line.Trim().StartsWith("-") ||
+            if (line.Trim().StartsWith("•") || line.Trim().StartsWith("◦") || line.Trim().StartsWith("-") ||
                 (line.Trim().Length > 0 && char.IsDigit(line.Trim()[0])))
             {
-                var trimmed = line.Trim().TrimStart('•', '-', ' ');
+                var trimmed = line.Trim().TrimStart('•', '◦', '-', ' ');
                 if (trimmed.Length > 0 && char.IsDigit(trimmed[0]))
                 {
                     // Remove number and dot if present
@@ -169,9 +182,15 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
                     }
                 }
                 list.Add(trimmed);
+                _logger.LogDebug("Added list item: '{Item}'", trimmed);
+            }
+            else
+            {
+                _logger.LogDebug("Line doesn't match list item format: '{Line}'", line);
             }
         }
 
+        _logger.LogDebug("Extracted {Count} list items for '{Heading}'", list.Count, heading);
         return list;
     }
 
@@ -186,35 +205,59 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
             if (lines[i].ToUpper().Contains("COUNTRY:"))
             {
                 startIndex = i + 1;
+                _logger.LogDebug("Found 'COUNTRY:' heading at line {LineIndex}: '{Line}'", i, lines[i]);
                 break;
             }
         }
 
-        if (startIndex == -1) return facts;
+        if (startIndex == -1)
+        {
+            _logger.LogWarning("Heading 'COUNTRY:' not found in document");
+            return facts;
+        }
 
+        string currentLabel = null;
         for (int i = startIndex; i < lines.Length; i++)
         {
-            var line = lines[i];
+            var line = lines[i].Trim();
+            _logger.LogDebug("Processing country facts line {LineIndex}: '{Line}'", i, line);
+
             // Stop at next major section
             if (line.ToUpper().Contains("INTERESTING FACTS") || line.ToUpper().Contains("NATIONAL HOLIDAYS"))
             {
+                _logger.LogDebug("Stopping country facts extraction at line {LineIndex} due to: '{Line}'", i, line);
                 break;
             }
 
-            if (line.Contains(":"))
+            // Skip empty lines
+            if (string.IsNullOrWhiteSpace(line))
+                continue;
+
+            if (line.EndsWith(":"))
             {
-                var parts = line.Split(':', 2);
-                if (parts.Length == 2)
+                // This is a label line
+                currentLabel = line.TrimEnd(':').Trim();
+                _logger.LogDebug("Found label: '{Label}'", currentLabel);
+            }
+            else if (currentLabel != null && !string.IsNullOrWhiteSpace(line))
+            {
+                // This is a value line for the previous label
+                var fact = new CountryFact
                 {
-                    facts.Add(new CountryFact
-                    {
-                        Label = parts[0].Trim(),
-                        Value = parts[1].Trim()
-                    });
-                }
+                    Label = currentLabel,
+                    Value = line.Trim()
+                };
+                facts.Add(fact);
+                _logger.LogDebug("Added country fact: {Label} = {Value}", fact.Label, fact.Value);
+                currentLabel = null; // Reset for next label
+            }
+            else
+            {
+                _logger.LogDebug("Skipping line: '{Line}' (no current label or not a label)", line);
             }
         }
 
+        _logger.LogDebug("Extracted {Count} country facts", facts.Count);
         return facts;
     }
 
@@ -229,27 +272,59 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
             if (lines[i].ToUpper().Contains("NATIONAL HOLIDAYS"))
             {
                 startIndex = i + 1;
+                _logger.LogDebug("Found 'NATIONAL HOLIDAYS' heading at line {LineIndex}: '{Line}'", i, lines[i]);
                 break;
             }
         }
 
-        if (startIndex == -1) return holidays;
+        if (startIndex == -1)
+        {
+            _logger.LogWarning("Heading 'NATIONAL HOLIDAYS' not found in document");
+            return holidays;
+        }
 
         for (int i = startIndex; i < lines.Length; i++)
         {
-            var line = lines[i];
-            // Look for date patterns like "01 January	New Year's Day"
-            var parts = line.Split('\t', 2);
-            if (parts.Length == 2)
+            var line = lines[i].Trim();
+            _logger.LogDebug("Processing holidays line {LineIndex}: '{Line}'", i, line);
+
+            // Skip empty lines
+            if (string.IsNullOrWhiteSpace(line))
+                continue;
+
+            // Skip the introductory paragraph about visiting Nigeria
+            if (line.Contains("Visiting Nigeria during the following dates") ||
+                line.Contains("depending on the objective of the visit"))
+                continue;
+
+            // Use regex to match date pattern: e.g., "01 January" or "10-11 April"
+            var match = Regex.Match(line, @"^(\d{1,2}(?:-\d{1,2})?\s+(January|February|March|April|May|June|July|August|September|October|November|December))(.*)$");
+            if (match.Success)
             {
-                holidays.Add(new Holiday
+                var date = match.Groups[1].Value.Trim();
+                var name = match.Groups[3].Value.Trim();
+                if (!string.IsNullOrWhiteSpace(name))
                 {
-                    Date = parts[0].Trim(),
-                    Name = parts[1].Trim()
-                });
+                    var holiday = new Holiday
+                    {
+                        Date = date,
+                        Name = name
+                    };
+                    holidays.Add(holiday);
+                    _logger.LogDebug("Added holiday: {Date} - {Name}", holiday.Date, holiday.Name);
+                }
+                else
+                {
+                    _logger.LogDebug("Line doesn't match expected holiday format: '{Line}'", line);
+                }
+            }
+            else
+            {
+                _logger.LogDebug("Line doesn't match expected holiday format: '{Line}'", line);
             }
         }
 
+        _logger.LogDebug("Extracted {Count} holidays", holidays.Count);
         return holidays;
     }
 

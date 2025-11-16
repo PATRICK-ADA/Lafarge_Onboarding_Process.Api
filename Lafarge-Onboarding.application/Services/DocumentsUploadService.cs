@@ -242,7 +242,20 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
 
                     var paragraphs = body.Descendants<DocumentFormat.OpenXml.Wordprocessing.Paragraph>();
                     var text = string.Join("\n", paragraphs.Select(p =>
-                        string.Join("", p.Descendants<DocumentFormat.OpenXml.Wordprocessing.Text>().Select(t => t.Text))));
+                    {
+                        var elements = p.Descendants().Where(e =>
+                            e is DocumentFormat.OpenXml.Wordprocessing.Text ||
+                            e is DocumentFormat.OpenXml.Wordprocessing.TabChar);
+
+                        return string.Join("", elements.Select(e =>
+                        {
+                            if (e is DocumentFormat.OpenXml.Wordprocessing.Text textElement)
+                                return textElement.Text;
+                            else if (e is DocumentFormat.OpenXml.Wordprocessing.TabChar)
+                                return "\t";
+                            return "";
+                        }));
+                    }));
 
                     _logger.LogInformation("DOCX text extraction completed successfully. Characters extracted: {CharCount}", text?.Length ?? 0);
                     return text ?? string.Empty;
