@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Lafarge_Onboarding.domain.Dtos.OnboardingRequests;
 
 public sealed record AuthLoginRequest

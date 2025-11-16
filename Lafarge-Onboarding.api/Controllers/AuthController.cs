@@ -52,13 +52,9 @@ public sealed class AuthController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), 400)]
     public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ApiResponse<object>.Failure(string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList())));
-        }
-
-        var result = await _authService.ForgotPasswordAsync(request);
-        return Ok(ApiResponse<string>.Success(result));
+        return !ModelState.IsValid
+            ? BadRequest(ApiResponse<object>.Failure(string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage))))
+            : Ok(ApiResponse<string>.Success(await _authService.ForgotPasswordAsync(request)));
     }
 
 
@@ -69,13 +65,9 @@ public sealed class AuthController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), 400)]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ApiResponse<object>.Failure(string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList())));
-        }
-
-        var result = await _authService.ResetPasswordAsync(request);
-        return Ok(ApiResponse<string>.Success(result));
+        return !ModelState.IsValid
+            ? BadRequest(ApiResponse<object>.Failure(string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage))))
+            : Ok(ApiResponse<string>.Success(await _authService.ResetPasswordAsync(request)));
     }
 }
     

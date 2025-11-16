@@ -8,6 +8,7 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
     }
 
     public DbSet<OnboardingDocument> OnboardingDocuments { get; set; }
+    public DbSet<Gallery> Galleries { get; set; }
     public DbSet<LocalHireInfo> LocalHireInfos { get; set; }
     public DbSet<WelcomeMessage> WelcomeMessages { get; set; }
     public DbSet<OnboardingPlan> OnboardingPlans { get; set; }
@@ -19,7 +20,7 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
     {
         base.OnModelCreating(modelBuilder);
 
-        // Configure OnboardingDocument entity
+    
         modelBuilder.Entity<OnboardingDocument>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -32,7 +33,6 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
             entity.Property(e => e.UploadedAt).HasDefaultValueSql("NOW()");
         });
 
-        // Configure LocalHireInfo entity
         modelBuilder.Entity<LocalHireInfo>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -53,7 +53,7 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
         });
 
-        // Configure WelcomeMessage entity
+        
         modelBuilder.Entity<WelcomeMessage>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -68,7 +68,7 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
         });
 
-        // Configure OnboardingPlan entity
+    
         modelBuilder.Entity<OnboardingPlan>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -79,7 +79,6 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
         });
 
-        // Configure Etiquette entity
         modelBuilder.Entity<Etiquette>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -88,7 +87,7 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
         });
 
-        // Configure Contact entity
+        
         modelBuilder.Entity<Contact>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -98,7 +97,7 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
         });
 
-        // Configure AllContact entity
+        
         modelBuilder.Entity<AllContact>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -107,7 +106,7 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
         });
 
-        // Configure custom Users entity
+        
         modelBuilder.Entity<Users>(entity =>
         {
             entity.Property(e => e.FirstName).HasMaxLength(100);
@@ -116,14 +115,14 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
         });
 
-        // Configure custom Role entity
+        
         modelBuilder.Entity<Role>(entity =>
         {
             entity.Property(e => e.Description).HasMaxLength(500);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
         });
 
-        // Seed roles
+    
         modelBuilder.Entity<Role>().HasData(
             new Role
             {

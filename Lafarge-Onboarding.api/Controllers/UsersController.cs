@@ -35,19 +35,14 @@ public sealed class UsersController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), 400)]
     public async Task<IActionResult> UploadBulkUsers(IFormFile file)
     {
-        if (file == null || file.Length == 0)
-        {
-            return BadRequest(ApiResponse<object>.Failure("File is required"));
-        }
-
         var allowedExtensions = new[] { ".xlsx", ".xls", ".csv" };
-        var fileExtension = Path.GetExtension(file.FileName).ToLower();
-        if (!allowedExtensions.Contains(fileExtension))
-        {
-            return BadRequest(ApiResponse<object>.Failure("Invalid file type. Only Excel (.xlsx, .xls) and CSV files are allowed."));
-        }
-
-        return Ok(ApiResponse<string>.Success(await _usersService.UploadBulkUsersAsync(file)));
+        var fileExtension = Path.GetExtension(file?.FileName ?? "").ToLower();
+        
+        return (file == null || file.Length == 0)
+            ? BadRequest(ApiResponse<object>.Failure("File is required"))
+            : !allowedExtensions.Contains(fileExtension)
+                ? BadRequest(ApiResponse<object>.Failure("Invalid file type. Only Excel (.xlsx, .xls) and CSV files are allowed."))
+                : Ok(ApiResponse<string>.Success(await _usersService.UploadBulkUsersAsync(file)));
     }
     
 

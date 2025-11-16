@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 
 namespace Lafarge_Onboarding.domain.Dtos.OnboardingRequests;
 

@@ -54,13 +54,11 @@ public sealed class ContentController : ControllerBase
     {
         _logger.LogInformation("Upload welcome messages request received");
 
-        if (files == null || files.Count == 0)
-            return BadRequest(ApiResponse<object>.Failure("Files are required"));
-
-        if (files.Any(f => !f.FileName.EndsWith(".docx") && !f.FileName.EndsWith(".doc")))
-            return BadRequest(ApiResponse<object>.Failure("Only .docx and .doc files are allowed"));
-
-        return Ok(ApiResponse<WelcomeMessageResponse>.Success(await _welcomeMessageService.ExtractAndSaveWelcomeMessagesAsync(files)));
+        return (files == null || files.Count == 0)
+            ? BadRequest(ApiResponse<object>.Failure("Files are required"))
+            : files.Any(f => !f.FileName.EndsWith(".docx") && !f.FileName.EndsWith(".doc"))
+                ? BadRequest(ApiResponse<object>.Failure("Only .docx and .doc files are allowed"))
+                : Ok(ApiResponse<WelcomeMessageResponse>.Success(await _welcomeMessageService.ExtractAndSaveWelcomeMessagesAsync(files)));
     }
 
     [HttpGet("get-welcome-messages")]
@@ -83,13 +81,11 @@ public sealed class ContentController : ControllerBase
     {
         _logger.LogInformation("Upload onboarding plan request received");
 
-        if (file == null || file.Length == 0)
-            return BadRequest(ApiResponse<object>.Failure("File is required"));
-
-        if (!file.FileName.EndsWith(".docx") && !file.FileName.EndsWith(".doc"))
-            return BadRequest(ApiResponse<object>.Failure("Only .docx and .doc files are allowed"));
-
-        return Ok(ApiResponse<OnboardingPlanResponse>.Success(await _onboardingPlanService.ExtractAndSaveOnboardingPlanAsync(file)));
+        return (file == null || file.Length == 0)
+            ? BadRequest(ApiResponse<object>.Failure("File is required"))
+            : (!file.FileName.EndsWith(".docx") && !file.FileName.EndsWith(".doc"))
+                ? BadRequest(ApiResponse<object>.Failure("Only .docx and .doc files are allowed"))
+                : Ok(ApiResponse<OnboardingPlanResponse>.Success(await _onboardingPlanService.ExtractAndSaveOnboardingPlanAsync(file)));
     }
 
     [HttpGet("get-onboarding-plan")]
@@ -112,13 +108,11 @@ public sealed class ContentController : ControllerBase
     {
         _logger.LogInformation("Upload etiquette request received");
 
-        if (file == null || file.Length == 0)
-            return BadRequest(ApiResponse<object>.Failure("File is required"));
-
-        if (!file.FileName.EndsWith(".docx") && !file.FileName.EndsWith(".doc"))
-            return BadRequest(ApiResponse<object>.Failure("Only .docx and .doc files are allowed"));
-
-        return Ok(ApiResponse<EtiquetteResponse>.Success(await _etiquetteService.ExtractAndSaveEtiquetteAsync(file)));
+        return (file == null || file.Length == 0)
+            ? BadRequest(ApiResponse<object>.Failure("File is required"))
+            : (!file.FileName.EndsWith(".docx") && !file.FileName.EndsWith(".doc"))
+                ? BadRequest(ApiResponse<object>.Failure("Only .docx and .doc files are allowed"))
+                : Ok(ApiResponse<EtiquetteResponse>.Success(await _etiquetteService.ExtractAndSaveEtiquetteAsync(file)));
     }
 
     [HttpGet("get-etiquette")]
@@ -174,6 +168,6 @@ public sealed class ContentController : ControllerBase
         _logger.LogInformation("Delete latest etiquette request received");
 
         await _etiquetteService.DeleteLatestAsync();
-        return Ok(ApiResponse<object>.Success(null, "Etiquette deleted successfully"));
+        return Ok(ApiResponse<object>.Success("Etiquette deleted successfully"));
     }
 }

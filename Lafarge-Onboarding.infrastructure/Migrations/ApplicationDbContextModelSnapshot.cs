@@ -117,6 +117,37 @@ namespace Lafarge_Onboarding.infrastructure.Migrations
                     b.ToTable("Etiquettes");
                 });
 
+            modelBuilder.Entity("Lafarge_Onboarding.domain.Entities.Gallery", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ImageBase64")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImageName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImageType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UploadedBy")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Galleries");
+                });
+
             modelBuilder.Entity("Lafarge_Onboarding.domain.Entities.LocalHireInfo", b =>
                 {
                     b.Property<int>("Id")
@@ -326,7 +357,7 @@ namespace Lafarge_Onboarding.infrastructure.Migrations
                         new
                         {
                             Id = "1",
-                            CreatedAt = new DateTime(2025, 11, 13, 10, 33, 3, 206, DateTimeKind.Utc).AddTicks(2269),
+                            CreatedAt = new DateTime(2025, 11, 16, 20, 37, 17, 261, DateTimeKind.Utc).AddTicks(1378),
                             Description = "Local hire role",
                             Name = "LOCAL_HIRE",
                             NormalizedName = "LOCAL_HIRE"
@@ -334,7 +365,7 @@ namespace Lafarge_Onboarding.infrastructure.Migrations
                         new
                         {
                             Id = "2",
-                            CreatedAt = new DateTime(2025, 11, 13, 10, 33, 3, 206, DateTimeKind.Utc).AddTicks(2280),
+                            CreatedAt = new DateTime(2025, 11, 16, 20, 37, 17, 261, DateTimeKind.Utc).AddTicks(1388),
                             Description = "Expat role",
                             Name = "EXPAT",
                             NormalizedName = "EXPAT"
@@ -342,7 +373,7 @@ namespace Lafarge_Onboarding.infrastructure.Migrations
                         new
                         {
                             Id = "3",
-                            CreatedAt = new DateTime(2025, 11, 13, 10, 33, 3, 206, DateTimeKind.Utc).AddTicks(2288),
+                            CreatedAt = new DateTime(2025, 11, 16, 20, 37, 17, 261, DateTimeKind.Utc).AddTicks(1394),
                             Description = "Visitor role",
                             Name = "VISITOR",
                             NormalizedName = "VISITOR"
@@ -350,7 +381,7 @@ namespace Lafarge_Onboarding.infrastructure.Migrations
                         new
                         {
                             Id = "4",
-                            CreatedAt = new DateTime(2025, 11, 13, 10, 33, 3, 206, DateTimeKind.Utc).AddTicks(2297),
+                            CreatedAt = new DateTime(2025, 11, 16, 20, 37, 17, 261, DateTimeKind.Utc).AddTicks(1400),
                             Description = "HR Admin role",
                             Name = "HR_ADMIN",
                             NormalizedName = "HR_ADMIN"

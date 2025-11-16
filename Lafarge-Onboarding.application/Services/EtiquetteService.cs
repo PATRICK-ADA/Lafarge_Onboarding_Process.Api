@@ -100,25 +100,22 @@ public sealed class EtiquetteService : IEtiquetteService
             return regionalInfo;
         }
 
-        // Simple table parsing: Category name followed by 3 data lines (one for each region)
-        // Structure: Category -> Data1 -> Data2 -> Data3 -> Category -> Data1 -> Data2 -> Data3 -> ...
-
         var categories = new List<string>();
         var allData = new List<List<string>>();
 
-        // Skip headers and find the first category
+    
         int currentIndex = startIndex;
         while (currentIndex < lines.Length)
         {
             var line = lines[currentIndex].Trim();
 
-            // Stop at next major section
+            
             if (line.ToUpper().Contains("MAKING A GOOD FIRST IMPRESSION"))
             {
                 break;
             }
 
-            // Skip table headers
+        
             if (line.Equals("Category", StringComparison.OrdinalIgnoreCase) ||
                 line.Equals("South West", StringComparison.OrdinalIgnoreCase) ||
                 line.Equals("South (Mfamosing)", StringComparison.OrdinalIgnoreCase) ||
@@ -129,13 +126,12 @@ public sealed class EtiquetteService : IEtiquetteService
                 continue;
             }
 
-            // Check if this looks like a category (short, no data-like content)
             if (IsCategoryLine(line))
             {
                 categories.Add(line);
                 var categoryData = new List<string>();
 
-                // Next 3 lines should be data for the 3 regions
+                
                 for (int j = 1; j <= 3 && currentIndex + j < lines.Length; j++)
                 {
                     var dataLine = lines[currentIndex + j].Trim();
@@ -151,7 +147,7 @@ public sealed class EtiquetteService : IEtiquetteService
 
                 allData.Add(categoryData);
                 _logger.LogDebug("Found category '{Category}' with {DataCount} data lines", line, categoryData.Count);
-                currentIndex += 4; // Skip category + 3 data lines
+                currentIndex += 4; 
             }
             else
             {
@@ -159,18 +155,18 @@ public sealed class EtiquetteService : IEtiquetteService
             }
         }
 
-        // Create RegionalInfoItem for each category
+    
         for (int i = 0; i < categories.Count && i < allData.Count; i++)
         {
             var data = allData[i];
             var item = new RegionalInfoItem
             {
                 Title = categories[i],
-                Regions = new List<Region>
+                Regions = new List<Lafarge_Onboarding.domain.Dtos.OnboardingResponses.Region>
                 {
-                    new Region { Title = "South West", Content = data.Count > 0 ? data[0] : "" },
-                    new Region { Title = "South (Mfamosing)", Content = data.Count > 1 ? data[1] : "" },
-                    new Region { Title = "North-East (Ashaka)", Content = data.Count > 2 ? data[2] : "" }
+                    new Lafarge_Onboarding.domain.Dtos.OnboardingResponses.Region { Title = "South West", Content = data.Count > 0 ? data[0] : "" },
+                    new Lafarge_Onboarding.domain.Dtos.OnboardingResponses.Region { Title = "South (Mfamosing)", Content = data.Count > 1 ? data[1] : "" },
+                    new Lafarge_Onboarding.domain.Dtos.OnboardingResponses.Region { Title = "North-East (Ashaka)", Content = data.Count > 2 ? data[2] : "" }
                 }
             };
             regionalInfo.Add(item);
@@ -183,7 +179,7 @@ public sealed class EtiquetteService : IEtiquetteService
 
     private bool IsCategoryLine(string line)
     {
-        // Categories are short lines without data-like content
+        
         if (line.Length > 50) return false;
         if (line.Contains("Plant") || line.Contains("depot") || line.Contains("tribe") ||
             line.Contains("language") || line.Contains("Lagos") || line.Contains("Mfamosing") ||
@@ -197,7 +193,7 @@ public sealed class EtiquetteService : IEtiquetteService
         var firstImpression = new List<FirstImpressionItem>();
         var startIndex = -1;
 
-        // Find the "MAKING A GOOD FIRST IMPRESSION" heading
+        
         for (int i = 0; i < lines.Length; i++)
         {
             if (lines[i].ToUpper().Contains("MAKING A GOOD FIRST IMPRESSION"))

@@ -1,9 +1,3 @@
-using System.Net;
-using System.Text.Json;
-using Lafarge_Onboarding.domain.Dtos.OnboardingResponses;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-
 namespace Lafarge_Onboarding.api.Middleware;
 
 public class ExceptionHandlingMiddleware

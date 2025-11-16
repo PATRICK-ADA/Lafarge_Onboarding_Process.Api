@@ -58,7 +58,7 @@
             },
             "DocumentFormat.OpenXml": {
               "target": "Package",
-              "version": "[3.1.1, )"
+              "version": "[2.20.0, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
@@ -180,7 +180,7 @@
             },
             "DocumentFormat.OpenXml": {
               "target": "Package",
-              "version": "[3.1.1, )"
+              "version": "[2.20.0, )"
             },
             "Microsoft.AspNetCore.Hosting.Abstractions": {
               "target": "Package",
@@ -205,6 +205,10 @@
             "PdfPig": {
               "target": "Package",
               "version": "[0.1.8, )"
+            },
+            "SixLabors.ImageSharp": {
+              "target": "Package",
+              "version": "[3.1.5, )"
             },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",

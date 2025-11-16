@@ -37,34 +37,18 @@
           }
         }
       },
-      "DocumentFormat.OpenXml/3.1.1": {
+      "DocumentFormat.OpenXml/2.20.0": {
         "type": "package",
         "dependencies": {
-          "DocumentFormat.OpenXml.Framework": "3.1.1"
+          "System.IO.Packaging": "4.7.0"
         },
         "compile": {
-          "lib/net8.0/DocumentFormat.OpenXml.dll": {
+          "lib/net6.0/DocumentFormat.OpenXml.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net8.0/DocumentFormat.OpenXml.dll": {
-            "related": ".xml"
-          }
-        }
-      },
-      "DocumentFormat.OpenXml.Framework/3.1.1": {
-        "type": "package",
-        "dependencies": {
-          "System.IO.Packaging": "8.0.1"
-        },
-        "compile": {
-          "lib/net8.0/DocumentFormat.OpenXml.Framework.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net8.0/DocumentFormat.OpenXml.Framework.dll": {
+          "lib/net6.0/DocumentFormat.OpenXml.dll": {
             "related": ".xml"
           }
         }
@@ -986,6 +970,22 @@
           }
         }
       },
+      "SixLabors.ImageSharp/3.1.5": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/SixLabors.ImageSharp.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/SixLabors.ImageSharp.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/SixLabors.ImageSharp.props": {}
+        }
+      },
       "System.AppContext/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -1289,20 +1289,20 @@
           "lib/netstandard1.3/System.IO.FileSystem.Primitives.dll": {}
         }
       },
-      "System.IO.Packaging/8.0.1": {
+      "System.IO.Packaging/6.0.0": {
         "type": "package",
         "compile": {
-          "lib/net8.0/System.IO.Packaging.dll": {
+          "lib/net6.0/System.IO.Packaging.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net8.0/System.IO.Packaging.dll": {
+          "lib/net6.0/System.IO.Packaging.dll": {
             "related": ".xml"
           }
         },
         "build": {
-          "buildTransitive/net6.0/_._": {}
+          "buildTransitive/netcoreapp3.1/_._": {}
         }
       },
       "System.Linq/4.3.0": {
@@ -2124,15 +2124,14 @@
         "lib/netstandard2.1/CsvHelper.xml"
       ]
     },
-    "DocumentFormat.OpenXml/3.1.1": {
-      "sha512": "2z9QBzeTLNNKWM9SaOSDMegfQk/7hDuElOsmF77pKZMkFRP/GHA/W/4yOAQD9kn15N/FsFxHn3QVYkatuZghiA==",
+    "DocumentFormat.OpenXml/2.20.0": {
+      "sha512": "+oFMsEppo/W6KpGTRXaJl2jTFYn9zeon4FaZuDoCijQ1/0JaPENaCef7d4Y3f8v116eKhVBwd4Ya+/NDglxkjw==",
       "type": "package",
-      "path": "documentformat.openxml/3.1.1",
+      "path": "documentformat.openxml/2.20.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "README.md",
-        "documentformat.openxml.3.1.1.nupkg.sha512",
+        "documentformat.openxml.2.20.0.nupkg.sha512",
         "documentformat.openxml.nuspec",
         "icon.png",
         "lib/net35/DocumentFormat.OpenXml.dll",
@@ -2141,35 +2140,12 @@
         "lib/net40/DocumentFormat.OpenXml.xml",
         "lib/net46/DocumentFormat.OpenXml.dll",
         "lib/net46/DocumentFormat.OpenXml.xml",
-        "lib/net8.0/DocumentFormat.OpenXml.dll",
-        "lib/net8.0/DocumentFormat.OpenXml.xml",
+        "lib/net6.0/DocumentFormat.OpenXml.dll",
+        "lib/net6.0/DocumentFormat.OpenXml.xml",
+        "lib/netstandard1.3/DocumentFormat.OpenXml.dll",
+        "lib/netstandard1.3/DocumentFormat.OpenXml.xml",
         "lib/netstandard2.0/DocumentFormat.OpenXml.dll",
         "lib/netstandard2.0/DocumentFormat.OpenXml.xml"
-      ]
-    },
-    "DocumentFormat.OpenXml.Framework/3.1.1": {
-      "sha512": "6APEp/ElZV58S/4v8mf4Ke3ONEDORs64MqdD64Z7wWpcHANB9oovQsGIwtqjnKihulOj7T0a6IxHIHOfMqKOng==",
-      "type": "package",
-      "path": "documentformat.openxml.framework/3.1.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "README.md",
-        "documentformat.openxml.framework.3.1.1.nupkg.sha512",
-        "documentformat.openxml.framework.nuspec",
-        "icon.png",
-        "lib/net35/DocumentFormat.OpenXml.Framework.dll",
-        "lib/net35/DocumentFormat.OpenXml.Framework.xml",
-        "lib/net40/DocumentFormat.OpenXml.Framework.dll",
-        "lib/net40/DocumentFormat.OpenXml.Framework.xml",
-        "lib/net46/DocumentFormat.OpenXml.Framework.dll",
-        "lib/net46/DocumentFormat.OpenXml.Framework.xml",
-        "lib/net6.0/DocumentFormat.OpenXml.Framework.dll",
-        "lib/net6.0/DocumentFormat.OpenXml.Framework.xml",
-        "lib/net8.0/DocumentFormat.OpenXml.Framework.dll",
-        "lib/net8.0/DocumentFormat.OpenXml.Framework.xml",
-        "lib/netstandard2.0/DocumentFormat.OpenXml.Framework.dll",
-        "lib/netstandard2.0/DocumentFormat.OpenXml.Framework.xml"
       ]
     },
     "ExcelNumberFormat/1.1.0": {
@@ -3476,6 +3452,22 @@
         "sixlabors.fonts.nuspec"
       ]
     },
+    "SixLabors.ImageSharp/3.1.5": {
+      "sha512": "lNtlq7dSI/QEbYey+A0xn48z5w4XHSffF8222cC4F4YwTXfEImuiBavQcWjr49LThT/pRmtWJRcqA/PlL+eJ6g==",
+      "type": "package",
+      "path": "sixlabors.imagesharp/3.1.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "build/SixLabors.ImageSharp.props",
+        "lib/net6.0/SixLabors.ImageSharp.dll",
+        "lib/net6.0/SixLabors.ImageSharp.xml",
+        "sixlabors.imagesharp.128.png",
+        "sixlabors.imagesharp.3.1.5.nupkg.sha512",
+        "sixlabors.imagesharp.nuspec"
+      ]
+    },
     "System.AppContext/4.3.0": {
       "sha512": "fKC+rmaLfeIzUhagxY17Q9siv/sPrjjKcfNg1Ic8IlQkZLipo8ljcaZQu4VtI4Jqbzjc2VTjzGLF6WmsRXAEgA==",
       "type": "package",
@@ -4416,31 +4408,25 @@
         "system.io.filesystem.primitives.nuspec"
       ]
     },
-    "System.IO.Packaging/8.0.1": {
-      "sha512": "KYkIOAvPexQOLDxPO2g0BVoWInnQhPpkFzRqvNrNrMhVT6kqhVr0zEb6KCHlptLFukxnZrjuMVAnxK7pOGUYrw==",
+    "System.IO.Packaging/6.0.0": {
+      "sha512": "C7OkTRIjqIjAKu6ef/fuj8ynCZTPcTYZnvHaq48bniACgXXJogmEoIc56YCDNTc14xhsbLmgpS3KP+evbsUa2g==",
       "type": "package",
-      "path": "system.io.packaging/8.0.1",
+      "path": "system.io.packaging/6.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "LICENSE.TXT",
         "THIRD-PARTY-NOTICES.TXT",
-        "buildTransitive/net461/System.IO.Packaging.targets",
-        "buildTransitive/net462/_._",
-        "buildTransitive/net6.0/_._",
         "buildTransitive/netcoreapp2.0/System.IO.Packaging.targets",
-        "lib/net462/System.IO.Packaging.dll",
-        "lib/net462/System.IO.Packaging.xml",
+        "buildTransitive/netcoreapp3.1/_._",
+        "lib/net461/System.IO.Packaging.dll",
+        "lib/net461/System.IO.Packaging.xml",
         "lib/net6.0/System.IO.Packaging.dll",
         "lib/net6.0/System.IO.Packaging.xml",
-        "lib/net7.0/System.IO.Packaging.dll",
-        "lib/net7.0/System.IO.Packaging.xml",
-        "lib/net8.0/System.IO.Packaging.dll",
-        "lib/net8.0/System.IO.Packaging.xml",
         "lib/netstandard2.0/System.IO.Packaging.dll",
         "lib/netstandard2.0/System.IO.Packaging.xml",
-        "system.io.packaging.8.0.1.nupkg.sha512",
+        "system.io.packaging.6.0.0.nupkg.sha512",
         "system.io.packaging.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -6517,7 +6503,7 @@
     "net8.0": [
       "ClosedXML >= 0.102.3",
       "CsvHelper >= 33.0.1",
-      "DocumentFormat.OpenXml >= 3.1.1",
+      "DocumentFormat.OpenXml >= 2.20.0",
       "Lafarge-Onboarding.domain >= 1.0.0",
       "Microsoft.AspNetCore.Hosting.Abstractions >= 2.2.0",
       "Microsoft.AspNetCore.Http >= 2.2.2",
@@ -6525,6 +6511,7 @@
       "Microsoft.Extensions.Hosting.Abstractions >= 8.0.0",
       "Microsoft.IdentityModel.Tokens >= 8.0.0",
       "PdfPig >= 0.1.8",
+      "SixLabors.ImageSharp >= 3.1.5",
       "System.IdentityModel.Tokens.Jwt >= 8.0.0"
     ]
   },
@@ -6579,7 +6566,7 @@
           },
           "DocumentFormat.OpenXml": {
             "target": "Package",
-            "version": "[3.1.1, )"
+            "version": "[2.20.0, )"
           },
           "Microsoft.AspNetCore.Hosting.Abstractions": {
             "target": "Package",
@@ -6604,6 +6591,10 @@
           "PdfPig": {
             "target": "Package",
             "version": "[0.1.8, )"
+          },
+          "SixLabors.ImageSharp": {
+            "target": "Package",
+            "version": "[3.1.5, )"
           },
           "System.IdentityModel.Tokens.Jwt": {
             "target": "Package",
@@ -6632,11 +6623,21 @@
   },
   "logs": [
     {
-      "code": "NU1608",
+      "code": "NU1903",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Detected package version outside of dependency constraint: ClosedXML 0.102.3 requires DocumentFormat.OpenXml (>= 2.16.0 && < 3.0.0) but version DocumentFormat.OpenXml 3.1.1 was resolved.",
-      "libraryId": "DocumentFormat.OpenXml",
+      "message": "Package 'SixLabors.ImageSharp' 3.1.5 has a known high severity vulnerability, https://github.com/advisories/GHSA-2cmq-823j-5qj8",
+      "libraryId": "SixLabors.ImageSharp",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1902",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'SixLabors.ImageSharp' 3.1.5 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-rxmq-m78w-7wmc",
+      "libraryId": "SixLabors.ImageSharp",
       "targetGraphs": [
         "net8.0"
       ]

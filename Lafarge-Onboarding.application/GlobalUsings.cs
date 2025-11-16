@@ -19,3 +19,5 @@ global using DocumentFormat.OpenXml.Packaging;
 global using Users = Lafarge_Onboarding.domain.Entities.Users;
 global using DocumentFormat.OpenXml.Spreadsheet;
 global using System.Text.RegularExpressions;
+global using System.Drawing;
+global using System.Drawing.Imaging;

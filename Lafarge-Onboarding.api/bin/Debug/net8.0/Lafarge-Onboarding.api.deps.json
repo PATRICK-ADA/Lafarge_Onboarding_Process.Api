@@ -10,7 +10,7 @@
         "dependencies": {
           "ClosedXML": "0.102.3",
           "CsvHelper": "33.0.1",
-          "DocumentFormat.OpenXml": "3.1.1",
+          "DocumentFormat.OpenXml": "2.20.0",
           "Lafarge-Onboarding.application": "1.0.0",
           "Lafarge-Onboarding.domain": "1.0.0",
           "Lafarge-Onboarding.infrastructure": "1.0.0",
@@ -67,10 +67,10 @@
       },
       "ClosedXML/0.102.3": {
         "dependencies": {
-          "DocumentFormat.OpenXml": "3.1.1",
+          "DocumentFormat.OpenXml": "2.20.0",
           "ExcelNumberFormat": "1.1.0",
           "SixLabors.Fonts": "1.0.0",
-          "System.IO.Packaging": "8.0.1",
+          "System.IO.Packaging": "6.0.0",
           "System.Net.Http": "4.3.4",
           "System.Text.RegularExpressions": "4.3.1",
           "XLParser": "1.5.2"
@@ -90,25 +90,14 @@
           }
         }
       },
-      "DocumentFormat.OpenXml/3.1.1": {
+      "DocumentFormat.OpenXml/2.20.0": {
         "dependencies": {
-          "DocumentFormat.OpenXml.Framework": "3.1.1"
+          "System.IO.Packaging": "6.0.0"
         },
         "runtime": {
-          "lib/net8.0/DocumentFormat.OpenXml.dll": {
-            "assemblyVersion": "3.1.1.0",
-            "fileVersion": "3.1.1.0"
-          }
-        }
-      },
-      "DocumentFormat.OpenXml.Framework/3.1.1": {
-        "dependencies": {
-          "System.IO.Packaging": "8.0.1"
-        },
-        "runtime": {
-          "lib/net8.0/DocumentFormat.OpenXml.Framework.dll": {
-            "assemblyVersion": "3.1.1.0",
-            "fileVersion": "3.1.1.0"
+          "lib/net6.0/DocumentFormat.OpenXml.dll": {
+            "assemblyVersion": "2.20.0.0",
+            "fileVersion": "2.20.0.0"
           }
         }
       },
@@ -1166,6 +1155,14 @@
           }
         }
       },
+      "SixLabors.ImageSharp/3.1.5": {
+        "runtime": {
+          "lib/net6.0/SixLabors.ImageSharp.dll": {
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.1.5.0"
+          }
+        }
+      },
       "Swashbuckle.AspNetCore/6.6.2": {
         "dependencies": {
           "Microsoft.Extensions.ApiDescription.Server": "6.0.5",
@@ -1474,11 +1471,11 @@
           "System.Runtime": "4.3.1"
         }
       },
-      "System.IO.Packaging/8.0.1": {
+      "System.IO.Packaging/6.0.0": {
         "runtime": {
-          "lib/net8.0/System.IO.Packaging.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.1024.46610"
+          "lib/net6.0/System.IO.Packaging.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.0.21.52210"
           }
         }
       },
@@ -1987,7 +1984,7 @@
         "dependencies": {
           "ClosedXML": "0.102.3",
           "CsvHelper": "33.0.1",
-          "DocumentFormat.OpenXml": "3.1.1",
+          "DocumentFormat.OpenXml": "2.20.0",
           "Lafarge-Onboarding.domain": "1.0.0",
           "Microsoft.AspNetCore.Hosting.Abstractions": "2.2.0",
           "Microsoft.AspNetCore.Http": "2.2.2",
@@ -1995,6 +1992,7 @@
           "Microsoft.Extensions.Hosting.Abstractions": "8.0.0",
           "Microsoft.IdentityModel.Tokens": "8.1.2",
           "PdfPig": "0.1.8",
+          "SixLabors.ImageSharp": "3.1.5",
           "System.IdentityModel.Tokens.Jwt": "8.1.2"
         },
         "runtime": {
@@ -2060,19 +2058,12 @@
       "path": "csvhelper/33.0.1",
       "hashPath": "csvhelper.33.0.1.nupkg.sha512"
     },
-    "DocumentFormat.OpenXml/3.1.1": {
+    "DocumentFormat.OpenXml/2.20.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-2z9QBzeTLNNKWM9SaOSDMegfQk/7hDuElOsmF77pKZMkFRP/GHA/W/4yOAQD9kn15N/FsFxHn3QVYkatuZghiA==",
-      "path": "documentformat.openxml/3.1.1",
-      "hashPath": "documentformat.openxml.3.1.1.nupkg.sha512"
-    },
-    "DocumentFormat.OpenXml.Framework/3.1.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-6APEp/ElZV58S/4v8mf4Ke3ONEDORs64MqdD64Z7wWpcHANB9oovQsGIwtqjnKihulOj7T0a6IxHIHOfMqKOng==",
-      "path": "documentformat.openxml.framework/3.1.1",
-      "hashPath": "documentformat.openxml.framework.3.1.1.nupkg.sha512"
+      "sha512": "sha512-+oFMsEppo/W6KpGTRXaJl2jTFYn9zeon4FaZuDoCijQ1/0JaPENaCef7d4Y3f8v116eKhVBwd4Ya+/NDglxkjw==",
+      "path": "documentformat.openxml/2.20.0",
+      "hashPath": "documentformat.openxml.2.20.0.nupkg.sha512"
     },
     "ExcelNumberFormat/1.1.0": {
       "type": "package",
@@ -2732,6 +2723,13 @@
       "path": "sixlabors.fonts/1.0.0",
       "hashPath": "sixlabors.fonts.1.0.0.nupkg.sha512"
     },
+    "SixLabors.ImageSharp/3.1.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lNtlq7dSI/QEbYey+A0xn48z5w4XHSffF8222cC4F4YwTXfEImuiBavQcWjr49LThT/pRmtWJRcqA/PlL+eJ6g==",
+      "path": "sixlabors.imagesharp/3.1.5",
+      "hashPath": "sixlabors.imagesharp.3.1.5.nupkg.sha512"
+    },
     "Swashbuckle.AspNetCore/6.6.2": {
       "type": "package",
       "serviceable": true,
@@ -2970,12 +2968,12 @@
       "path": "system.io.filesystem.primitives/4.3.0",
       "hashPath": "system.io.filesystem.primitives.4.3.0.nupkg.sha512"
     },
-    "System.IO.Packaging/8.0.1": {
+    "System.IO.Packaging/6.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-KYkIOAvPexQOLDxPO2g0BVoWInnQhPpkFzRqvNrNrMhVT6kqhVr0zEb6KCHlptLFukxnZrjuMVAnxK7pOGUYrw==",
-      "path": "system.io.packaging/8.0.1",
-      "hashPath": "system.io.packaging.8.0.1.nupkg.sha512"
+      "sha512": "sha512-C7OkTRIjqIjAKu6ef/fuj8ynCZTPcTYZnvHaq48bniACgXXJogmEoIc56YCDNTc14xhsbLmgpS3KP+evbsUa2g==",
+      "path": "system.io.packaging/6.0.0",
+      "hashPath": "system.io.packaging.6.0.0.nupkg.sha512"
     },
     "System.IO.Pipelines/6.0.3": {
       "type": "package",

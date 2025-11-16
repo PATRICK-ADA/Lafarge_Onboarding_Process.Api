@@ -1,5 +1,6 @@
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;
@@ -8,7 +9,9 @@ global using Microsoft.IdentityModel.Tokens;
 global using Microsoft.OpenApi.Models;
 global using Serilog;
 global using Swashbuckle.AspNetCore.SwaggerGen;
+global using System.Net;
 global using System.Text;
+global using System.Text.Json;
 global using Lafarge_Onboarding.application.Abstraction;
 global using Lafarge_Onboarding.domain.Entities;
 global using Lafarge_Onboarding.domain.Dtos.OnboardingRequests;

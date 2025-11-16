@@ -1,6 +1,6 @@
 namespace Lafarge_Onboarding.domain.Entities;
 
-public static class OnboardingStatus
+public sealed class OnboardingStatus
 {
     public const string NotStarted = "NotStarted";
     public const string Ongoing = "Ongoing";

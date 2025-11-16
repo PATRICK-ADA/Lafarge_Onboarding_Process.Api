@@ -20,20 +20,14 @@ public sealed class ContactsController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), 400)]
     public async Task<IActionResult> UploadLocalContacts(IFormFile file)
     {
-        if (file == null || file.Length == 0)
-        {
-            return BadRequest(ApiResponse<object>.Failure("File is required"));
-        }
-
         var allowedExtensions = new[] { ".xlsx", ".xls", ".csv" };
-        var fileExtension = Path.GetExtension(file.FileName).ToLower();
-        if (!allowedExtensions.Contains(fileExtension))
-        {
-            return BadRequest(ApiResponse<object>.Failure("Invalid file type. Only Excel (.xlsx, .xls) and CSV files are allowed."));
-        }
-
-        await _contactService.UploadContactsAsync(file);
-        return Ok(ApiResponse<string>.Success("Contacts uploaded successfully"));
+        var fileExtension = Path.GetExtension(file?.FileName ?? "").ToLower();
+        
+        return (file == null || file.Length == 0)
+            ? BadRequest(ApiResponse<object>.Failure("File is required"))
+            : !allowedExtensions.Contains(fileExtension)
+                ? BadRequest(ApiResponse<object>.Failure("Invalid file type. Only Excel (.xlsx, .xls) and CSV files are allowed."))
+                : Ok(ApiResponse<string>.Success(await Task.Run(async () => { await _contactService.UploadContactsAsync(file); return "Contacts uploaded successfully"; })));
     }
 
     [HttpGet("get-local")]
@@ -50,20 +44,14 @@ public sealed class ContactsController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), 400)]
     public async Task<IActionResult> UploadAllContacts(IFormFile file)
     {
-        if (file == null || file.Length == 0)
-        {
-            return BadRequest(ApiResponse<object>.Failure("File is required"));
-        }
-
-        var allowedExtensions = new[] { ".pdf", ".docx", ".txt" }; // Assuming document types
-        var fileExtension = Path.GetExtension(file.FileName).ToLower();
-        if (!allowedExtensions.Contains(fileExtension))
-        {
-            return BadRequest(ApiResponse<object>.Failure("Invalid file type. Only PDF, DOCX, and TXT files are allowed."));
-        }
-
-        await _allContactService.UploadAllContactsAsync(file);
-        return Ok(ApiResponse<string>.Success("All contacts uploaded successfully"));
+        var allowedExtensions = new[] { ".pdf", ".docx", ".txt" };
+        var fileExtension = Path.GetExtension(file?.FileName ?? "").ToLower();
+        
+        return (file == null || file.Length == 0)
+            ? BadRequest(ApiResponse<object>.Failure("File is required"))
+            : !allowedExtensions.Contains(fileExtension)
+                ? BadRequest(ApiResponse<object>.Failure("Invalid file type. Only PDF, DOCX, and TXT files are allowed."))
+                : Ok(ApiResponse<string>.Success(await Task.Run(async () => { await _allContactService.UploadAllContactsAsync(file); return "All contacts uploaded successfully"; })));
     }
 
     [HttpGet("get-all")]
@@ -80,7 +68,7 @@ public sealed class ContactsController : ControllerBase
     public async Task<IActionResult> DeleteLocalContacts()
     {
         await _contactService.DeleteAllContactsAsync();
-        return Ok(ApiResponse<object>.Success(null, "Local contacts deleted successfully"));
+        return Ok(ApiResponse<object>.Success("Local contacts deleted successfully"));
     }
 
     [HttpDelete("delete-all")]
@@ -89,6 +77,6 @@ public sealed class ContactsController : ControllerBase
     public async Task<IActionResult> DeleteAllContacts()
     {
         await _allContactService.DeleteAllContactsAsync();
-        return Ok(ApiResponse<object>.Success(null, "All contacts deleted successfully"));
+        return Ok(ApiResponse<object>.Success("All contacts deleted successfully"));
     }
 }

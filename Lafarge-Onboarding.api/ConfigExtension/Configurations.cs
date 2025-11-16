@@ -37,6 +37,9 @@ public static class Configurations
 
         // Add HttpClient for email service
         builder.Services.AddHttpClient();
+        
+        // Add HttpContextAccessor for accessing current user
+        builder.Services.AddHttpContextAccessor();
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
