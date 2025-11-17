@@ -1,0 +1,11 @@
+First Name,Last Name,Email,Phone Number,Active Status,Staff Profile Picture (Base64),Role
+John,Doe,john.doe@lafarge.com,+1-555-0101,true,,LocalHire
+Jane,Smith,jane.smith@lafarge.com,+1-555-0102,true,,LocalHire
+Michael,Johnson,michael.johnson@lafarge.com,+1-555-0103,true,,HR_ADMIN
+Sarah,Williams,sarah.williams@lafarge.com,+1-555-0104,false,,LocalHire
+David,Brown,david.brown@lafarge.com,+1-555-0105,true,,LocalHire
+Emily,Davis,emily.davis@lafarge.com,+1-555-0106,true,,HR_ADMIN
+Robert,Miller,robert.miller@lafarge.com,+1-555-0107,false,,LocalHire
+Lisa,Wilson,lisa.wilson@lafarge.com,+1-555-0108,true,,LocalHire
+James,Moore,james.moore@lafarge.com,+1-555-0109,true,,HR_ADMIN
+Jennifer,Taylor,jennifer.taylor@lafarge.com,+1-555-0110,false,,LocalHire

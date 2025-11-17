@@ -68,18 +68,40 @@ public sealed class WelcomeMessageService : IWelcomeMessageService
         var response = new WelcomeMessageResponse();
 
         // Parse CEO
-        response.Ceo.Name = ExtractField(ceoText, "name");
-        response.Ceo.Title = ExtractField(ceoText, "title");
-        response.Ceo.Message = ExtractField(ceoText, "message");
+        var ceoParsed = ParsePersonText(ceoText);
+        response.Ceo.Name = ceoParsed.Name;
+        response.Ceo.Title = ceoParsed.Title;
+        response.Ceo.Message = ceoParsed.Message;
         response.Ceo.ImageUrl = string.Empty; // Placeholder
 
         // Parse HR
-        response.Hr.Name = ExtractField(hrText, "name");
-        response.Hr.Title = ExtractField(hrText, "title");
-        response.Hr.Message = ExtractField(hrText, "message");
+        var hrParsed = ParsePersonText(hrText);
+        response.Hr.Name = hrParsed.Name;
+        response.Hr.Title = hrParsed.Title;
+        response.Hr.Message = hrParsed.Message;
         response.Hr.ImageUrl = string.Empty; // Placeholder
 
         return response;
+    }
+
+
+    private (string Name, string Title, string Message) ParsePersonText(string text)
+    {
+        var lines = text.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        if (lines.Length < 2)
+        {
+            return (string.Empty, string.Empty, text);
+        }
+
+        var title = lines[^1]; // Last line
+        var nameLine = lines[^2]; // Second to last
+        var name = nameLine.TrimStart('•', ' ').Trim(); // Remove bullet and spaces
+
+        var messageLines = lines.Take(lines.Length - 2);
+        var message = string.Join("\n", messageLines);
+
+        return (name, title, message);
     }
 
     private string ExtractField(string text, string fieldName)

@@ -1,3 +1,7 @@
+using CsvHelper;
+using ClosedXML.Excel;
+using System.Globalization;
+
 namespace Lafarge_Onboarding.application.Services;
 
 public sealed class AllContactService : IAllContactService
@@ -16,14 +20,73 @@ public sealed class AllContactService : IAllContactService
         _logger = logger;
     }
 
+    private async Task<List<AllContactRow>> ParseCsvAsync(IFormFile file)
+    {
+        var rows = new List<AllContactRow>();
+        using var reader = new StreamReader(file.OpenReadStream());
+        using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+        await foreach (var record in csv.GetRecordsAsync<AllContactRow>())
+        {
+            rows.Add(record);
+        }
+        return rows;
+    }
+
+    private async Task<List<AllContactRow>> ParseExcelAsync(IFormFile file)
+    {
+        var rows = new List<AllContactRow>();
+        using var stream = file.OpenReadStream();
+        using var workbook = new XLWorkbook(stream);
+        var worksheet = workbook.Worksheet(1); // Assume first sheet
+
+        // Skip header row
+        var headerRow = worksheet.Row(1);
+        var rowsData = worksheet.RowsUsed().Skip(1);
+
+        foreach (var row in rowsData)
+        {
+            var contactRow = new AllContactRow
+            {
+                Category = row.Cell(1).GetValue<string>(),
+                Service = row.Cell(2).GetValue<string>(),
+                Function = row.Cell(3).GetValue<string>(),
+                Embassy = row.Cell(4).GetValue<string>(),
+                Name = row.Cell(5).GetValue<string>(),
+                Designation = row.Cell(6).GetValue<string>(),
+                Info = row.Cell(7).GetValue<string>(),
+                Address = row.Cell(8).GetValue<string>(),
+                Website = row.Cell(9).GetValue<string>(),
+                Phone = row.Cell(10).GetValue<string>(),
+                Email = row.Cell(11).GetValue<string>()
+            };
+            rows.Add(contactRow);
+        }
+        return rows;
+    }
+
     public async Task UploadAllContactsAsync(IFormFile file)
     {
-        _logger.LogInformation("Starting all contacts extraction from file: {FileName}", file.FileName);
+        _logger.LogInformation("Starting all contacts parsing from file: {FileName}", file.FileName);
 
-        var extractedText = await _documentService.ExtractTextFromDocumentAsync(file);
-        _logger.LogInformation("Text extracted successfully. Length: {Length}", extractedText.Length);
+        var extension = Path.GetExtension(file.FileName).ToLower();
+        List<AllContactRow> rows;
 
-        var parsedData = ParseAllContacts(extractedText);
+        if (extension == ".csv")
+        {
+            rows = await ParseCsvAsync(file);
+        }
+        else if (extension == ".xlsx" || extension == ".xls")
+        {
+            rows = await ParseExcelAsync(file);
+        }
+        else
+        {
+            throw new InvalidOperationException("Unsupported file type");
+        }
+
+        _logger.LogInformation("Parsed {Count} rows from file", rows.Count);
+
+        var parsedData = ParseAllContacts(rows);
 
         await _repository.DeleteAllAsync(); // Clear existing
 
@@ -51,161 +114,52 @@ public sealed class AllContactService : IAllContactService
         _logger.LogInformation("All contacts deleted successfully");
     }
 
-    private AllContactsResponse ParseAllContacts(string text)
+    private AllContactsResponse ParseAllContacts(List<AllContactRow> rows)
     {
         var response = new AllContactsResponse();
 
-        // Parse emergency contacts
-        response.Emergency = ExtractEmergencyContacts(text);
-
-        // Parse lafarge contacts
-        response.Lafarge = ExtractLafargeContacts(text);
-
-        // Parse embassies
-        response.Embassies = ExtractEmbassyContacts(text);
-
-        // Parse hr contacts
-        response.Hr = ExtractHrContacts(text);
+        foreach (var row in rows)
+        {
+            switch (row.Category.ToLower())
+            {
+                case "emergency":
+                    response.Emergency.Add(new EmergencyContact
+                    {
+                        Service = row.Service,
+                        Info = row.Info
+                    });
+                    break;
+                case "lafarge":
+                    response.Lafarge.Add(new LafargeContact
+                    {
+                        Function = row.Function,
+                        Name = row.Name,
+                        Phone = row.Phone
+                    });
+                    break;
+                case "embassies":
+                    response.Embassies.Add(new EmbassyContact
+                    {
+                        Embassy = row.Embassy,
+                        Address = row.Address,
+                        Website = row.Website,
+                        Phone = row.Phone
+                    });
+                    break;
+                case "hr":
+                    response.Hr.Add(new HrContact
+                    {
+                        Name = row.Name,
+                        Designation = row.Designation,
+                        Email = row.Email
+                    });
+                    break;
+            }
+        }
 
         return response;
     }
 
-    private List<EmergencyContact> ExtractEmergencyContacts(string text)
-    {
-        // Simple extraction - assume sections are marked
-        var contacts = new List<EmergencyContact>();
-        var lines = text.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-
-        bool inEmergency = false;
-        foreach (var line in lines)
-        {
-            if (line.ToLower().Contains("emergency") || line.ToLower().Contains("fire services"))
-            {
-                inEmergency = true;
-                continue;
-            }
-            if (inEmergency && line.Contains(":"))
-            {
-                var parts = line.Split(':', 2);
-                if (parts.Length == 2)
-                {
-                    contacts.Add(new EmergencyContact
-                    {
-                        Service = parts[0].Trim(),
-                        Info = parts[1].Trim()
-                    });
-                }
-            }
-            else if (inEmergency && string.IsNullOrWhiteSpace(line))
-            {
-                break; // End of section
-            }
-        }
-        return contacts;
-    }
-
-    private List<LafargeContact> ExtractLafargeContacts(string text)
-    {
-        var contacts = new List<LafargeContact>();
-        var lines = text.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-
-        bool inLafarge = false;
-        foreach (var line in lines)
-        {
-            if (line.ToLower().Contains("lafarge") || line.ToLower().Contains("country ceo"))
-            {
-                inLafarge = true;
-                continue;
-            }
-            if (inLafarge && line.Contains("-"))
-            {
-                var parts = line.Split('-', 2);
-                if (parts.Length == 2)
-                {
-                    contacts.Add(new LafargeContact
-                    {
-                        Function = parts[0].Trim(),
-                        Name = parts[1].Trim(),
-                        Phone = "" // Assume phone is in name or separate
-                    });
-                }
-            }
-            else if (inLafarge && string.IsNullOrWhiteSpace(line))
-            {
-                break;
-            }
-        }
-        return contacts;
-    }
-
-    private List<EmbassyContact> ExtractEmbassyContacts(string text)
-    {
-        var contacts = new List<EmbassyContact>();
-        var lines = text.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-
-        bool inEmbassies = false;
-        foreach (var line in lines)
-        {
-            if (line.ToLower().Contains("embass"))
-            {
-                inEmbassies = true;
-                continue;
-            }
-            if (inEmbassies && line.Contains(":"))
-            {
-                var parts = line.Split(':', 2);
-                if (parts.Length == 2)
-                {
-                    contacts.Add(new EmbassyContact
-                    {
-                        Embassy = parts[0].Trim(),
-                        Address = parts[1].Trim(),
-                        Website = "",
-                        Phone = ""
-                    });
-                }
-            }
-            else if (inEmbassies && string.IsNullOrWhiteSpace(line))
-            {
-                break;
-            }
-        }
-        return contacts;
-    }
-
-    private List<HrContact> ExtractHrContacts(string text)
-    {
-        var contacts = new List<HrContact>();
-        var lines = text.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-
-        bool inHr = false;
-        foreach (var line in lines)
-        {
-            if (line.ToLower().Contains("hr") || line.ToLower().Contains("human resources"))
-            {
-                inHr = true;
-                continue;
-            }
-            if (inHr && line.Contains(","))
-            {
-                var parts = line.Split(',', 2);
-                if (parts.Length == 2)
-                {
-                    contacts.Add(new HrContact
-                    {
-                        Name = parts[0].Trim(),
-                        Designation = parts[1].Trim(),
-                        Email = ""
-                    });
-                }
-            }
-            else if (inHr && string.IsNullOrWhiteSpace(line))
-            {
-                break;
-            }
-        }
-        return contacts;
-    }
 
     private List<AllContact> MapToEntities(AllContactsResponse response)
     {
@@ -275,4 +229,20 @@ public sealed class AllContactService : IAllContactService
 
         return response;
     }
+
+    private class AllContactRow
+    {
+        public string Category { get; set; } = string.Empty;
+        public string Service { get; set; } = string.Empty;
+        public string Function { get; set; } = string.Empty;
+        public string Embassy { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string Designation { get; set; } = string.Empty;
+        public string Info { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
+        public string Website { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+    }
+
 }

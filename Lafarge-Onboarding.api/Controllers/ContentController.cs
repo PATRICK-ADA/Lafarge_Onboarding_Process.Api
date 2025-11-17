@@ -33,19 +33,6 @@ public sealed class ContentController : ControllerBase
 
     }
 
-    [HttpGet("get-local-hire-info")]
-    [Authorize]
-    [ProducesResponseType(typeof(ApiResponse<LocalHireInfoResponse>), 200)]
-    [ProducesResponseType(typeof(ApiResponse<object>), 404)]
-    public async Task<IActionResult> GetLocalHireInfo()
-    {
-        _logger.LogInformation("Get local hire info request received");
-
-            var result = await _localHireInfoService.GetLocalHireInfoAsync();
-            return result == null ? NotFound(ApiResponse<object>.Failure("Local hire info not found", "404")) : Ok(ApiResponse<LocalHireInfoResponse>.Success(result));
-
-    }
-
     [HttpPost("upload-welcome-messages")]
     [Authorize(Roles = "HR_ADMIN")]
     [ProducesResponseType(typeof(ApiResponse<WelcomeMessageResponse>), 200)]
@@ -59,18 +46,6 @@ public sealed class ContentController : ControllerBase
             : files.Any(f => !f.FileName.EndsWith(".docx") && !f.FileName.EndsWith(".doc"))
                 ? BadRequest(ApiResponse<object>.Failure("Only .docx and .doc files are allowed"))
                 : Ok(ApiResponse<WelcomeMessageResponse>.Success(await _welcomeMessageService.ExtractAndSaveWelcomeMessagesAsync(files)));
-    }
-
-    [HttpGet("get-welcome-messages")]
-    [Authorize]
-    [ProducesResponseType(typeof(ApiResponse<WelcomeMessageResponse>), 200)]
-    [ProducesResponseType(typeof(ApiResponse<object>), 404)]
-    public async Task<IActionResult> GetWelcomeMessages()
-    {
-        _logger.LogInformation("Get welcome messages request received");
-
-        var result = await _welcomeMessageService.GetWelcomeMessagesAsync();
-        return result == null ? NotFound(ApiResponse<object>.Failure("Welcome messages not found", "404")) : Ok(ApiResponse<WelcomeMessageResponse>.Success(result));
     }
 
     [HttpPost("upload-onboarding-plan")]
@@ -88,17 +63,6 @@ public sealed class ContentController : ControllerBase
                 : Ok(ApiResponse<OnboardingPlanResponse>.Success(await _onboardingPlanService.ExtractAndSaveOnboardingPlanAsync(file)));
     }
 
-    [HttpGet("get-onboarding-plan")]
-    [Authorize]
-    [ProducesResponseType(typeof(ApiResponse<OnboardingPlanResponse>), 200)]
-    [ProducesResponseType(typeof(ApiResponse<object>), 404)]
-    public async Task<IActionResult> GetOnboardingPlan()
-    {
-        _logger.LogInformation("Get onboarding plan request received");
-
-        var result = await _onboardingPlanService.GetOnboardingPlanAsync();
-        return result == null ? NotFound(ApiResponse<object>.Failure("Onboarding plan not found", "404")) : Ok(ApiResponse<OnboardingPlanResponse>.Success(result));
-    }
 
     [HttpPost("upload-etiquette")]
     [Authorize(Roles = "HR_ADMIN")]
@@ -113,6 +77,45 @@ public sealed class ContentController : ControllerBase
             : (!file.FileName.EndsWith(".docx") && !file.FileName.EndsWith(".doc"))
                 ? BadRequest(ApiResponse<object>.Failure("Only .docx and .doc files are allowed"))
                 : Ok(ApiResponse<EtiquetteResponse>.Success(await _etiquetteService.ExtractAndSaveEtiquetteAsync(file)));
+    }
+
+    
+    [HttpGet("get-local-hire-info")]
+    [Authorize]
+    [ProducesResponseType(typeof(ApiResponse<LocalHireInfoResponse>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<object>), 404)]
+    public async Task<IActionResult> GetLocalHireInfo()
+    {
+        _logger.LogInformation("Get local hire info request received");
+
+            var result = await _localHireInfoService.GetLocalHireInfoAsync();
+            return result == null ? NotFound(ApiResponse<object>.Failure("Local hire info not found", "404")) : Ok(ApiResponse<LocalHireInfoResponse>.Success(result));
+
+    }
+
+    [HttpGet("get-welcome-messages")]
+    [Authorize]
+    [ProducesResponseType(typeof(ApiResponse<WelcomeMessageResponse>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<object>), 404)]
+    public async Task<IActionResult> GetWelcomeMessages()
+    {
+        _logger.LogInformation("Get welcome messages request received");
+
+        var result = await _welcomeMessageService.GetWelcomeMessagesAsync();
+        return result == null ? NotFound(ApiResponse<object>.Failure("Welcome messages not found", "404")) : Ok(ApiResponse<WelcomeMessageResponse>.Success(result));
+    }
+
+
+    [HttpGet("get-onboarding-plan")]
+    [Authorize]
+    [ProducesResponseType(typeof(ApiResponse<OnboardingPlanResponse>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<object>), 404)]
+    public async Task<IActionResult> GetOnboardingPlan()
+    {
+        _logger.LogInformation("Get onboarding plan request received");
+
+        var result = await _onboardingPlanService.GetOnboardingPlanAsync();
+        return result == null ? NotFound(ApiResponse<object>.Failure("Onboarding plan not found", "404")) : Ok(ApiResponse<OnboardingPlanResponse>.Success(result));
     }
 
     [HttpGet("get-etiquette")]

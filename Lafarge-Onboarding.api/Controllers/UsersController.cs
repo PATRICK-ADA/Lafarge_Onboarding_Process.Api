@@ -6,28 +6,13 @@ namespace Lafarge_Onboarding.api.Controllers;
 public sealed class UsersController : ControllerBase
 {
     private readonly IUsersService _usersService;
+    private readonly IWebHostEnvironment _webHostEnvironment;
 
-    public UsersController(IUsersService usersService)
+    public UsersController(IUsersService usersService, IWebHostEnvironment webHostEnvironment)
     {
         _usersService = usersService;
+        _webHostEnvironment = webHostEnvironment;
     }
-
-
-    [HttpGet("view-users")]
-    [Authorize(Roles = "HR_ADMIN")]
-    public async Task<IActionResult> ViewUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
-    {
-        var pagination = new PaginationRequest
-        {
-            PageNumber = pageNumber,
-            PageSize = pageSize
-        };
-
-        var result = await _usersService.GetUsersAsync(pagination);
-        return Ok(ApiResponse<PaginatedResponse<GetUserResponse>>.Success(result));
-    }
-
-
 
     [HttpPost("bulk-users-upload")]
     [Authorize(Roles = "HR_ADMIN")]
@@ -45,7 +30,47 @@ public sealed class UsersController : ControllerBase
                 : Ok(ApiResponse<string>.Success(await _usersService.UploadBulkUsersAsync(file)));
     }
     
+ 
+    [HttpPut("update-user/{id}")]
+    [Authorize(Roles = "HR_ADMIN")]
+    [ProducesResponseType(typeof(ApiResponse<string>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<object>), 400)]
+    [ProducesResponseType(typeof(ApiResponse<object>), 404)]
+    public async Task<IActionResult> UpdateUserById(string id, [FromBody] UpdateUserRequest request)
+    {
+        return !ModelState.IsValid
+            ? BadRequest(ApiResponse<object>.Failure(string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage))))
+            : Ok(ApiResponse<string>.Success(await _usersService.UpdateUserByIdAsync(id, request)));
+    }
 
+
+
+    [HttpPut("update-bulk-users")]
+    [Authorize(Roles = "HR_ADMIN")]
+    [ProducesResponseType(typeof(ApiResponse<string>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<object>), 400)]
+    public async Task<IActionResult> UpdateBulkUsers([FromBody] UpdateBulkUsersRequest request)
+    {
+       return !ModelState.IsValid
+           ? BadRequest(ApiResponse<object>.Failure(string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage))))
+           : Ok(ApiResponse<string>.Success(await _usersService.UpdateBulkUsersAsync(request)));
+    }
+
+
+
+    [HttpGet("view-users")]
+    [Authorize(Roles = "HR_ADMIN")]
+    public async Task<IActionResult> ViewUsers([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+    {
+        var pagination = new PaginationRequest
+        {
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        };
+
+        var result = await _usersService.GetUsersAsync(pagination);
+        return Ok(ApiResponse<PaginatedResponse<GetUserResponse>>.Success(result));
+    }
 
     [HttpGet("get-by-role/{role}")]
     [Authorize(Roles = "HR_ADMIN")]
@@ -87,32 +112,19 @@ public sealed class UsersController : ControllerBase
     }
 
 
-
-
-    [HttpPut("update-user/{id}")]
+    [HttpGet("download-bulk-users-upload-file-format")]
     [Authorize(Roles = "HR_ADMIN")]
-    [ProducesResponseType(typeof(ApiResponse<string>), 200)]
-    [ProducesResponseType(typeof(ApiResponse<object>), 400)]
-    [ProducesResponseType(typeof(ApiResponse<object>), 404)]
-    public async Task<IActionResult> UpdateUserById(string id, [FromBody] UpdateUserRequest request)
+    public IActionResult DownloadBulkUsersUploadFileFormat()
     {
-        return !ModelState.IsValid
-            ? BadRequest(ApiResponse<object>.Failure(string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage))))
-            : Ok(ApiResponse<string>.Success(await _usersService.UpdateUserByIdAsync(id, request)));
+        var filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Formats", "BulkUsers-Upload-Format.csv");
+        if (!System.IO.File.Exists(filePath))
+        {
+            return NotFound(ApiResponse<object>.Failure("File not found"));
+        }
+        var fileBytes = System.IO.File.ReadAllBytes(filePath);
+        return File(fileBytes, "text/csv", "BulkUsers-Upload-Format.csv");
     }
 
-
-
-    [HttpPut("update-bulk-users")]
-    [Authorize(Roles = "HR_ADMIN")]
-    [ProducesResponseType(typeof(ApiResponse<string>), 200)]
-    [ProducesResponseType(typeof(ApiResponse<object>), 400)]
-    public async Task<IActionResult> UpdateBulkUsers([FromBody] UpdateBulkUsersRequest request)
-    {
-       return !ModelState.IsValid
-           ? BadRequest(ApiResponse<object>.Failure(string.Join("; ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage))))
-           : Ok(ApiResponse<string>.Success(await _usersService.UpdateBulkUsersAsync(request)));
-    }
 
     [HttpDelete("delete-user/{id}")]
     [Authorize(Roles = "HR_ADMIN")]
@@ -133,4 +145,5 @@ public sealed class UsersController : ControllerBase
         var result = await _usersService.DeleteBulkUsersByRoleAsync(role);
         return Ok(ApiResponse<string>.Success(result));
     }
+
 }

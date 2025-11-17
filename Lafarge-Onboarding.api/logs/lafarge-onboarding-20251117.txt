@@ -1,0 +1,158 @@
+2025-11-17 18:45:17.955 +01:00 [INF] Processing login request for email: patada306@gmail.com <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-17 18:45:18.002 +01:00 [INF] Validating credentials for email: patada306@gmail.com <s2025-11-17 18:45:18.002 +01:00 [INF] Validating creden2025-11-17 18:45:19.338 +01:00 [INF] 2025-11-17 18:45:19.338 +01:00 [INF] Credentials validated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 18:45:19.340 +01:00 [INF] Generating JWT token for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 18:45:19.408 +01:00 [INF] JWT token generated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 18:45:19.409 +01:00 [INF] Login successful for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 18:45:19.410 +01:00 [INF] Processing login request for email: patada306@gmail.com
+2025-11-17 18:45:19.410 +01:00 [INF] Validating credentials for email: patada306@gmail.com
+2025-11-17 18:45:19.491 +01:00 [INF] Credentials validated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 18:45:19.492 +01:00 [INF] Generating JWT token for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 18:45:19.494 +01:00 [INF] JWT token generated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 18:45:19.494 +01:00 [INF] Login successful for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 18:46:15.927 +01:00 [INF] Retrieving all contacts
+2025-11-17 18:46:15.983 +01:00 [INF] All contacts retrieved successfully
+2025-11-17 18:46:43.178 +01:00 [INF] Upload welcome messages request received
+2025-11-17 18:46:43.181 +01:00 [INF] Starting welcome messages extraction from 1 files
+2025-11-17 18:46:43.187 +01:00 [ERR] An unhandled exception occurred. Request: POST /api/Content/upload-welcome-messages, User: Anonymous
+System.ArgumentException: At least two files are required: one for CEO and one for HR
+   at Lafarge_Onboarding.application.Services.WelcomeMessageService.ExtractAndSaveWelcomeMessagesAsync(IFormFileCollection files) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/WelcomeMessageService.cs:line 25
+   at Lafarge_Onboarding.api.Controllers.ContentController.UploadWelcomeMessages(IFormFileCollection files) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Controllers/ContentController.cs:line 57
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Lafarge_Onboarding.api.Middleware.ExceptionHandlingMiddleware.InvokeAsync(HttpContext context) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Middleware/ExceptionHandlingMiddleware.cs:line 18
+ited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Lafarge_Onboarding.api.Middleware.ExceptionHandlingMiddleware.InvokeAsync(HttpContext context) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Middleware/ExceptionHandlingMiddleware.cs:line 18
+2025-11-17 19:02:00.319 +01:00 [INF] Processing login request for email: patada306@gmail.com <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-17 19:02:00.380 +01:00 [INF] Validating credentials for email: patada306@gmail.com <s2025-11-17 19:02:00.380 +01:00 [INF] Validating creden2025-11-17 19:02:01.897 +01:00 [INF] 2025-11-17 19:02:01.897 +01:00 [INF] Credentials validated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 19:02:01.899 +01:00 [INF] Generating JWT token for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 19:02:01.973 +01:00 [INF] JWT token generated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 19:02:01.974 +01:00 [INF] Login successful for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 19:02:01.976 +01:00 [INF] Processing login request for email: patada306@gmail.com
+2025-11-17 19:02:01.976 +01:00 [INF] Validating credentials for email: patada306@gmail.com
+2025-11-17 19:02:02.071 +01:00 [INF] Credentials validated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 19:02:02.071 +01:00 [INF] Generating JWT token for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 19:02:02.074 +01:00 [INF] JWT token generated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 19:02:02.074 +01:00 [INF] Login successful for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 19:02:44.794 +01:00 [INF] Upload welcome messages request received
+2025-11-17 19:02:44.797 +01:00 [INF] Starting welcome messages extraction from 1 files
+2025-11-17 19:02:44.812 +01:00 [INF] Starting DOCX text extraction for file: Welcome-message.docx
+2025-11-17 19:02:45.065 +01:00 [INF] DOCX text extraction completed successfully. Characters extracted: 1733
+2025-11-17 19:02:45.070 +01:00 [INF] Text extracted successfully
+2025-11-17 19:02:45.078 +01:00 [ERR] An unhandled exception occurred. Request: POST /api/Content/upload-welcome-messages, User: Anonymous
+System.ArgumentException: Could not find the bullet line separating CEO and HR messages
+   at Lafarge_Onboarding.application.Services.WelcomeMessageService.SplitWelcomeMessagesText(String fullText) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/WelcomeMessageService.cs:line 104
+   at Lafarge_Onboarding.application.Services.WelcomeMessageService.ExtractAndSaveWelcomeMessagesAsync(IFormFileCollection files) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/WelcomeMessageService.cs:line 32
+   at Lafarge_Onboarding.api.Controllers.ContentController.UploadWelcomeMessages(IFormFile file) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Controllers/ContentController.cs:line 57
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Lafarge_Onboarding.api.Middleware.ExceptionHandlingMiddleware.InvokeAsync(HttpContext context) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Middleware/ExceptionHandlingMiddleware.cs:line 18
+ Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Lafarge_Onboarding.api.Middleware.ExceptionHandlingMiddleware.InvokeAsync(HttpContext context) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Middleware/ExceptionHandlingMiddleware.cs:line 18
+2025-11-17 19:07:43.308 +01:00 [INF] Processing login request for email: patada306@gmail.com <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-17 19:07:43.372 +01:00 [INF] Validating credentials for email: patada306@gmail.com <s2025-11-17 19:07:43.372 +01:00 [INF] Validating creden2025-11-17 19:07:44.886 +01:00 [INF] 2025-11-17 19:07:44.886 +01:00 [INF] Credentials validated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 19:07:44.888 +01:00 [INF] Generating JWT token for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 19:07:44.971 +01:00 [INF] JWT token generated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 19:07:44.972 +01:00 [INF] Login successful for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 19:07:44.972 +01:00 [INF] Processing login request for email: patada306@gmail.com
+2025-11-17 19:07:44.973 +01:00 [INF] Validating credentials for email: patada306@gmail.com
+2025-11-17 19:07:45.094 +01:00 [INF] Credentials validated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 19:07:45.094 +01:00 [INF] Generating JWT token for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 19:07:45.097 +01:00 [INF] JWT token generated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 19:07:45.098 +01:00 [INF] Login successful for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 19:08:57.498 +01:00 [INF] Upload welcome messages request received
+2025-11-17 19:08:57.500 +01:00 [INF] Starting welcome messages extraction from 2 files
+2025-11-17 19:08:57.513 +01:00 [INF] Starting DOCX text extraction for file: ceo_welcome_message.docx
+2025-11-17 19:08:57.763 +01:00 [INF] DOCX text extraction completed successfully. Characters extracted: 890
+2025-11-17 19:08:57.767 +01:00 [INF] Starting DOCX text extraction for file: hr_welcome_message.docx
+2025-11-17 19:08:57.772 +01:00 [INF] DOCX text extraction completed successfully. Characters extracted: 843
+2025-11-17 19:08:57.772 +01:00 [INF] Texts extracted successfully
+2025-11-17 19:08:57.981 +01:00 [INF] Welcome messages saved successfully with ID: 1
+2025-11-17 19:10:19.268 +01:00 [INF] Get onboarding plan request received
+2025-11-17 19:10:19.271 +01:00 [INF] Retrieving latest onboarding plan
+2025-11-17 19:10:19.328 +01:00 [INF] Onboarding plan retrieved successfully
+2025-11-17 19:11:05.360 +01:00 [INF] Get etiquette request received
+2025-11-17 19:11:05.364 +01:00 [INF] Retrieving latest etiquette
+2025-11-17 19:11:05.396 +01:00 [INF] Etiquette retrieved successfully
+2025-11-17 19:13:12.876 +01:00 [INF] Retrieving local contacts
+2025-11-17 19:13:13.056 +01:00 [INF] Retrieved 0 contacts
+2025-11-17 19:13:36.089 +01:00 [INF] Retrieving local contacts
+2025-11-17 19:13:36.091 +01:00 [INF] Retrieved 0 contacts
+lly. Characters extracted: 843 <s:Lafarge_Onboarding.application.Services.DocumentsUploadService>
+2025-11-17 19:08:57.772 +01:00 [INF] Texts extracted successfully <s:Lafarge_Onboarding.application.Services.WelcomeMessageService>
+2025-11-17 19:08:57.981 +01:00 [INF] Welcome messages saved successfully with ID: 1 <s:Lafarge_Onboarding.application.Services.WelcomeMessageService>
+2025-11-17 19:10:19.268 +01:00 [INF] Get onboarding plan request received <s:Lafarge_Onboarding.api.Controllers.ContentController>
+2025-11-17 19:10:19.271 +01:00 [INF] Retrieving latest onboarding plan <s:Lafarge_Onboarding.application.Services.OnboardingPlanService>
+2025-11-17 19:10:19.328 +01:00 [INF] Onboarding plan retrieved successfully <s:Lafarge_Onboarding.application.Services.OnboardingPlanService>
+2025-11-17 19:11:05.360 +01:00 [INF] Get etiquette request received <s:Lafarge_Onboarding.api.Controllers.ContentController>
+2025-11-17 19:11:05.364 +01:00 [INF] Retrieving latest etiquette <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-17 19:11:05.396 +01:00 [INF] Etiquette retrieved successfully <s:Lafarge_Onboarding.application.Services.EtiquetteService>
+2025-11-17 19:13:12.876 +01:00 [INF] Retrieving local contacts <s:Lafarge_Onboarding.application.Services.ContactService>
+2025-11-17 19:13:13.056 +01:00 [INF] Retrieved 0 contacts <s:Lafarge_Onboarding.application.Services.ContactService>
+2025-11-17 19:13:36.089 +01:00 [INF] Retrieving local contacts <s:Lafarge_Onboarding.application.Services.ContactService>
+2025-11-17 19:13:36.091 +01:00 [INF] Retrieved 0 contacts <s:Lafarge_Onboarding.application.Services.ContactService>
+2025-11-17 20:20:17.592 +01:00 [INF] Processing login request for email: patada306@gmail.com <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-17 20:20:17.661 +01:00 [INF] Validating credentials for email: patada306@gmail.com <s2025-11-17 20:20:17.661 +01:00 [INF] Validating creden2025-11-17 20:20:19.230 +01:00 [INF] 2025-11-17 20:20:19.230 +01:00 [INF] Credentials validated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 20:20:19.233 +01:00 [INF] Generating JWT token for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 20:20:19.317 +01:00 [INF] JWT token generated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 20:20:19.318 +01:00 [INF] Login successful for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 20:20:19.319 +01:00 [INF] Processing login request for email: patada306@gmail.com
+2025-11-17 20:20:19.319 +01:00 [INF] Validating credentials for email: patada306@gmail.com
+2025-11-17 20:20:19.437 +01:00 [INF] Credentials validated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 20:20:19.437 +01:00 [INF] Generating JWT token for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 20:20:19.440 +01:00 [INF] JWT token generated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+2025-11-17 20:20:19.440 +01:00 [INF] Login successful for user: 2a00a351-5183-4390-8f59-ff935f05e5e7
+plication.Services.AuthService>
+2025-11-17 20:20:19.437 +01:00 [INF] Generating JWT token for user: 2a00a351-5183-4390-8f59-ff935f05e5e7 <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-17 20:20:19.440 +01:00 [INF] JWT token generated successfully for user: 2a00a351-5183-4390-8f59-ff935f05e5e7 <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-17 20:20:19.440 +01:00 [INF] Login successful for user: 2a00a351-5183-4390-8f59-ff935f05e5e7 <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-17 20:33:57.663 +01:00 [INF] Uploading contacts from file: LocalContacts-Format.csv <s:Lafarge_Onboarding.application.Services.ContactService>
+2025-11-17 20:33:58.674 +01:00 [INF] Contacts uploaded successfully <s:Lafarge_Onboarding.ap2025-11-17 20:33:58.674 +01:00 [INF2025-11-17 20:34:22.722 +01:00 [I2025-11-17 20:34:22.722 +01:00 [INF] Retrieving local contacts
+2025-11-17 20:34:22.885 +01:00 [INF] Retrieved 3 contacts
+INF] Retrieved 3 contacts <s:Lafarge_Onboarding.application.Services.ContactService>
+2025-11-17 20:50:34.411 +01:00 [INF] Starting all contacts parsing from file: AllContacts-Format.csv <s:Lafarge_Onboarding.application.Services.AllContactService>
+2025-11-17 20:50:34.497 +01:00 [INF] Parsed 15 rows from file <s:Lafarge_Onboarding.application.Servi2025-11-17 20:50:34.4972025-11-17 20:50:35.594 +01:00 [INF] Al2025-11-17 20:50:35.594 +01:00 [INF] All contacts saved successfully
+2025-11-17 20:50:55.049 +01:00 [INF] Retrieving all contacts
+2025-11-17 20:50:55.071 +01:00 [INF] All contacts retrieved successfully
+2025-11-17 21:00:46.070 +01:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2025-11-17 21:00:46.071 +01:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+ad to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased. <s:Microsoft.EntityFrameworkCore.Query>

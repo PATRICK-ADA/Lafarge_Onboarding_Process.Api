@@ -1,0 +1,16 @@
+Category,Service,Function,Embassy,Name,Designation,Info,Address,Website,Phone,Email
+emergency,Fire Department,,,,,Call 911 for emergencies,,,,
+emergency,Police,,,,,Call 911 for police assistance,,,,
+emergency,Ambulance,,,,,Call 911 for medical emergencies,,,,
+emergency,Hospital,,,,,City General Hospital - 123 Main St,,,,
+lafarge,,Country CEO,,Pierre Dupont,,,,,+1-555-0201,
+lafarge,,HR Director,,Marie Laurent,,,,,+1-555-0202,
+lafarge,,Operations Manager,,Jean Michel,,,,,+1-555-0203,
+lafarge,,Finance Director,,Sophie Bernard,,,,,+1-555-0204,
+embassies,,,French Embassy,,,,"4101 Reservoir Rd NW, Washington, DC 20007",https://franceintheus.org,+1-202-944-6000,
+embassies,,,Canadian Embassy,,,,"501 Pennsylvania Ave NW, Washington, DC 20001",https://www.canadainternational.gc.ca,+1-202-682-1740,
+embassies,,,German Embassy,,,,"4645 Reservoir Rd NW, Washington, DC 20007",https://www.germany.info,+1-202-298-4000,
+hr,,,,Alice Johnson,HR Manager,,,,,alice.johnson@lafarge.com
+hr,,,,Bob Anderson,Recruitment Specialist,,,,,bob.anderson@lafarge.com
+hr,,,,Carol White,Employee Relations,,,,,carol.white@lafarge.com
+hr,,,,Daniel Lee,Training Coordinator,,,,,daniel.lee@lafarge.com
