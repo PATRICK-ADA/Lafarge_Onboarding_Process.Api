@@ -15,6 +15,7 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
     public DbSet<Etiquette> Etiquettes { get; set; }
     public DbSet<Contact> Contacts { get; set; }
     public DbSet<AllContact> AllContacts { get; set; }
+    public DbSet<AppVersion> AppVersions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -103,6 +104,16 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Category).HasMaxLength(50);
             entity.Property(e => e.Data).HasColumnType("text");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
+        });
+
+        modelBuilder.Entity<AppVersion>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Version).HasColumnType("float");
+            entity.Property(e => e.Link).HasMaxLength(1000);
+            entity.Property(e => e.Features).HasColumnType("text");
+            entity.Property(e => e.AppName).HasMaxLength(100);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
         });
 

@@ -17,6 +17,7 @@ public static class RegisterApplicationServices
         services.AddScoped<IContactService, Lafarge_Onboarding.application.Services.ContactService>();
         services.AddScoped<IAllContactService, Lafarge_Onboarding.application.Services.AllContactService>();
         services.AddScoped<IGalleryService, Lafarge_Onboarding.application.Services.GalleryService>();
+        services.AddScoped<IAppVersionService, Lafarge_Onboarding.application.Services.AppVersionService>();
         // Repository registration is handled in infrastructure layer
 
         return services;
