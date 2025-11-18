@@ -216,7 +216,7 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
             return facts;
         }
 
-        string currentLabel = null;
+        string currentLabel = null!;
         for (int i = startIndex; i < lines.Length; i++)
         {
             var line = lines[i].Trim();
@@ -249,7 +249,7 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
                 };
                 facts.Add(fact);
                 _logger.LogDebug("Added country fact: {Label} = {Value}", fact.Label, fact.Value);
-                currentLabel = null; // Reset for next label
+                currentLabel = null!; // Reset for next label
             }
             else
             {
@@ -359,8 +359,8 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
                 Footprint = new Footprint
                 {
                     Summary = entity.FootprintSummary,
-                    Plants = JsonSerializer.Deserialize<List<string>>(entity.Plants) ?? new List<string>(),
-                    ReadyMix = JsonSerializer.Deserialize<List<string>>(entity.ReadyMix) ?? new List<string>(),
+                    Plants = JsonSerializer.Deserialize<List<string>>(entity.Plants ?? string.Empty) ?? new List<string>(),
+                    ReadyMix = JsonSerializer.Deserialize<List<string>>(entity.ReadyMix ?? string.Empty) ?? new List<string>(),
                     Depots = entity.Depots
                 },
                 Culture = new Culture

@@ -29,7 +29,7 @@ public class EmailService : IEmailService
                 return false;
             }
 
-            var resetLink = $"https://onboardingservice-812204315267.europe-west1.run.app/api/Auth/reset-password?token={resetToken}&email={toEmail}";
+            var resetLink = $"https://onboardingservice-812204315267.europe-west1.run.app/reset-password?token={resetToken}&email={toEmail}";
 
             var emailBody = $@"
                 <html>
@@ -47,7 +47,6 @@ public class EmailService : IEmailService
 
             var requestBody = new
             {
-                mail_template_key = "",
                 from = new
                 {
                     address = fromEmail,

@@ -99,7 +99,7 @@ public sealed class WelcomeMessageService : IWelcomeMessageService
         var name = nameLine.TrimStart('•', ' ').Trim(); // Remove bullet and spaces
 
         var messageLines = lines.Take(lines.Length - 2);
-        var message = string.Join("\n", messageLines);
+        var message = string.Join(" ", messageLines);
 
         return (name, title, message);
     }

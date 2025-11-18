@@ -143,13 +143,13 @@ public sealed class UsersService : IUsersService
         {
             var userRequest = new CreateUserRequest
             {
-                FirstName = csv.GetField<string>("First Name"),
-                LastName = csv.GetField<string>("Last Name"),
-                Email = csv.GetField<string>("Email"),
-                PhoneNumber = csv.GetField<string>("Phone Number"),
-                ActiveStatus = bool.TryParse(csv.GetField<string>("Active Status"), out var activeStatus) ? activeStatus : true,
-                StaffProfilePicture = csv.GetField<string>("Staff Profile Picture (Base64)"),
-                Role = csv.GetField<string>("Role")
+                FirstName = csv.GetField<string?>("First Name") ?? string.Empty,
+                LastName = csv.GetField<string?>("Last Name") ?? string.Empty,
+                Email = csv.GetField<string?>("Email") ?? string.Empty,
+                PhoneNumber = csv.GetField<string?>("Phone Number"),
+                ActiveStatus = bool.TryParse(csv.GetField<string?>("Active Status"), out var activeStatus) ? activeStatus : true,
+                StaffProfilePicture = csv.GetField<string?>("Staff Profile Picture (Base64)"),
+                Role = csv.GetField<string?>("Role") ?? string.Empty
             };
 
             userRequests.Add(userRequest);
@@ -158,7 +158,7 @@ public sealed class UsersService : IUsersService
         return userRequests;
     }
 
-    private async Task<List<CreateUserRequest>> ParseExcelFileAsync(IFormFile file)
+    private Task<List<CreateUserRequest>> ParseExcelFileAsync(IFormFile file)
     {
         var userRequests = new List<CreateUserRequest>();
 
@@ -172,20 +172,23 @@ public sealed class UsersService : IUsersService
         {
             var userRequest = new CreateUserRequest
             {
-                FirstName = row.Cell(1).GetValue<string>(), // First Name
-                LastName = row.Cell(2).GetValue<string>(), // Last Name
-                Email = row.Cell(3).GetValue<string>(), // Email
-                PhoneNumber = row.Cell(4).GetValue<string>(), // Phone Number
-                ActiveStatus = bool.TryParse(row.Cell(5).GetValue<string>(), out var activeStatus) ? activeStatus : true, // Active Status
-                StaffProfilePicture = row.Cell(6).GetValue<string>(), // Staff Profile Picture (Base64)
-                Role = row.Cell(7).GetValue<string>() // Role
+                FirstName = row.Cell(1).GetValue<string?>() ?? string.Empty,
+                LastName = row.Cell(2).GetValue<string?>() ?? string.Empty,
+                Email = row.Cell(3).GetValue<string?>() ?? string.Empty,
+                PhoneNumber = row.Cell(4).GetValue<string?>(),
+                ActiveStatus = bool.TryParse(row.Cell(5).GetValue<string?>(), out var activeStatus) ? activeStatus : true,
+                StaffProfilePicture = row.Cell(6).GetValue<string?>(),
+                Role = row.Cell(7).GetValue<string?>() ?? string.Empty
             };
 
             userRequests.Add(userRequest);
         }
 
-        return userRequests;
+        return Task.FromResult(userRequests);
     }
+
+        
+    
 
     public async Task<PaginatedResponse<GetUserResponse>> GetUsersByRoleAsync(string role, PaginationRequest pagination)
     {

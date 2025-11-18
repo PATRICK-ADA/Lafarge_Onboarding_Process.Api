@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "IB5cLkH5j7RGOT0iqsj9h9sKrsuHAF3R/MF3GE/MmDothCmKXakFscmmODjPTfV+x4Qq2Yyx/LrFwpSenkIWpg==",
+  "dgSpecHash": "N5eWsnuu0TKuoKucf7qopB9VDee4cX7x+vCwiOf2CPdeV/rO7HWg4Yu+WbrCyxusQ4AS28QqjgOFamsVt59zYg==",
   "success": true,
   "projectFilePath": "/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Lafarge-Onboarding.application.csproj",
   "expectedPackageFiles": [
@@ -64,7 +64,7 @@
     "/home/simon-patrick/.nuget/packages/runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl/4.3.2/runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
     "/home/simon-patrick/.nuget/packages/runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl/4.3.2/runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
     "/home/simon-patrick/.nuget/packages/sixlabors.fonts/1.0.0/sixlabors.fonts.1.0.0.nupkg.sha512",
-    "/home/simon-patrick/.nuget/packages/sixlabors.imagesharp/3.1.5/sixlabors.imagesharp.3.1.5.nupkg.sha512",
+    "/home/simon-patrick/.nuget/packages/sixlabors.imagesharp/3.1.12/sixlabors.imagesharp.3.1.12.nupkg.sha512",
     "/home/simon-patrick/.nuget/packages/system.appcontext/4.3.0/system.appcontext.4.3.0.nupkg.sha512",
     "/home/simon-patrick/.nuget/packages/system.buffers/4.5.0/system.buffers.4.5.0.nupkg.sha512",
     "/home/simon-patrick/.nuget/packages/system.collections/4.3.0/system.collections.4.3.0.nupkg.sha512",
@@ -123,26 +123,5 @@
     "/home/simon-patrick/.nuget/packages/system.xml.xdocument/4.3.0/system.xml.xdocument.4.3.0.nupkg.sha512",
     "/home/simon-patrick/.nuget/packages/xlparser/1.5.2/xlparser.1.5.2.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'SixLabors.ImageSharp' 3.1.5 has a known high severity vulnerability, https://github.com/advisories/GHSA-2cmq-823j-5qj8",
-      "libraryId": "SixLabors.ImageSharp",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    },
-    {
-      "code": "NU1902",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'SixLabors.ImageSharp' 3.1.5 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-rxmq-m78w-7wmc",
-      "libraryId": "SixLabors.ImageSharp",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    }
-  ]
+  "logs": []
 }

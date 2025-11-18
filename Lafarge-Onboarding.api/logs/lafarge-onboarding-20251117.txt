@@ -155,4 +155,57 @@ INF] Retrieved 3 contacts <s:Lafarge_Onboarding.application.Services.ContactServ
 2025-11-17 20:50:55.071 +01:00 [INF] All contacts retrieved successfully
 2025-11-17 21:00:46.070 +01:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
 2025-11-17 21:00:46.071 +01:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
-ad to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased. <s:Microsoft.EntityFrameworkCore.Query>
+2025-11-17 22:56:59.226 +01:00 [INF] Processing forgot password request for email: patrick.ada.ext@lafarge.com
+2025-11-17 22:56:59.418 +01:00 [INF] Generated reset token for user: de2c6e10-8445-4cde-9a2d-1e51d7dff6dc
+2025-11-17 22:57:01.601 +01:00 [ERR] Failed to send password reset email to patrick.ada.ext@lafarge.com. Status: "Forbidden", Response: {"error":{"code":"TM_3601","details":[{"code":"SERR_120","message":"This URL does not exist"}],"message":"Request Denied"}}
+
+
+2025-11-17 22:57:01.604 +01:00 [ERR] Failed to send password reset email to patrick.ada.ext@lafarge.com
+2025-11-17 22:57:01.613 +01:00 [ERR] An unhandled exception occurred. Request: POST /api/Auth/forgot-password, User: Anonymous
+System.Exception: Failed to send reset email
+   at Lafarge_Onboarding.application.Services.AuthService.ForgotPasswordAsync(ForgotPasswordRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/AuthService.cs:line 220
+   at Lafarge_Onboarding.api.Controllers.AuthController.ForgotPassword(ForgotPasswordRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Controllers/AuthController.cs:line 55
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Lafarge_Onboarding.api.Middleware.ExceptionHandlingMiddleware.InvokeAsync(HttpContext context) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Middleware/ExceptionHandlingMiddleware.cs:line 18
+t.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Lafarge_Onboarding.api.Middleware.ExceptionHandlingMiddleware.InvokeAsync(HttpContext context) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Middleware/ExceptionHandlingMiddleware.cs:line 18
+2025-11-17 23:47:41.183 +01:00 [INF] Processing forgot password request for email: patrick.ada.ext@lafarge.com <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-17 23:47:42.732 +01:00 [INF] Generated reset token for user: de2c6e10-8445-4cde-9a2d-1e51d7dff6dc <s:La2025-11-17 23:47:42.732 +01:00 [INF] Generated rese2025-11-17 23:47:44.385 +01:00 [ERR] Failed to send pas2025-11-17 23:47:44.385 +01:00 [ERR] Failed to send password reset email to patrick.ada.ext@lafarge.com. Status: "BadRequest", Response: {"error":{"code":"TM_3301","details":[{"code":"GE_121","message":"An extra key found in the input value.","target":"mail_template_key"}],"message":"Bad Syntax"}}
+2025-11-17 23:47:44.391 +01:00 [ERR] Failed to send password reset email to patrick.ada.ext@lafarge.com
+2025-11-17 23:47:44.410 +01:00 [ERR] An unhandled exception occurred. Request: POST /api/Auth/forgot-password, User: Anonymous
+System.Exception: Failed to send reset email
+   at Lafarge_Onboarding.application.Services.AuthService.ForgotPasswordAsync(ForgotPasswordRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.application/Services/AuthService.cs:line 220
+   at Lafarge_Onboarding.api.Controllers.AuthController.ForgotPassword(ForgotPasswordRequest request) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Controllers/AuthController.cs:line 55
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Lafarge_Onboarding.api.Middleware.ExceptionHandlingMiddleware.InvokeAsync(HttpContext context) in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Middleware/ExceptionHandlingMiddleware.cs:line 18
+in /home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.api/Middleware/ExceptionHandlingMiddleware.cs:line 18
+2025-11-17 23:52:07.859 +01:00 [INF] Processing forgot password request for email: patrick.ada.ext@lafarge.com <s:Lafarge_Onboarding.application.Services.AuthService>
+2025-11-17 23:52:09.308 +01:00 [INF] Generated reset token for user: de2c6e10-8445-4cde-9a2d-1e51d7dff6dc <s:La2025-11-17 23:52:09.308 +01:00 [INF] Generated rese2025-11-17 23:52:10.625 +01:00 [INF] Password reset ema2025-11-17 23:52:10.625 +01:00 [INF] Password reset email sent successfully to patrick.ada.ext@lafarge.com
+2025-11-17 23:52:10.626 +01:00 [INF] Password reset email sent successfully to patrick.ada.ext@lafarge.com
+m <s:Lafarge_Onboarding.application.Services.AuthService>

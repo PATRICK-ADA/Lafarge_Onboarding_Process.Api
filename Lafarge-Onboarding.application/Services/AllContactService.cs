@@ -32,7 +32,7 @@ public sealed class AllContactService : IAllContactService
         return rows;
     }
 
-    private async Task<List<AllContactRow>> ParseExcelAsync(IFormFile file)
+    private Task<List<AllContactRow>> ParseExcelAsync(IFormFile file)
     {
         var rows = new List<AllContactRow>();
         using var stream = file.OpenReadStream();
@@ -61,7 +61,7 @@ public sealed class AllContactService : IAllContactService
             };
             rows.Add(contactRow);
         }
-        return rows;
+        return Task.FromResult(rows);
     }
 
     public async Task UploadAllContactsAsync(IFormFile file)

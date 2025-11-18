@@ -138,7 +138,7 @@ public sealed class ContentController : ControllerBase
         _logger.LogInformation("Delete latest local hire info request received");
 
         await _localHireInfoService.DeleteLatestAsync();
-        return Ok(ApiResponse<object>.Success(null, "Local hire info deleted successfully"));
+        return Ok(ApiResponse<object>.Success("Local hire info deleted successfully"));
     }
 
     [HttpDelete("delete-welcome-messages")]
@@ -149,7 +149,7 @@ public sealed class ContentController : ControllerBase
         _logger.LogInformation("Delete latest welcome messages request received");
 
         await _welcomeMessageService.DeleteLatestAsync();
-        return Ok(ApiResponse<object>.Success(null, "Welcome messages deleted successfully"));
+        return Ok(ApiResponse<object>.Success("Welcome messages deleted successfully"));
     }
 
     [HttpDelete("delete-onboarding-plan")]
@@ -160,7 +160,7 @@ public sealed class ContentController : ControllerBase
         _logger.LogInformation("Delete latest onboarding plan request received");
 
         await _onboardingPlanService.DeleteLatestAsync();
-        return Ok(ApiResponse<object>.Success(null, "Onboarding plan deleted successfully"));
+        return Ok(ApiResponse<object>.Success("Onboarding plan deleted successfully"));
     }
 
     [HttpDelete("delete-etiquette")]

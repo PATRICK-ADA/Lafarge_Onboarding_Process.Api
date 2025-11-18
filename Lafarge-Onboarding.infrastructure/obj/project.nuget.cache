@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ObZ2ECxeq8kGb/zPYLNykWCMdyH47zdywZleFx9ZyrA/QW4MPKQrGXUUuGCsE/avTFUNVFrXpIJ2audwylXlvg==",
+  "dgSpecHash": "ueeZmeaI7XoeXCrT6bFDwdLqwxBnYy/Ee7YEK92l4UuwjAmgqsU00EMwUEPWJMC4qmGD8gQc9kRHhfujhZko4g==",
   "success": true,
   "projectFilePath": "/home/simon-patrick/Documents/OnboardingService/Lafarge-Onboarding.infrastructure/Lafarge-Onboarding.infrastructure.csproj",
   "expectedPackageFiles": [
@@ -88,7 +88,7 @@
     "/home/simon-patrick/.nuget/packages/runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl/4.3.2/runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
     "/home/simon-patrick/.nuget/packages/runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl/4.3.2/runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
     "/home/simon-patrick/.nuget/packages/sixlabors.fonts/1.0.0/sixlabors.fonts.1.0.0.nupkg.sha512",
-    "/home/simon-patrick/.nuget/packages/sixlabors.imagesharp/3.1.5/sixlabors.imagesharp.3.1.5.nupkg.sha512",
+    "/home/simon-patrick/.nuget/packages/sixlabors.imagesharp/3.1.12/sixlabors.imagesharp.3.1.12.nupkg.sha512",
     "/home/simon-patrick/.nuget/packages/system.appcontext/4.3.0/system.appcontext.4.3.0.nupkg.sha512",
     "/home/simon-patrick/.nuget/packages/system.buffers/4.5.0/system.buffers.4.5.0.nupkg.sha512",
     "/home/simon-patrick/.nuget/packages/system.codedom/4.4.0/system.codedom.4.4.0.nupkg.sha512",

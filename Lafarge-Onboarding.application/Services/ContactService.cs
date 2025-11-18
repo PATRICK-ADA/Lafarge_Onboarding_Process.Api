@@ -73,23 +73,23 @@ public sealed class ContactService : IContactService
         }
     }
 
-    private async Task<List<ContactDto>> ParseCsvAsync(IFormFile file)
+    private Task<List<ContactDto>> ParseCsvAsync(IFormFile file)
     {
         var contacts = new List<ContactDto>();
         using var reader = new StreamReader(file.OpenReadStream());
         using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
         var records = csv.GetRecords<ContactDto>();
         contacts.AddRange(records);
-        return contacts;
+        return Task.FromResult(contacts);
     }
 
-    private async Task<List<ContactDto>> ParseExcelAsync(IFormFile file)
+    private Task<List<ContactDto>> ParseExcelAsync(IFormFile file)
     {
         var contacts = new List<ContactDto>();
         using var stream = file.OpenReadStream();
         using var document = SpreadsheetDocument.Open(stream, false);
-        var worksheet = document.WorkbookPart.WorksheetParts.First().Worksheet;
-        var rows = worksheet.Descendants<Row>();
+        var worksheet = document.WorkbookPart?.WorksheetParts.First().Worksheet;
+        var rows = worksheet!.Descendants<Row>();
 
         bool isFirstRow = true;
         foreach (var row in rows)
@@ -105,23 +105,23 @@ public sealed class ContactService : IContactService
             {
                 var contact = new ContactDto
                 {
-                    Name = GetCellValue(cells[0], document.WorkbookPart),
-                    Email = GetCellValue(cells[1], document.WorkbookPart),
-                    Phone = GetCellValue(cells[2], document.WorkbookPart)
+                    Name = GetCellValue(cells[0], document.WorkbookPart!),
+                    Email = GetCellValue(cells[1], document.WorkbookPart!),
+                    Phone = GetCellValue(cells[2], document.WorkbookPart!)
                 };
                 contacts.Add(contact);
             }
         }
-        return contacts;
+        return Task.FromResult(contacts);
     }
 
-    private string GetCellValue(Cell cell, WorkbookPart workbookPart)
+    private string GetCellValue(Cell cell, WorkbookPart? workbookPart)
     {
         if (cell.CellValue == null) return string.Empty;
         var value = cell.CellValue.Text;
-        if (cell.DataType != null && cell.DataType.Value == CellValues.SharedString)
+        if (cell.DataType != null && cell.DataType.Value == CellValues.SharedString && workbookPart != null)
         {
-            return workbookPart.SharedStringTablePart.SharedStringTable.Elements<SharedStringItem>().ElementAt(int.Parse(value)).Text?.Text ?? string.Empty;
+            return workbookPart.SharedStringTablePart?.SharedStringTable.Elements<SharedStringItem>().ElementAt(int.Parse(value)).Text?.Text ?? string.Empty;
         }
         return value;
     }
