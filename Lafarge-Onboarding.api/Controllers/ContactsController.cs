@@ -51,7 +51,7 @@ public sealed class ContactsController : ControllerBase
 
 
     [HttpGet("get-local")]
-    [Authorize(Roles = "HR_ADMIN")]
+    [Authorize]
     public async Task<IActionResult> GetLocalContacts()
     {
         var contacts = await _contactService.GetLocalContactsAsync();
@@ -61,7 +61,7 @@ public sealed class ContactsController : ControllerBase
   
 
     [HttpGet("get-all")]
-    [Authorize(Roles = "HR_ADMIN")]
+    [Authorize]
     public async Task<IActionResult> GetAllContacts()
     {
         var contacts = await _allContactService.GetAllContactsAsync();
@@ -70,7 +70,7 @@ public sealed class ContactsController : ControllerBase
 
    
     [HttpGet("download-all-contacts-file-format")]
-    [Authorize(Roles = "HR_ADMIN")]
+    [Authorize]
     public IActionResult DownloadAllContactsFileFormat()
     {
         var filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Formats", "AllContacts-Format.csv");
@@ -83,7 +83,7 @@ public sealed class ContactsController : ControllerBase
     }
 
     [HttpGet("download-local-contacts-file-format")]
-    [Authorize(Roles = "HR_ADMIN")]
+    [Authorize]
     public IActionResult DownloadLocalContactsFileFormat()
     {
         var filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Formats", "LocalContacts-Format.csv");
