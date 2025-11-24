@@ -58,8 +58,6 @@ public sealed class ContactsController : ControllerBase
         return Ok(ApiResponse<List<ContactDto>>.Success(contacts));
     }
 
-  
-
     [HttpGet("get-all")]
     [Authorize]
     public async Task<IActionResult> GetAllContacts()
@@ -74,25 +72,16 @@ public sealed class ContactsController : ControllerBase
     public IActionResult DownloadAllContactsFileFormat()
     {
         var filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Formats", "AllContacts-Format.csv");
-        if (!System.IO.File.Exists(filePath))
-        {
-            return NotFound(ApiResponse<object>.Failure("File not found"));
-        }
-        var fileBytes = System.IO.File.ReadAllBytes(filePath);
-        return File(fileBytes, "text/csv", "AllContacts-Format.csv");
+        return !System.IO.File.Exists(filePath) ? NotFound(ApiResponse<object>.Failure("File not found", "404")) : File(filePath, "text/csv", "AllContacts-Format.csv");
     }
+
 
     [HttpGet("download-local-contacts-file-format")]
     [Authorize]
     public IActionResult DownloadLocalContactsFileFormat()
     {
         var filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Formats", "LocalContacts-Format.csv");
-        if (!System.IO.File.Exists(filePath))
-        {
-            return NotFound(ApiResponse<object>.Failure("File not found"));
-        }
-        var fileBytes = System.IO.File.ReadAllBytes(filePath);
-        return File(fileBytes, "text/csv", "LocalContacts-Format.csv");
+        return !System.IO.File.Exists(filePath) ? NotFound(ApiResponse<object>.Failure("File not found", "404" )) : File(filePath, "text/csv", "LocalContacts-Format.csv");
     }
 
     [HttpDelete("delete-all")]

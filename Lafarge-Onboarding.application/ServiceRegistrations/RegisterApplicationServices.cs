@@ -10,8 +10,22 @@ public static class RegisterApplicationServices
         services.AddScoped<IAuthService, Lafarge_Onboarding.application.Services.AuthService>();
         services.AddScoped<IUsersService, Lafarge_Onboarding.application.Services.UsersService>();
         services.AddScoped<IEmailService, Lafarge_Onboarding.application.Services.EmailService>();
-        services.AddScoped<ILocalHireInfoService, Lafarge_Onboarding.application.Services.LocalHireInfoService>();
-        services.AddScoped<IWelcomeMessageService, Lafarge_Onboarding.application.Services.WelcomeMessageService>();
+        // Register base services
+        services.AddScoped<Lafarge_Onboarding.application.Services.LocalHireInfoService>();
+        services.AddScoped<Lafarge_Onboarding.application.Services.WelcomeMessageService>();
+        
+        // Register cached decorators
+        services.AddScoped<ILocalHireInfoService>(provider =>
+            new Lafarge_Onboarding.application.Services.CachedLocalHireInfoService(
+                provider.GetRequiredService<Lafarge_Onboarding.application.Services.LocalHireInfoService>(),
+                provider.GetRequiredService<IMemoryCache>(),
+                provider.GetRequiredService<ILogger<Lafarge_Onboarding.application.Services.CachedLocalHireInfoService>>()));
+                
+        services.AddScoped<IWelcomeMessageService>(provider =>
+            new Lafarge_Onboarding.application.Services.CachedWelcomeMessageService(
+                provider.GetRequiredService<Lafarge_Onboarding.application.Services.WelcomeMessageService>(),
+                provider.GetRequiredService<IMemoryCache>(),
+                provider.GetRequiredService<ILogger<Lafarge_Onboarding.application.Services.CachedWelcomeMessageService>>()));
         services.AddScoped<IOnboardingPlanService, Lafarge_Onboarding.application.Services.OnboardingPlanService>();
         services.AddScoped<IEtiquetteService, Lafarge_Onboarding.application.Services.EtiquetteService>();
         services.AddScoped<IContactService, Lafarge_Onboarding.application.Services.ContactService>();

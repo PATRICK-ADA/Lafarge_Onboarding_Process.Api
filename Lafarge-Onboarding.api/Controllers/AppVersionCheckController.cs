@@ -31,14 +31,10 @@ public sealed class AppVersionCheckController : ControllerBase
     [ProducesResponseType(typeof(ApiResponse<object>), 404)]
     public async Task<IActionResult> GetLatestAppVersion([FromQuery] string appName)
     {
-        if (string.IsNullOrEmpty(appName))
-        {
-            return BadRequest(ApiResponse<object>.Failure("AppName is required"));
-        }
-
-        var result = await _appVersionService.GetLatestAppVersionAsync(appName);
-        return result == null
-            ? NotFound(ApiResponse<object>.Failure("No app version found", "404"))
-            : Ok(ApiResponse<AppVersionResponse>.Success(result, "Latest AppUpDate fetched successfully"));
+        return (string.IsNullOrEmpty(appName)) 
+              ? BadRequest(ApiResponse<object>.Failure("AppName is required"))
+              : (await _appVersionService.GetLatestAppVersionAsync(appName)) == null 
+              ? NotFound(ApiResponse<object>.Failure("No app version found", "404")) 
+              : Ok(ApiResponse<AppVersionResponse>.Success((await _appVersionService!.GetLatestAppVersionAsync(appName) ?? new AppVersionResponse()), "Latest AppUpDate fetched successfully"));
     }
 }

@@ -1,9 +1,3 @@
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Jpeg;
-using SixLabors.ImageSharp.Formats.Png;
-using SixLabors.ImageSharp.Processing;
-using System.Security.Claims;
-
 namespace Lafarge_Onboarding.application.Services;
 
 public sealed class GalleryService : IGalleryService

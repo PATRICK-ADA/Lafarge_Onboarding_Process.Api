@@ -20,3 +20,7 @@ global using Lafarge_Onboarding.domain.Dtos.OnboardingResponses;
 global using Lafarge_Onboarding.infrastructure.RegisterServices;
 global using Lafarge_Onboarding.application.ServiceRegistrations;
 global using Lafarge_Onboarding.api.ConfigExtension;
+global using Microsoft.Extensions.Caching.Memory;
+global using System.IO.Compression;
+global using System.Security.Cryptography;
+global using Microsoft.AspNetCore.ResponseCompression;

@@ -117,12 +117,8 @@ public sealed class UsersController : ControllerBase
     public IActionResult DownloadBulkUsersUploadFileFormat()
     {
         var filePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Formats", "BulkUsers-Upload-Format.csv");
-        if (!System.IO.File.Exists(filePath))
-        {
-            return NotFound(ApiResponse<object>.Failure("File not found"));
-        }
-        var fileBytes = System.IO.File.ReadAllBytes(filePath);
-        return File(fileBytes, "text/csv", "BulkUsers-Upload-Format.csv");
+        return !System.IO.File.Exists(filePath) ? NotFound(ApiResponse<object>.Failure("File not found")) : File(filePath, "text/csv", "BulkUsers-Upload-Format.csv");
+    
     }
 
 

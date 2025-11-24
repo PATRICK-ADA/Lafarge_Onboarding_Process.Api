@@ -40,6 +40,16 @@ public static class Configurations
         
         // Add HttpContextAccessor for accessing current user
         builder.Services.AddHttpContextAccessor();
+        
+        // Add response compression
+        builder.Services.AddResponseCompression(options =>
+        {
+            options.EnableForHttps = true;
+            options.Providers.Add<GzipCompressionProvider>();
+        });
+        
+        // Add memory caching
+        builder.Services.AddMemoryCache();
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
@@ -120,8 +130,13 @@ public static class Configurations
     {
       
         app.UseMiddleware<Lafarge_Onboarding.api.Middleware.ExceptionHandlingMiddleware>();
-
-    
+        
+        // Enable response compression
+        app.UseResponseCompression();
+        
+        // Add ETag caching
+        app.UseMiddleware<Lafarge_Onboarding.api.Middleware.ETagMiddleware>();
+        
         app.UseCors("AllowAll");
 
            app.UseSwagger();
