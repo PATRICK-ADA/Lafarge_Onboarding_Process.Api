@@ -20,15 +20,13 @@ public sealed class EtiquetteService : IEtiquetteService
     {
         _logger.LogInformation("Starting etiquette extraction from file: {FileName}", file.FileName);
 
-        // Extract text from the uploaded file
+        await _repository.DeleteAllAsync();
+        _logger.LogInformation("Deleted all existing etiquette records");
+
         var extractedText = await _documentService.ExtractTextFromDocumentAsync(file);
         _logger.LogInformation("Text extracted successfully. Length: {Length}", extractedText.Length);
-        _logger.LogDebug("Extracted text preview: {Preview}", extractedText.Length > 500 ? extractedText.Substring(0, 500) + "..." : extractedText);
 
         var parsedData = ParseEtiquette(extractedText);
-        _logger.LogInformation("Parsed data - RegionalInfo count: {RegionalCount}, FirstImpression count: {FirstImpressionCount}",
-            parsedData.RegionalInfo.Count, parsedData.FirstImpression.Count);
-
         var entity = MapToEntity(parsedData);
         await _repository.AddAsync(entity);
 

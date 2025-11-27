@@ -3,16 +3,16 @@ namespace Lafarge_Onboarding.application.Services;
 public sealed class LocalHireInfoService : ILocalHireInfoService
 {
     private readonly ILocalHireInfoRepository _repository;
-    private readonly IDocumentsUploadService _documentService;
+    private readonly IImprovedDocumentExtractionService _extractionService;
     private readonly ILogger<LocalHireInfoService> _logger;
 
     public LocalHireInfoService(
         ILocalHireInfoRepository repository,
-        IDocumentsUploadService documentService,
+        IImprovedDocumentExtractionService extractionService,
         ILogger<LocalHireInfoService> logger)
     {
         _repository = repository;
-        _documentService = documentService;
+        _extractionService = extractionService;
         _logger = logger;
     }
 
@@ -20,19 +20,13 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
     {
         _logger.LogInformation("Starting local hire info extraction from file: {FileName}", file.FileName);
 
-        // Extract text from the uploaded file
-        var extractedText = await _documentService.ExtractTextFromDocumentAsync(file);
-        _logger.LogInformation("Text extracted successfully. Length: {Length}", extractedText.Length);
-        _logger.LogDebug("Extracted text preview: {Preview}", extractedText.Length > 500 ? extractedText.Substring(0, 500) + "..." : extractedText);
+        await _repository.DeleteAllAsync();
+        _logger.LogInformation("Deleted all existing local hire info records");
 
-        var parsedData = ParseLocalHireInfo(extractedText);
-        _logger.LogInformation("Parsed data - WhoWeAre: '{WhoWeAre}', FootprintSummary: '{FootprintSummary}'", parsedData.AboutLafarge.WhoWeAre?.Substring(0, Math.Min(50, parsedData.AboutLafarge.WhoWeAre?.Length ?? 0)) + "...", parsedData.AboutLafarge.Footprint.Summary?.Substring(0, Math.Min(50, parsedData.AboutLafarge.Footprint.Summary?.Length ?? 0)) + "...");
-        _logger.LogInformation("Parsed data - Introduction: '{Introduction}', CountryFacts count: {CountryFactsCount}, InterestingFacts count: {InterestingFactsCount}, Holidays count: {HolidaysCount}",
-            parsedData.GeneralIntro.Introduction?.Substring(0, Math.Min(50, parsedData.GeneralIntro.Introduction?.Length ?? 0)) + "...",
-            parsedData.GeneralIntro.CountryFacts.Count,
-            parsedData.GeneralIntro.InterestingFacts.Count,
-            parsedData.GeneralIntro.Holidays.Count);
+        var sections = await _extractionService.ExtractStructuredSectionsAsync(file);
+        _logger.LogInformation("Extracted {SectionCount} sections from document", sections.Count);
 
+        var parsedData = ParseLocalHireInfo(sections);
         var entity = MapToEntity(parsedData);
         await _repository.AddAsync(entity);
 
@@ -63,269 +57,176 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
         _logger.LogInformation("Latest local hire info deleted successfully");
     }
 
-    private LocalHireInfoResponse ParseLocalHireInfo(string text)
+    private LocalHireInfoResponse ParseLocalHireInfo(Dictionary<string, string> sections)
     {
         var response = new LocalHireInfoResponse();
+        var fullText = string.Join("\n", sections.Values);
+        var lines = fullText.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                           .Select(line => line.Trim())
+                           .Where(line => !string.IsNullOrWhiteSpace(line))
+                           .ToArray();
 
-        // Split text into lines for processing
-        var lines = text.Split('\n', StringSplitOptions.RemoveEmptyEntries)
-                       .Select(line => line.Trim())
-                       .Where(line => !string.IsNullOrWhiteSpace(line))
-                       .ToArray();
+        _logger.LogInformation("Total lines extracted: {Count}", lines.Length);
 
-        // Extract sections based on numbered headings
-        response.AboutLafarge.WhoWeAre = ExtractSectionByHeading(lines, "1. WHO WE ARE");
-        response.AboutLafarge.Footprint.Summary = ExtractSectionByHeading(lines, "2. LAFARGE AFRICA FOOTPRINT");
-        response.AboutLafarge.Footprint.Plants = ExtractListByHeading(lines, "Cement Plants");
-        response.AboutLafarge.Footprint.ReadyMix = ExtractListByHeading(lines, "ReadyMix Locations");
-        response.AboutLafarge.Footprint.Depots = ExtractSectionByHeading(lines, "Depots");
+        response.AboutLafarge.WhoWeAre = ExtractSection(lines, "1. WHO WE ARE", "2. LAFARGE AFRICA FOOTPRINT");
+        response.AboutLafarge.Footprint.Summary = ExtractSection(lines, "2. LAFARGE AFRICA FOOTPRINT", "Cement Plants");
+        response.AboutLafarge.Footprint.Plants = ExtractList(lines, "Cement Plants", "ReadyMix Locations");
+        response.AboutLafarge.Footprint.ReadyMix = ExtractList(lines, "ReadyMix Locations", "Depots");
+        response.AboutLafarge.Footprint.Depots = ExtractSection(lines, "Depots", "3. LAFARGE AFRICA CULTURE");
 
-        response.AboutLafarge.Culture.Summary = ExtractSectionByHeading(lines, "3. LAFARGE AFRICA CULTURE");
-        response.AboutLafarge.Culture.Pillars = ExtractListByHeading(lines, "Behavioural Pillars");
-        response.AboutLafarge.Culture.HuaxinSpirit = ExtractListByHeading(lines, "Huaxin Spirit");
-        response.AboutLafarge.Culture.Innovation = ExtractListByHeading(lines, "Innovation");
-        response.AboutLafarge.Culture.RespectfulWorkplaces = ExtractSectionByHeading(lines, "Respectful Workplaces");
+        response.AboutLafarge.Culture.Summary = ExtractSection(lines, "3. LAFARGE AFRICA CULTURE", "Behavioural Pillars");
+        response.AboutLafarge.Culture.Pillars = ExtractSection(lines, "Behavioural Pillars", "Huaxin Spirit");
+        response.AboutLafarge.Culture.HuaxinSpirit = ExtractList(lines, "Huaxin Spirit", "• Innovation:");
+        response.AboutLafarge.Culture.Innovation = ExtractSection(lines, "• Innovation:", "Respectful Workplaces");
+        response.AboutLafarge.Culture.RespectfulWorkplaces = ExtractSection(lines, "Respectful Workplaces", "1.1. General introduction");
 
-        response.GeneralIntro.Introduction = ExtractSectionByHeading(lines, "1.1. General introduction");
+        response.GeneralIntro.Introduction = ExtractSection(lines, "1.1. General introduction", "Country:");
         response.GeneralIntro.CountryFacts = ExtractCountryFacts(lines);
-        response.GeneralIntro.InterestingFacts = ExtractListByHeading(lines, "Interesting Facts About Nigeria");
+        response.GeneralIntro.InterestingFacts = ExtractList(lines, "Interesting Facts About Nigeria", "National Holidays");
         response.GeneralIntro.Holidays = ExtractHolidays(lines);
 
         return response;
     }
 
-    private string ExtractSectionByHeading(string[] lines, string heading)
+    private string ExtractSection(string[] lines, string startHeading, string stopHeading)
     {
-        var startIndex = -1;
-        for (int i = 0; i < lines.Length; i++)
-        {
-            if (lines[i].ToUpper().Contains(heading.ToUpper()))
-            {
-                startIndex = i + 1;
-                _logger.LogDebug("Found heading '{Heading}' at line {LineIndex}: '{Line}'", heading, i, lines[i]);
-                break;
-            }
-        }
-
+        var startIndex = FindHeadingIndex(lines, startHeading);
         if (startIndex == -1)
         {
-            _logger.LogWarning("Heading '{Heading}' not found in document", heading);
+            _logger.LogWarning("Heading '{Heading}' not found", startHeading);
             return string.Empty;
         }
 
+        var stopIndex = FindHeadingIndex(lines, stopHeading);
+        var endIndex = stopIndex == -1 ? lines.Length : stopIndex;
+
         var content = new List<string>();
-        for (int i = startIndex; i < lines.Length; i++)
+        for (int i = startIndex + 1; i < endIndex; i++)
         {
-            var line = lines[i];
-            // Stop at next numbered section or major heading
-            if (Regex.IsMatch(line, @"^\d+\.\s") || line.ToUpper().Contains("GENERAL INTRODUCTION") ||
-                line.ToUpper().Contains("COUNTRY:") || line.ToUpper().Contains("INTERESTING FACTS") ||
-                line.ToUpper().Contains("NATIONAL HOLIDAYS"))
-            {
-                _logger.LogDebug("Stopping extraction for '{Heading}' at line {LineIndex} due to: '{Line}'", heading, i, line);
-                break;
-            }
-            content.Add(line);
+            content.Add(lines[i]);
         }
 
         var result = string.Join(" ", content).Trim();
-        _logger.LogDebug("Extracted content for '{Heading}': '{Content}'", heading, result.Length > 100 ? result.Substring(0, 100) + "..." : result);
+        _logger.LogInformation("Extracted section '{StartHeading}' to '{StopHeading}': {Count} chars", startHeading, stopHeading, result.Length);
         return result;
     }
 
-    private List<string> ExtractListByHeading(string[] lines, string heading)
+    private List<string> ExtractList(string[] lines, string startHeading, string stopHeading)
     {
-        var startIndex = -1;
-        for (int i = 0; i < lines.Length; i++)
-        {
-            if (lines[i].ToUpper().Contains(heading.ToUpper()))
-            {
-                startIndex = i + 1;
-                _logger.LogDebug("Found list heading '{Heading}' at line {LineIndex}: '{Line}'", heading, i, lines[i]);
-                break;
-            }
-        }
-
+        var startIndex = FindHeadingIndex(lines, startHeading);
         if (startIndex == -1)
         {
-            _logger.LogWarning("List heading '{Heading}' not found in document", heading);
+            _logger.LogWarning("List heading '{Heading}' not found", startHeading);
             return new List<string>();
         }
 
+        var stopIndex = FindHeadingIndex(lines, stopHeading);
+        var endIndex = stopIndex == -1 ? lines.Length : stopIndex;
+
+        _logger.LogInformation("Extracting list from '{StartHeading}' (line {Start}) to '{StopHeading}' (line {End})", 
+            startHeading, startIndex, stopHeading, stopIndex);
+
         var list = new List<string>();
-        for (int i = startIndex; i < lines.Length; i++)
+        for (int i = startIndex + 1; i < endIndex; i++)
         {
             var line = lines[i];
-            _logger.LogDebug("Processing list line {LineIndex}: '{Line}'", i, line);
-
-            // Stop at next section
-            if (Regex.IsMatch(line, @"^\d+\.\s") || line.ToUpper().Contains("GENERAL INTRODUCTION") ||
-                line.ToUpper().Contains("COUNTRY:") || line.ToUpper().Contains("INTERESTING FACTS") ||
-                line.ToUpper().Contains("NATIONAL HOLIDAYS"))
-            {
-                _logger.LogDebug("Stopping list extraction for '{Heading}' at line {LineIndex} due to: '{Line}'", heading, i, line);
-                break;
-            }
-
-            // Check for bullet points or numbered items
-            if (line.Trim().StartsWith("•") || line.Trim().StartsWith("◦") || line.Trim().StartsWith("-") ||
-                (line.Trim().Length > 0 && char.IsDigit(line.Trim()[0])))
+            if (line.Trim().StartsWith("•") || line.Trim().StartsWith("◦") || line.Trim().StartsWith("-"))
             {
                 var trimmed = line.Trim().TrimStart('•', '◦', '-', ' ');
-                if (trimmed.Length > 0 && char.IsDigit(trimmed[0]))
+
+                while (i + 1 < endIndex)
                 {
-                    // Remove number and dot if present
-                    var dotIndex = trimmed.IndexOf('.');
-                    if (dotIndex > 0)
-                    {
-                        trimmed = trimmed[(dotIndex + 1)..].Trim();
-                    }
+                    var nextLine = lines[i + 1].Trim();
+                    if (string.IsNullOrWhiteSpace(nextLine) || nextLine.StartsWith("•") || nextLine.StartsWith("◦") || nextLine.StartsWith("-"))
+                        break;
+                    trimmed += " " + nextLine;
+                    i++;
                 }
+
                 list.Add(trimmed);
-                _logger.LogDebug("Added list item: '{Item}'", trimmed);
-            }
-            else
-            {
-                _logger.LogDebug("Line doesn't match list item format: '{Line}'", line);
             }
         }
 
-        _logger.LogDebug("Extracted {Count} list items for '{Heading}'", list.Count, heading);
+        _logger.LogInformation("Extracted {Count} list items for '{Heading}'", list.Count, startHeading);
         return list;
     }
 
     private List<CountryFact> ExtractCountryFacts(string[] lines)
     {
         var facts = new List<CountryFact>();
-        var startIndex = -1;
-
-        // Find the "Country:" heading
-        for (int i = 0; i < lines.Length; i++)
-        {
-            if (lines[i].ToUpper().Contains("COUNTRY:"))
-            {
-                startIndex = i + 1;
-                _logger.LogDebug("Found 'COUNTRY:' heading at line {LineIndex}: '{Line}'", i, lines[i]);
-                break;
-            }
-        }
-
+        var startIndex = FindHeadingIndex(lines, "Country:");
         if (startIndex == -1)
         {
-            _logger.LogWarning("Heading 'COUNTRY:' not found in document");
+            _logger.LogWarning("Heading 'Country:' not found");
             return facts;
         }
 
+        var stopIndex = FindHeadingIndex(lines, "Interesting Facts About Nigeria");
+        var endIndex = stopIndex == -1 ? lines.Length : stopIndex;
+
         string currentLabel = null!;
-        for (int i = startIndex; i < lines.Length; i++)
+        for (int i = startIndex + 1; i < endIndex; i++)
         {
             var line = lines[i].Trim();
-            _logger.LogDebug("Processing country facts line {LineIndex}: '{Line}'", i, line);
-
-            // Stop at next major section
-            if (line.ToUpper().Contains("INTERESTING FACTS") || line.ToUpper().Contains("NATIONAL HOLIDAYS"))
-            {
-                _logger.LogDebug("Stopping country facts extraction at line {LineIndex} due to: '{Line}'", i, line);
-                break;
-            }
-
-            // Skip empty lines
             if (string.IsNullOrWhiteSpace(line))
                 continue;
 
             if (line.EndsWith(":"))
             {
-                // This is a label line
                 currentLabel = line.TrimEnd(':').Trim();
-                _logger.LogDebug("Found label: '{Label}'", currentLabel);
             }
-            else if (currentLabel != null && !string.IsNullOrWhiteSpace(line))
+            else if (currentLabel != null)
             {
-                // This is a value line for the previous label
-                var fact = new CountryFact
-                {
-                    Label = currentLabel,
-                    Value = line.Trim()
-                };
-                facts.Add(fact);
-                _logger.LogDebug("Added country fact: {Label} = {Value}", fact.Label, fact.Value);
-                currentLabel = null!; // Reset for next label
-            }
-            else
-            {
-                _logger.LogDebug("Skipping line: '{Line}' (no current label or not a label)", line);
+                facts.Add(new CountryFact { Label = currentLabel, Value = line });
+                currentLabel = null!;
             }
         }
 
-        _logger.LogDebug("Extracted {Count} country facts", facts.Count);
         return facts;
     }
 
     private List<Holiday> ExtractHolidays(string[] lines)
     {
         var holidays = new List<Holiday>();
-        var startIndex = -1;
-
-        // Find the "National Holidays" heading
-        for (int i = 0; i < lines.Length; i++)
-        {
-            if (lines[i].ToUpper().Contains("NATIONAL HOLIDAYS"))
-            {
-                startIndex = i + 1;
-                _logger.LogDebug("Found 'NATIONAL HOLIDAYS' heading at line {LineIndex}: '{Line}'", i, lines[i]);
-                break;
-            }
-        }
-
+        var startIndex = FindHeadingIndex(lines, "National Holidays");
         if (startIndex == -1)
         {
-            _logger.LogWarning("Heading 'NATIONAL HOLIDAYS' not found in document");
+            _logger.LogWarning("Heading 'National Holidays' not found");
             return holidays;
         }
 
-        for (int i = startIndex; i < lines.Length; i++)
+        for (int i = startIndex + 1; i < lines.Length; i++)
         {
             var line = lines[i].Trim();
-            _logger.LogDebug("Processing holidays line {LineIndex}: '{Line}'", i, line);
-
-            // Skip empty lines
-            if (string.IsNullOrWhiteSpace(line))
+            if (string.IsNullOrWhiteSpace(line) || line.Contains("Visiting Nigeria"))
                 continue;
 
-            // Skip the introductory paragraph about visiting Nigeria
-            if (line.Contains("Visiting Nigeria during the following dates") ||
-                line.Contains("depending on the objective of the visit"))
-                continue;
-
-            // Use regex to match date pattern: e.g., "01 January" or "10-11 April"
-            var match = Regex.Match(line, @"^(\d{1,2}(?:-\d{1,2})?\s+(January|February|March|April|May|June|July|August|September|October|November|December))(.*)$");
+            var match = Regex.Match(line, @"^(\d{1,2}(?:-\d{1,2})?)\s+(January|February|March|April|May|June|July|August|September|October|November|December)(.*)$");
             if (match.Success)
             {
-                var date = match.Groups[1].Value.Trim();
+                var date = match.Groups[1].Value + " " + match.Groups[2].Value;
                 var name = match.Groups[3].Value.Trim();
-                if (!string.IsNullOrWhiteSpace(name))
-                {
-                    var holiday = new Holiday
-                    {
-                        Date = date,
-                        Name = name
-                    };
-                    holidays.Add(holiday);
-                    _logger.LogDebug("Added holiday: {Date} - {Name}", holiday.Date, holiday.Name);
-                }
-                else
-                {
-                    _logger.LogDebug("Line doesn't match expected holiday format: '{Line}'", line);
-                }
-            }
-            else
-            {
-                _logger.LogDebug("Line doesn't match expected holiday format: '{Line}'", line);
+                holidays.Add(new Holiday { Date = date, Name = name });
             }
         }
 
-        _logger.LogDebug("Extracted {Count} holidays", holidays.Count);
         return holidays;
+    }
+
+    private int FindHeadingIndex(string[] lines, string heading)
+    {
+        var headingUpper = heading.ToUpper().Replace(" ", "");
+        for (int i = 0; i < lines.Length; i++)
+        {
+            var lineUpper = lines[i].ToUpper().Replace(" ", "");
+            if (lineUpper == headingUpper || lineUpper.StartsWith(headingUpper))
+            {
+                _logger.LogInformation("Found heading '{Heading}' at line {Index}: '{Line}'", heading, i, lines[i]);
+                return i;
+            }
+        }
+        _logger.LogWarning("Heading '{Heading}' not found in document", heading);
+        return -1;
     }
 
     private LocalHireInfo MapToEntity(LocalHireInfoResponse response)
@@ -338,8 +239,8 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
             ReadyMix = JsonSerializer.Serialize(response.AboutLafarge.Footprint.ReadyMix),
             Depots = response.AboutLafarge.Footprint.Depots,
             CultureSummary = response.AboutLafarge.Culture.Summary,
-            Pillars = JsonSerializer.Serialize(response.AboutLafarge.Culture.Pillars),
-            Innovation = JsonSerializer.Serialize(response.AboutLafarge.Culture.Innovation),
+            Pillars = response.AboutLafarge.Culture.Pillars,
+            Innovation = response.AboutLafarge.Culture.Innovation,
             HuaxinSpirit = JsonSerializer.Serialize(response.AboutLafarge.Culture.HuaxinSpirit),
             RespectfulWorkplaces = response.AboutLafarge.Culture.RespectfulWorkplaces,
             Introduction = response.GeneralIntro.Introduction,
@@ -366,8 +267,8 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
                 Culture = new Culture
                 {
                     Summary = entity.CultureSummary,
-                    Pillars = JsonSerializer.Deserialize<List<string>>(entity.Pillars) ?? new List<string>(),
-                    Innovation = JsonSerializer.Deserialize<List<string>>(entity.Innovation) ?? new List<string>(),
+                    Pillars = entity.Pillars ?? string.Empty,
+                    Innovation = entity.Innovation,
                     HuaxinSpirit = JsonSerializer.Deserialize<List<string>>(entity.HuaxinSpirit) ?? new List<string>(),
                     RespectfulWorkplaces = entity.RespectfulWorkplaces
                 }

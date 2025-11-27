@@ -38,4 +38,9 @@ public sealed class LocalHireInfoRepository : ILocalHireInfoRepository
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task DeleteAllAsync()
+    {
+        await _context.LocalHireInfos.ExecuteDeleteAsync();
+    }
 }

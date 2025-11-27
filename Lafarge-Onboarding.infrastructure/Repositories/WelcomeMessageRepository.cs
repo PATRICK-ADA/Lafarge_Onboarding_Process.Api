@@ -38,4 +38,9 @@ public sealed class WelcomeMessageRepository : IWelcomeMessageRepository
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task DeleteAllAsync()
+    {
+        await _context.WelcomeMessages.ExecuteDeleteAsync();
+    }
 }

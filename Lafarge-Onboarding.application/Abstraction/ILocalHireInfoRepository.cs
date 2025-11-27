@@ -6,4 +6,5 @@ public interface ILocalHireInfoRepository
     Task<LocalHireInfo?> GetLatestAsync();
     Task UpdateAsync(LocalHireInfo localHireInfo);
     Task DeleteLatestAsync();
+    Task DeleteAllAsync();
 }

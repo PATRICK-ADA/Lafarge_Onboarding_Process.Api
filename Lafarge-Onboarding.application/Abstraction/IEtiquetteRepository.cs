@@ -6,4 +6,5 @@ public interface IEtiquetteRepository
     Task<Etiquette?> GetLatestAsync();
     Task UpdateAsync(Etiquette etiquette);
     Task DeleteLatestAsync();
+    Task DeleteAllAsync();
 }

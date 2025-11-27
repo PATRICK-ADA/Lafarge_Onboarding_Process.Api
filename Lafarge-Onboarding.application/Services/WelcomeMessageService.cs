@@ -21,18 +21,15 @@ public sealed class WelcomeMessageService : IWelcomeMessageService
         _logger.LogInformation("Starting welcome messages extraction from {Count} files", files.Count);
 
         if (files.Count < 2)
-        {
             throw new ArgumentException("At least two files are required: one for CEO and one for HR");
-        }
 
-        // Assume first file is CEO, second is HR
+        await _repository.DeleteAllAsync();
+        _logger.LogInformation("Deleted all existing welcome messages records");
+
         var ceoText = await _documentService.ExtractTextFromDocumentAsync(files[0]);
         var hrText = await _documentService.ExtractTextFromDocumentAsync(files[1]);
 
-        _logger.LogInformation("Texts extracted successfully");
-
         var parsedData = ParseWelcomeMessages(ceoText, hrText);
-
         var entity = MapToEntity(parsedData);
         await _repository.AddAsync(entity);
 

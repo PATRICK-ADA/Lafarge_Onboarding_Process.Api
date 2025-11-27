@@ -24,8 +24,8 @@ public class Footprint
 public class Culture
 {
     public string Summary { get; set; } = string.Empty;
-    public List<string> Pillars { get; set; } = new();
-    public List<string> Innovation { get; set; } = new();
+    public string Pillars { get; set; } = string.Empty;
+    public string Innovation { get; set; } = string.Empty;
     public List<string> HuaxinSpirit { get; set; } = new();
     public string RespectfulWorkplaces { get; set; } = string.Empty;
 }

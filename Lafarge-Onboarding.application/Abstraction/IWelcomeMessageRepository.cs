@@ -6,4 +6,5 @@ public interface IWelcomeMessageRepository
     Task<WelcomeMessage?> GetLatestAsync();
     Task UpdateAsync(WelcomeMessage welcomeMessage);
     Task DeleteLatestAsync();
+    Task DeleteAllAsync();
 }

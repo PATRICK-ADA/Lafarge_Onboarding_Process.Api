@@ -38,4 +38,9 @@ public sealed class EtiquetteRepository : IEtiquetteRepository
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task DeleteAllAsync()
+    {
+        await _context.Etiquettes.ExecuteDeleteAsync();
+    }
 }

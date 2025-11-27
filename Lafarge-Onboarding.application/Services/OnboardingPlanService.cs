@@ -20,15 +20,13 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
     {
         _logger.LogInformation("Starting onboarding plan extraction from file: {FileName}", file.FileName);
 
-        // Extract text from the uploaded file
+        await _repository.DeleteAllAsync();
+        _logger.LogInformation("Deleted all existing onboarding plan records");
+
         var extractedText = await _documentService.ExtractTextFromDocumentAsync(file);
         _logger.LogInformation("Text extracted successfully. Length: {Length}", extractedText.Length);
-        _logger.LogDebug("Extracted text preview: {Preview}", extractedText.Length > 500 ? extractedText.Substring(0, 500) + "..." : extractedText);
 
         var parsedData = ParseOnboardingPlan(extractedText);
-        _logger.LogInformation("Parsed data - BuddyActivities: {BuddyActivities}, TimelineItems: {TimelineItems}",
-            parsedData.Buddy.Activities.Count, parsedData.Checklist.Timeline.Count);
-
         var entity = MapToEntity(parsedData);
         await _repository.AddAsync(entity);
 

@@ -38,4 +38,9 @@ public sealed class OnboardingPlanRepository : IOnboardingPlanRepository
             await _context.SaveChangesAsync();
         }
     }
+
+    public async Task DeleteAllAsync()
+    {
+        await _context.OnboardingPlans.ExecuteDeleteAsync();
+    }
 }
