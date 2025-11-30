@@ -1,38 +1,35 @@
-
 var builder = WebApplication.CreateBuilder(args);
-
 
 builder.ConfigureServices();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<Lafarge_Onboarding.infrastructure.Data.ApplicationDbContext>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    var env = scope.ServiceProvider.GetRequiredService<IHostEnvironment>();
 
-// using (var scope = app.Services.CreateScope())
-// {
-//     var dbContext = scope.ServiceProvider.GetRequiredService<Lafarge_Onboarding.infrastructure.Data.ApplicationDbContext>();
-//     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-//     var env = scope.ServiceProvider.GetRequiredService<IHostEnvironment>();
-
-//     // Only run migrations in development environment
-//     if (env.IsDevelopment())
-//     {
-//         try
-//         {
-//             logger.LogInformation("Applying database migrations...");
-//             dbContext.Database.Migrate();
-//             logger.LogInformation("Database migrations applied successfully.");
-//         }
-//         catch (Exception ex)
-//         {
-//             logger.LogError(ex, "An error occurred while applying database migrations.");
-//             throw; // Re-throw to fail the startup if migrations fail
-//         }
-//     }
-//     else
-//     {
-//         logger.LogInformation("Skipping automatic migrations in production. Ensure database is migrated manually.");
-//     }
-// }
+   
+    if (env.IsDevelopment())
+    {
+        try
+        {
+            logger.LogInformation("Applying database migrations...");
+            dbContext.Database.Migrate();
+            logger.LogInformation("Database migrations applied successfully.");
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An error occurred while applying database migrations.");
+            throw; 
+        }
+    }
+    else
+    {
+        logger.LogInformation("Skipping automatic migrations in production. Ensure database is migrated manually.");
+    }
+}
 
 // Configure the HTTP request pipeline.
 

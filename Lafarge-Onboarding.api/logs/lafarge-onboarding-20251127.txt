@@ -3189,3 +3189,72 @@ xin Spirit' <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
 2025-11-27 04:58:11.083 +01:00 [INF] Found heading 'National Holidays' at line 79: 'National Holidays' <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
 2025-11-27 04:58:11.430 +01:00 [INF] Local hire info saved successfully with ID: 46 <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
 2025-11-27 04:58:11.430 +01:00 [INF] Cache cleared after new local hire info upload <s:Lafarge_Onboarding.application.Services.CachedLocalHireInfoService>
+2025-11-27 05:13:34.548 +01:00 [INF] Local hire info upload request received <s:Lafarge_Onboarding.api.Controllers.ContentController>
+2025-11-27 05:13:34.627 +01:00 [INF] Starting local hire info extraction from2025-11-27 05:13:34.627 +01:00 [INF] Starting local hire info extraction from file: local-hir2025-11-27 02025-11-27 05:13:36.205 +01:00 [INF] Deleted all existing local hire info records
+2025-11-27 05:13:36.523 +01:00 [INF] Extracted full content from DOCX
+2025-11-27 05:13:36.528 +01:00 [INF] Extracted 1 sections from document
+2025-11-27 05:13:36.534 +01:00 [INF] Total lines extracted: 91
+2025-11-27 05:13:36.536 +01:00 [INF] Found heading '1. WHO WE ARE' at line 0: '1. WHO WE ARE'
+2025-11-27 05:13:36.536 +01:00 [INF] Found heading '2. LAFARGE AFRICA FOOTPRINT' at line 4: '2. LAFARGE AFRICA FOOTPRINT'
+2025-11-27 05:13:36.537 +01:00 [INF] Extracted section '1. WHO WE ARE' to '2. LAFARGE AFRICA FOOTPRINT': 1000 chars
+2025-11-27 05:13:36.537 +01:00 [INF] Found heading '2. LAFARGE AFRICA FOOTPRINT' at line 4: '2. LAFARGE AFRICA FOOTPRINT'
+2025-11-27 05:13:36.538 +01:00 [INF] Found heading 'Cement Plants' at line 6: 'Cement Plants'
+2025-11-27 05:13:36.538 +01:00 [INF] Extracted section '2. LAFARGE AFRICA FOOTPRINT' to 'Cement Plants': 123 chars
+2025-11-27 05:13:36.540 +01:00 [INF] Found heading 'Cement Plants' at line 6: 'Cement Plants'
+2025-11-27 05:13:36.543 +01:00 [INF] Found heading 'ReadyMix Locations' at line 11: 'ReadyMix Locations'
+2025-11-27 05:13:36.543 +01:00 [INF] Extracting list from 'Cement Plants' (line 6) to 'ReadyMix Locations' (line 11)
+2025-11-27 05:13:36.544 +01:00 [INF] Extracted 4 list items for 'Cement Plants'
+2025-11-27 05:13:36.544 +01:00 [INF] Found heading 'ReadyMix Locations' at line 11: 'ReadyMix Locations'
+2025-11-27 05:13:36.545 +01:00 [INF] Found heading 'Depots' at line 20: 'Depots'
+2025-11-27 05:13:36.545 +01:00 [INF] Extracting list from 'ReadyMix Locations' (line 11) to 'Depots' (line 20)
+2025-11-27 05:13:36.545 +01:00 [INF] Extracted 8 list items for 'ReadyMix Locations'
+2025-11-27 05:13:36.545 +01:00 [INF] Found heading 'Depots' at line 20: 'Depots'
+2025-11-27 05:13:36.546 +01:00 [INF] Found heading '3. LAFARGE AFRICA CULTURE' at line 22: '3. LAFARGE AFRICA CULTURE'
+2025-11-27 05:13:36.546 +01:00 [INF] Extracted section 'Depots' to '3. LAFARGE AFRICA CULTURE': 260 chars
+2025-11-27 05:13:36.547 +01:00 [INF] Found heading '3. LAFARGE AFRICA CULTURE' at line 22: '3. LAFARGE AFRICA CULTURE'
+2025-11-27 05:13:36.547 +01:00 [INF] Found heading 'Behavioural Pillars' at line 26: 'Behavioural Pillars  ("Pillars")'
+2025-11-27 05:13:36.547 +01:00 [INF] Extracted section '3. LAFARGE AFRICA CULTURE' to 'Behavioural Pillars': 507 chars
+2025-11-27 05:13:36.548 +01:00 [INF] Found heading 'Behavioural Pillars' at line 26: 'Behavioural Pillars  ("Pillars")'
+2025-11-27 05:13:36.548 +01:00 [INF] Found heading 'Huaxin Spirit' at line 33: 'Huaxin Spirit'
+2025-11-27 05:13:36.548 +01:00 [INF] Extracted section 'Behavioural Pillars' to 'Huaxin Spirit': 245 chars
+2025-11-27 05:13:36.549 +01:00 [INF] Found heading 'Huaxin Spirit' at line 33: 'Huaxin Spirit'
+2025-11-27 05:13:36.549 +01:00 [INF] Found heading '• Innovation:' at line 37: '• Innovation:'
+2025-11-27 05:13:36.549 +01:00 [INF] Extracting list from 'Huaxin Spirit' (line 33) to '• Innovation:' (line 37)
+2025-11-27 05:13:36.550 +01:00 [INF] Extracted 3 list items for 'Huaxin Spirit'
+2025-11-27 05:13:36.550 +01:00 [INF] Found heading '• Innovation:' at line 37: '• Innovation:'
+2025-11-27 05:13:36.551 +01:00 [INF] Found heading 'Respectful Workplaces' at line 39: 'Respectful Workplaces'
+2025-11-27 05:13:36.551 +01:00 [INF] Extracted section '• Innovation:' to 'Respectful Workplaces': 213 chars
+2025-11-27 05:13:36.551 +01:00 [INF] Found heading 'Respectful Workplaces' at line 39: 'Respectful Workplaces'
+2025-11-27 05:13:36.552 +01:00 [INF] Found heading '1.1. General introduction' at line 45: '1.1. General introduction'
+2025-11-27 05:13:36.552 +01:00 [INF] Extracted section 'Respectful Workplaces' to '1.1. General introduction': 1202 chars
+2025-11-27 05:13:36.553 +01:00 [INF] Found heading '1.1. General introduction' at line 45: '1.1. General introduction'
+2025-11-27 05:13:36.553 +01:00 [INF] Found heading 'Country:' at line 47: 'Country:'
+2025-11-27 05:13:36.553 +01:00 [INF] Extracted section '1.1. General introduction' to 'Country:': 751 chars
+2025-11-27 05:13:36.554 +01:00 [INF] Found heading 'Country:' at line 47: 'Country:'
+2025-11-27 05:13:36.555 +01:00 [INF] Found heading 'Interesting Facts About Nigeria' at line 74: 'Interesting Facts About Nigeria'
+2025-11-27 05:13:36.556 +01:00 [INF] Found heading 'Interesting Facts About Nigeria' at line 74: 'Interesting Facts About Nigeria'
+2025-11-27 05:13:36.556 +01:00 [INF] Found heading 'National Holidays' at line 79: 'National Holidays'
+2025-11-27 05:13:36.557 +01:00 [INF] Extracting list from 'Interesting Facts About Nigeria' (line 74) to 'National Holidays' (line 79)
+2025-11-27 05:13:36.557 +01:00 [INF] Extracted 4 list items for 'Interesting Facts About Nigeria'
+2025-11-27 05:13:36.558 +01:00 [INF] Found heading 'National Holidays' at line 79: 'National Holidays'
+2025-11-27 05:13:36.916 +01:00 [INF] Local hire info saved successfully with ID: 47
+2025-11-27 05:13:36.917 +01:00 [INF] Cache cleared after new local hire info upload
+xin Spirit' <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-27 05:13:36.550 +01:00 [INF] Found heading '• Innovation:' at line 37: '• Innovation:' <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-27 05:13:36.551 +01:00 [INF] Found heading 'Respectful Workplaces' at line 39: 'Respectful Workplaces' <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-27 05:13:36.551 +01:00 [INF] Extracted section '• Innovation:' to 'Respectful Workplaces': 213 chars <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-27 05:13:36.551 +01:00 [INF] Found heading 'Respectful Workplaces' at line 39: 'Respectful Workplaces' <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-27 05:13:36.552 +01:00 [INF] Found heading '1.1. General introduction' at line 45: '1.1. General introduction' <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-27 05:13:36.552 +01:00 [INF] Extracted section 'Respectful Workplaces' to '1.1. General introduction': 1202 chars <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-27 05:13:36.553 +01:00 [INF] Found heading '1.1. General introduction' at line 45: '1.1. General introduction' <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-27 05:13:36.553 +01:00 [INF] Found heading 'Country:' at line 47: 'Country:' <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-27 05:13:36.553 +01:00 [INF] Extracted section '1.1. General introduction' to 'Country:': 751 chars <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-27 05:13:36.554 +01:00 [INF] Found heading 'Country:' at line 47: 'Country:' <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-27 05:13:36.555 +01:00 [INF] Found heading 'Interesting Facts About Nigeria' at line 74: 'Interesting Facts About Nigeria' <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-27 05:13:36.556 +01:00 [INF] Found heading 'Interesting Facts About Nigeria' at line 74: 'Interesting Facts About Nigeria' <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-27 05:13:36.556 +01:00 [INF] Found heading 'National Holidays' at line 79: 'National Holidays' <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-27 05:13:36.557 +01:00 [INF] Extracting list from 'Interesting Facts About Nigeria' (line 74) to 'National Holidays' (line 79) <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-27 05:13:36.557 +01:00 [INF] Extracted 4 list items for 'Interesting Facts About Nigeria' <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-27 05:13:36.558 +01:00 [INF] Found heading 'National Holidays' at line 79: 'National Holidays' <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-27 05:13:36.916 +01:00 [INF] Local hire info saved successfully with ID: 47 <s:Lafarge_Onboarding.application.Services.LocalHireInfoService>
+2025-11-27 05:13:36.917 +01:00 [INF] Cache cleared after new local hire info upload <s:Lafarge_Onboarding.application.Services.CachedLocalHireInfoService>

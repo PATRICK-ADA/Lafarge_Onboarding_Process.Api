@@ -55,29 +55,29 @@ public sealed class GalleryController : ControllerBase
 
     [HttpGet("get-ceo-images")]
     [Authorize]
-    [ProducesResponseType(typeof(ApiResponse<List<Gallery>>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<List<GalleryResponse>>), 200)]
     public async Task<IActionResult> GetCeoImages()
     {
         var images = await _galleryService.GetCeoImagesAsync();
-        return images.Count == 0 ? NotFound(ApiResponse<object>.Failure("Ceo Image not found", "404")) : Ok(ApiResponse<List<Gallery>>.Success(images));
+        return images.Count == 0 ? NotFound(ApiResponse<object>.Failure("Ceo Image not found", "404")) : Ok(ApiResponse<List<GalleryResponse>>.Success(images));
     }
 
     [HttpGet("get-hr-images")]
     [Authorize]
-    [ProducesResponseType(typeof(ApiResponse<List<Gallery>>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<List<GalleryResponse>>), 200)]
     public async Task<IActionResult> GetHrImages()
     {
         var images = await _galleryService.GetHrImagesAsync();
-        return images.Count == 0 ? NotFound(ApiResponse<object>.Failure("Hr Image not found", "404")) : Ok(ApiResponse<List<Gallery>>.Success(images));
+        return images.Count == 0 ? NotFound(ApiResponse<object>.Failure("Hr Image not found", "404")) : Ok(ApiResponse<List<GalleryResponse>>.Success(images));
     }
 
     [HttpGet("get-any-images")]
     [Authorize]
-    [ProducesResponseType(typeof(ApiResponse<List<Gallery>>), 200)]
+    [ProducesResponseType(typeof(ApiResponse<List<GalleryResponse>>), 200)]
     public async Task<IActionResult> GetAnyImages()
     {
         var images = await _galleryService.GetAnyImagesAsync();
-        return images.Count == 0 ? NotFound(ApiResponse<object>.Failure("Image not found", "404")) : Ok(ApiResponse<List<Gallery>>.Success(images));
+        return images.Count == 0 ? NotFound(ApiResponse<object>.Failure("Image not found", "404")) : Ok(ApiResponse<List<GalleryResponse>>.Success(images));
     }
 
     [HttpDelete("delete-ceo-images")]

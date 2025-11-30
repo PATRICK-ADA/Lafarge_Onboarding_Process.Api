@@ -119,7 +119,8 @@ public static class Configurations
         builder.Services.AddDbContext<Lafarge_Onboarding.infrastructure.Data.ApplicationDbContext>(options =>
         {
             var connectionString = BuildConnectionString(builder.Configuration);
-            options.UseNpgsql(connectionString);
+                options.UseNpgsql(connectionString);
+            
         });
 
         return builder;
@@ -128,15 +129,17 @@ public static class Configurations
    
     public static WebApplication ConfigureMiddleware(this WebApplication app)
     {
-      
+        // Add audit logging middleware early in the pipeline
+        app.UseMiddleware<Lafarge_Onboarding.api.Middleware.AuditLoggingMiddleware>();
+
         app.UseMiddleware<Lafarge_Onboarding.api.Middleware.ExceptionHandlingMiddleware>();
-        
+
         // Enable response compression
         app.UseResponseCompression();
-        
+
         // Add ETag caching
         app.UseMiddleware<Lafarge_Onboarding.api.Middleware.ETagMiddleware>();
-        
+
         app.UseCors("AllowAll");
 
            app.UseSwagger();
@@ -153,7 +156,7 @@ public static class Configurations
 
     static string BuildConnectionString(IConfiguration configuration)
     {
-    // Try environment variables first (for production)
+
     var connectionName = Environment.GetEnvironmentVariable("DB_CONNECTION_NAME");
     var database = Environment.GetEnvironmentVariable("DB_NAME");
     var username = Environment.GetEnvironmentVariable("DB_USER");
@@ -161,7 +164,7 @@ public static class Configurations
 
 
 
-        // If DB_CONNECTION_NAME is set, use Cloud SQL socket connection
+      
         if (!string.IsNullOrEmpty(connectionName))
         {
             database = database ?? configuration["Database:DB_NAME"] ?? "lafarge_onboarding_db";

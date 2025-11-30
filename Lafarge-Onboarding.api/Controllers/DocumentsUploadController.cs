@@ -20,15 +20,11 @@ public sealed class DocumentsUploadController : ControllerBase
     public async Task<IActionResult> UploadDocument([FromForm] DocumentUploadRequest request)
     {
     
-      return   request.ContentBodyUpload == null ?
-
-            BadRequest(ApiResponse<DocumentUploadResponse>.Failure("ContentBodyUpload file is required")) :
-
-         User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value == null ?
-    
-         Unauthorized(ApiResponse<DocumentUploadResponse>.Failure("User not authenticated", "401")) :
-
-        Ok(await _uploadService.ProcessDocumentUploadAsync(request.ContentBodyUpload, User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value, request.ContentHeading, request.ContentSubHeading, request.ImageUpload));
+      return   request.ContentBodyUpload == null 
+      ? BadRequest(ApiResponse<DocumentUploadResponse>.Failure("ContentBodyUpload file is required")) 
+      :User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value == null 
+      ?Unauthorized(ApiResponse<DocumentUploadResponse>.Failure("User not authenticated", "401")) 
+      :Ok(await _uploadService.ProcessDocumentUploadAsync(request.ContentBodyUpload, User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value, request.ContentHeading, request.ContentSubHeading, request.ImageUpload));
 
     }
 
@@ -69,20 +65,9 @@ public sealed class DocumentsUploadController : ControllerBase
     {
         var document = await _uploadService.GetDocumentByIdAsync(id);
         
-          var response = new DocumentUploadResponse
-        {
-            BodyContentFileType = document!.FileName,
-            BodyFilePath = document.FilePath,
-            BodyContent = document.Content,
-            ImageFilePath = document.ImageFilePath,
-            ImageFileType = document.ImageFileType,
-            ContentHeading = document.ContentHeading,
-            ContentSubHeading = document.ContentSubHeading
-        };
-        
-        return document == null ?
-            NotFound(ApiResponse<DocumentUploadResponse>.Failure("Document not found.", "404")) :
-            Ok(ApiResponse<DocumentUploadResponse>.Success(response));
+        return document == null 
+            ? NotFound(ApiResponse<DocumentUploadResponse>.Failure("Document not found.", "404")) 
+            : Ok(ApiResponse<DocumentUploadResponse>.Success(document));
     }
 
 }
