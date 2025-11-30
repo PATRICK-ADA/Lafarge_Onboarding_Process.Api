@@ -1,3 +1,4 @@
+
 namespace Lafarge_Onboarding.infrastructure.Repositories;
 
 public sealed class WelcomeMessageRepository : IWelcomeMessageRepository
@@ -15,10 +16,28 @@ public sealed class WelcomeMessageRepository : IWelcomeMessageRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<WelcomeMessage?> GetLatestAsync()
+    public async Task<WelcomeMessageResponse?> GetLatestAsync()
     {
         return await _context.WelcomeMessages
             .OrderByDescending(w => w.CreatedAt)
+            .AsNoTracking()
+            .Select(w => new WelcomeMessageResponse
+            {
+                Ceo = new WelcomePerson
+                {
+                    Name = w.CeoName,
+                    Title = w.CeoTitle,
+                    ImageUrl = w.CeoImageUrl,
+                    Message = w.CeoMessage
+                },
+                Hr = new WelcomePerson
+                {
+                    Name = w.HrName,
+                    Title = w.HrTitle,
+                    ImageUrl = w.HrImageUrl,
+                    Message = w.HrMessage
+                }
+            })
             .FirstOrDefaultAsync();
     }
 
@@ -31,7 +50,7 @@ public sealed class WelcomeMessageRepository : IWelcomeMessageRepository
 
     public async Task DeleteLatestAsync()
     {
-        var latest = await GetLatestAsync();
+        var latest = await _context.WelcomeMessages.OrderByDescending(w => w.CreatedAt).FirstOrDefaultAsync();
         if (latest != null)
         {
             _context.WelcomeMessages.Remove(latest);

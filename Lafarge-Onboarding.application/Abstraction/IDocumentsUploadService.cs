@@ -5,9 +5,9 @@ public interface IDocumentsUploadService
     Task<OnboardingDocument> UploadDocumentAsync(IFormFile file, string uploadedBy, string? contentHeading, string? contentSubHeading, IFormFile? imageFile = null);
     Task<string> ExtractTextFromDocumentAsync(string filePath);
     Task<string> ExtractTextFromDocumentAsync(IFormFile file);
-    Task<IEnumerable<OnboardingDocument>> GetAllDocumentsAsync();
+    Task<IEnumerable<DocumentUploadResponse>> GetAllDocumentsAsync();
     Task<PaginatedResponse<DocumentUploadResponse>> GetAllDocumentsPaginatedAsync(PaginationRequest request);
-    Task<OnboardingDocument?> GetDocumentByIdAsync(int id);
+    Task<DocumentUploadResponse?> GetDocumentByIdAsync(int id);
     Task<DocumentUploadResponse> ProcessDocumentUploadAsync(IFormFile file, string userId, string? contentHeading, string? contentSubHeading, IFormFile? imageFile = null);
     Task<IEnumerable<DocumentUploadResponse>> ProcessDocumentsBulkAsync(IEnumerable<IFormFile> files, string userId, string? contentHeading, string? contentSubHeading);
 }

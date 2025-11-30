@@ -1,25 +1,26 @@
 namespace Lafarge_Onboarding.domain.Dtos.OnboardingResponses;
 
-public class EtiquetteResponse
+public sealed record EtiquetteResponse
 {
-    public List<RegionalInfoItem> RegionalInfo { get; set; } = new();
-    public List<FirstImpressionItem> FirstImpression { get; set; } = new();
+    public int Id { get; init; }
+    public List<RegionalInfoItem> RegionalInfo { get; init; } = new();
+    public List<FirstImpressionItem> FirstImpression { get; init; } = new();
 }
 
-public class RegionalInfoItem
+public sealed record RegionalInfoItem
 {
-    public string Title { get; set; } = string.Empty;
-    public List<Region> Regions { get; set; } = new();
+    public string Title { get; init; } = string.Empty;
+    public List<Region> Regions { get; init; } = new();
 }
 
-public class Region
+public sealed record Region
 {
-    public string Title { get; set; } = string.Empty;
-    public string Content { get; set; } = string.Empty;
+    public string Title { get; init; } = string.Empty;
+    public string Content { get; init; } = string.Empty;
 }
 
-public class FirstImpressionItem
+public sealed record FirstImpressionItem
 {
-    public string Title { get; set; } = string.Empty;
-    public string Content { get; set; } = string.Empty;
+    public string Title { get; init; } = string.Empty;
+    public string Content { get; init; } = string.Empty;
 }

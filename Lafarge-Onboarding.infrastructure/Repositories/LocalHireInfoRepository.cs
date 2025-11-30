@@ -1,3 +1,4 @@
+
 namespace Lafarge_Onboarding.infrastructure.Repositories;
 
 public sealed class LocalHireInfoRepository : ILocalHireInfoRepository
@@ -15,11 +16,45 @@ public sealed class LocalHireInfoRepository : ILocalHireInfoRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<LocalHireInfo?> GetLatestAsync()
+    public async Task<LocalHireInfoResponse?> GetLatestAsync()
     {
-        return await _context.LocalHireInfos
+        var entity = await _context.LocalHireInfos
             .OrderByDescending(l => l.CreatedAt)
+            .AsNoTracking()
             .FirstOrDefaultAsync();
+
+        if (entity == null) return null;
+
+        return new LocalHireInfoResponse
+        {
+            Id = entity.Id,
+            AboutLafarge = new AboutLafarge
+            {
+                WhoWeAre = entity.WhoWeAre,
+                Footprint = new Footprint
+                {
+                    Summary = entity.FootprintSummary,
+                    Plants = JsonSerializer.Deserialize<List<string>>(entity.Plants) ?? new List<string>(),
+                    ReadyMix = JsonSerializer.Deserialize<List<string>>(entity.ReadyMix) ?? new List<string>(),
+                    Depots = entity.Depots
+                },
+                Culture = new Culture
+                {
+                    Summary = entity.CultureSummary,
+                    Pillars = entity.Pillars,
+                    Innovation = entity.Innovation,
+                    HuaxinSpirit = JsonSerializer.Deserialize<List<string>>(entity.HuaxinSpirit) ?? new List<string>(),
+                    RespectfulWorkplaces = entity.RespectfulWorkplaces
+                }
+            },
+            GeneralIntro = new GeneralIntro
+            {
+                Introduction = entity.Introduction,
+                CountryFacts = JsonSerializer.Deserialize<List<CountryFact>>(entity.CountryFacts) ?? new List<CountryFact>(),
+                InterestingFacts = JsonSerializer.Deserialize<List<string>>(entity.InterestingFacts) ?? new List<string>(),
+                Holidays = JsonSerializer.Deserialize<List<Holiday>>(entity.Holidays) ?? new List<Holiday>()
+            }
+        };
     }
 
     public async Task UpdateAsync(LocalHireInfo localHireInfo)
@@ -31,7 +66,7 @@ public sealed class LocalHireInfoRepository : ILocalHireInfoRepository
 
     public async Task DeleteLatestAsync()
     {
-        var latest = await GetLatestAsync();
+        var latest = await _context.LocalHireInfos.OrderByDescending(l => l.CreatedAt).FirstOrDefaultAsync();
         if (latest != null)
         {
             _context.LocalHireInfos.Remove(latest);

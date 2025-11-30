@@ -3,7 +3,7 @@ namespace Lafarge_Onboarding.application.Abstraction;
 public interface IEtiquetteRepository
 {
     Task AddAsync(Etiquette etiquette);
-    Task<Etiquette?> GetLatestAsync();
+    Task<EtiquetteResponse?> GetLatestAsync();
     Task UpdateAsync(Etiquette etiquette);
     Task DeleteLatestAsync();
     Task DeleteAllAsync();

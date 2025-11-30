@@ -1,26 +1,27 @@
 namespace Lafarge_Onboarding.domain.Dtos.OnboardingResponses;
 
-public class OnboardingPlanResponse
+public sealed record OnboardingPlanResponse
 {
-    public Buddy Buddy { get; set; } = new();
-    public Checklist Checklist { get; set; } = new();
+    public int Id { get; init; }
+    public Buddy Buddy { get; init; } = new();
+    public Checklist Checklist { get; init; } = new();
 }
 
-public class Buddy
+public sealed record Buddy
 {
-    public string Details { get; set; } = string.Empty;
-    public List<string> Activities { get; set; } = new();
+    public string Details { get; init; } = string.Empty;
+    public List<string> Activities { get; init; } = new();
 }
 
-public class Checklist
+public sealed record Checklist
 {
-    public string Summary { get; set; } = string.Empty;
-    public List<TimelineItem> Timeline { get; set; } = new();
+    public string Summary { get; init; } = string.Empty;
+    public List<TimelineItem> Timeline { get; init; } = new();
 }
 
-public class TimelineItem
+public sealed record TimelineItem
 {
-    public string Period { get; set; } = string.Empty;
-    public List<string> Tasks { get; set; } = new();
-    public List<string> SubTasks { get; set; } = new();
+    public string Period { get; init; } = string.Empty;
+    public List<string> Tasks { get; init; } = new();
+    public List<string> SubTasks { get; init; } = new();
 }

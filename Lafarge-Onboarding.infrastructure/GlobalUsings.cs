@@ -1,8 +1,14 @@
 ﻿global using Lafarge_Onboarding.application.Abstraction;
-global using Lafarge_Onboarding.domain.Entities;
 global using Lafarge_Onboarding.domain.Dtos.OnboardingRequests;
+global using Lafarge_Onboarding.domain.Dtos.OnboardingResponses;
+global using Lafarge_Onboarding.domain.Entities;
 global using Lafarge_Onboarding.infrastructure.Data;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore;
-global using System;
+global using Microsoft.EntityFrameworkCore.Infrastructure;
+global using Microsoft.EntityFrameworkCore.Migrations;
+global using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 global using Microsoft.Extensions.DependencyInjection;
+global using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+global using System;
+global using System.Text.Json;

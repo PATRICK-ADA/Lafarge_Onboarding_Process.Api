@@ -5,31 +5,23 @@ public sealed class UsersService : IUsersService
     private readonly IUsersRepository _usersRepository;
     private readonly UserManager<Users> _userManager;
     private readonly RoleManager<Role> _roleManager;
+    private readonly IAuditService _auditService;
 
-    public UsersService(IUsersRepository usersRepository, UserManager<Users> userManager, RoleManager<Role> roleManager)
+    public UsersService(IUsersRepository usersRepository, UserManager<Users> userManager, RoleManager<Role> roleManager, IAuditService auditService)
     {
         _usersRepository = usersRepository;
         _userManager = userManager;
         _roleManager = roleManager;
+        _auditService = auditService;
     }
 
     public async Task<PaginatedResponse<GetUserResponse>> GetUsersAsync(PaginationRequest pagination)
     {
         var (users, totalCount) = await _usersRepository.GetUsersAsync(pagination);
-        var userResponses = users.Select(u => new GetUserResponse
-        {
-            Id = u.Id,
-            Name = $"{u.FirstName} {u.LastName}",
-            Email = u.Email!,
-            PhoneNumber = u.PhoneNumber,
-            Role = u.Role,
-            Department = null,
-            CreatedAt = u.CreatedAt
-        });
 
         return new PaginatedResponse<GetUserResponse>
         {
-            Content = userResponses,
+            Content = users,
             PageNumber = pagination.PageNumber,
             PageSize = pagination.PageSize,
             TotalCount = totalCount
@@ -193,19 +185,10 @@ public sealed class UsersService : IUsersService
     public async Task<PaginatedResponse<GetUserResponse>> GetUsersByRoleAsync(string role, PaginationRequest pagination)
     {
         var (users, totalCount) = await _usersRepository.GetUsersByRoleAsync(role, pagination);
-        var userResponses = users.Select(u => new GetUserResponse
-        {
-            Id = u.Id,
-            Name = $"{u.FirstName} {u.LastName}",
-            Email = u.Email!,
-            PhoneNumber = u.PhoneNumber,
-            Role = u.Role,
-            CreatedAt = u.CreatedAt
-        });
 
         return new PaginatedResponse<GetUserResponse>
         {
-            Content = userResponses,
+            Content = users,
             PageNumber = pagination.PageNumber,
             PageSize = pagination.PageSize,
             TotalCount = totalCount
@@ -215,20 +198,10 @@ public sealed class UsersService : IUsersService
     public async Task<PaginatedResponse<GetUserResponse>> GetUsersByNameAsync(string name, PaginationRequest pagination)
     {
         var (users, totalCount) = await _usersRepository.GetUsersByNameAsync(name, pagination);
-        var userResponses = users.Select(u => new GetUserResponse
-        {
-            Id = u.Id,
-            Name = $"{u.FirstName} {u.LastName}",
-            Email = u.Email!,
-            PhoneNumber = u.PhoneNumber,
-            Role = u.Role,
-            Department = null,
-            CreatedAt = u.CreatedAt
-        });
 
         return new PaginatedResponse<GetUserResponse>
         {
-            Content = userResponses,
+            Content = users,
             PageNumber = pagination.PageNumber,
             PageSize = pagination.PageSize,
             TotalCount = totalCount
@@ -243,32 +216,46 @@ public sealed class UsersService : IUsersService
             throw new KeyNotFoundException("User not found");
         }
 
-        var userResponse = new GetUserResponse
-        {
-            Id = user.Id,
-            Name = $"{user.FirstName} {user.LastName}",
-            Email = user.Email!,
-            PhoneNumber = user.PhoneNumber,
-            Role = user.Role,
-            Department = null,
-            CreatedAt = user.CreatedAt
-        };
-
-        return userResponse;
+        return user;
     }
 
     public async Task<string> UpdateUserByIdAsync(string id, UpdateUserRequest request)
     {
+        var existingUser = await _usersRepository.GetUserByIdAsync(id);
+        if (existingUser == null)
+        {
+            throw new KeyNotFoundException("User not found");
+        }
+        var oldValues = JsonSerializer.Serialize(existingUser);
+
         var result = await _usersRepository.UpdateUserAsync(id, request);
         if (!result)
         {
             throw new KeyNotFoundException("User not found");
         }
+
+        var updatedUser = await _usersRepository.GetUserByIdAsync(id);
+        var newValues = JsonSerializer.Serialize(updatedUser);
+
+        await _auditService.LogAuditEventAsync("UPDATE", "User", id, oldValues: oldValues, newValues: newValues);
+
         return "User updated successfully";
     }
 
     public async Task<string> UpdateBulkUsersAsync(UpdateBulkUsersRequest request)
     {
+        var ids = request.Users.Select(u => u.Id).ToList();
+        var oldUsers = new List<GetUserResponse>();
+        foreach (var id in ids)
+        {
+            var user = await _usersRepository.GetUserByIdAsync(id);
+            if (user != null)
+            {
+                oldUsers.Add(user);
+            }
+        }
+        var oldValues = JsonSerializer.Serialize(oldUsers);
+
         var errors = new List<string>();
         var successCount = 0;
 
@@ -311,6 +298,19 @@ public sealed class UsersService : IUsersService
             }
         }
 
+        var newUsers = new List<GetUserResponse>();
+        foreach (var id in ids)
+        {
+            var user = await _usersRepository.GetUserByIdAsync(id);
+            if (user != null)
+            {
+                newUsers.Add(user);
+            }
+        }
+        var newValues = JsonSerializer.Serialize(newUsers);
+
+        await _auditService.LogAuditEventAsync("UPDATE", "User", "bulk", oldValues: oldValues, newValues: newValues);
+
         var message = $"{successCount} users updated successfully.";
         if (errors.Any())
         {
@@ -322,17 +322,30 @@ public sealed class UsersService : IUsersService
 
     public async Task<string> DeleteUserByIdAsync(string id)
     {
+        var existingUser = await _usersRepository.GetUserByIdAsync(id);
+        if (existingUser == null)
+        {
+            throw new KeyNotFoundException("User not found");
+        }
+        var oldValues = JsonSerializer.Serialize(existingUser);
         var result = await _usersRepository.DeleteUserAsync(id);
         if (!result)
         {
             throw new KeyNotFoundException("User not found");
         }
+        await _auditService.LogAuditEventAsync("DELETE", "User", id, oldValues: oldValues, newValues: null);
         return $"User deleted successfully";
     }
 
     public async Task<string> DeleteBulkUsersByRoleAsync(string role)
     {
+        var paginationForCount = new PaginationRequest { PageNumber = 1, PageSize = 1 };
+        var (_, totalCount) = await _usersRepository.GetUsersByRoleAsync(role, paginationForCount);
+        var pagination = new PaginationRequest { PageNumber = 1, PageSize = totalCount };
+        var (oldUsers, _) = await _usersRepository.GetUsersByRoleAsync(role, pagination);
+        var oldValues = JsonSerializer.Serialize(oldUsers);
         var count = await _usersRepository.DeleteUsersByRoleAsync(role);
+        await _auditService.LogAuditEventAsync("DELETE", "User", "bulk-by-role", oldValues: oldValues, newValues: null);
         return $"{count} users deleted successfully";
     }
 }

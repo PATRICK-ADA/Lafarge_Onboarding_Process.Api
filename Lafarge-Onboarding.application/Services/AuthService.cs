@@ -7,19 +7,22 @@ public sealed class AuthService : IAuthService
     private readonly IConfiguration _configuration;
     private readonly ILogger<AuthService> _logger;
     private readonly IEmailService _emailService;
+    private readonly IAuditService _auditService;
 
     public AuthService(
         UserManager<Users> userManager,
         RoleManager<Role> roleManager,
         IConfiguration configuration,
         ILogger<AuthService> logger,
-        IEmailService emailService)
+        IEmailService emailService,
+        IAuditService auditService)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _configuration = configuration;
         _logger = logger;
         _emailService = emailService;
+        _auditService = auditService;
     }
 
     public async Task<string> GenerateJwtToken(Users user)
@@ -112,11 +115,29 @@ public sealed class AuthService : IAuthService
             }
 
             _logger.LogInformation("User registered successfully: {UserId}", user.Id);
+
+            // Audit logging for successful user registration
+            await _auditService.LogAuditEventAsync(
+                action: "REGISTER",
+                resourceType: "User",
+                resourceId: user.Id,
+                description: $"User {user.Email} registered successfully with role {request.Role}",
+                status: "Success");
+
             return new AuthRegisterResponse { RegisterationStatus = "User registered successfully" };
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error during user registration for email: {Email}", request.Email);
+
+            // Audit logging for failed user registration
+            await _auditService.LogAuditEventAsync(
+                action: "REGISTER",
+                resourceType: "User",
+                resourceId: null,
+                description: $"Failed to register user {request.Email}: {ex.Message}",
+                status: "Failed");
+
             throw;
         }
     }
@@ -131,6 +152,15 @@ public sealed class AuthService : IAuthService
             if (user == null)
             {
                 _logger.LogWarning("Invalid login credentials for email: {Email}", request.Email);
+
+                // Audit logging for failed login attempt
+                await _auditService.LogAuditEventAsync(
+                    action: "LOGIN",
+                    resourceType: "User",
+                    resourceId: null,
+                    description: $"Failed login attempt for email {request.Email}",
+                    status: "Failed");
+
                 return null;
             }
 
@@ -150,6 +180,15 @@ public sealed class AuthService : IAuthService
             };
 
             _logger.LogInformation("Login successful for user: {UserId}", user.Id);
+
+            // Audit logging for successful login
+            await _auditService.LogAuditEventAsync(
+                action: "LOGIN",
+                resourceType: "User",
+                resourceId: user.Id,
+                description: $"User {user.Email} logged in successfully",
+                status: "Success");
+
             return response;
         }
         catch (Exception ex)
@@ -167,6 +206,15 @@ public sealed class AuthService : IAuthService
         if (user == null)
         {
             _logger.LogWarning("User not found: {UserId}", userId);
+
+            // Audit logging for failed role assignment - user not found
+            await _auditService.LogAuditEventAsync(
+                action: "ASSIGN_ROLE",
+                resourceType: "User",
+                resourceId: userId,
+                description: $"Failed to assign role {roleName} - user not found",
+                status: "Failed");
+
             return false;
         }
 
@@ -182,6 +230,15 @@ public sealed class AuthService : IAuthService
             if (!roleResult.Succeeded)
             {
                 _logger.LogError("Failed to create role: {Role}", roleName);
+
+                // Audit logging for failed role creation
+                await _auditService.LogAuditEventAsync(
+                    action: "CREATE_ROLE",
+                    resourceType: "Role",
+                    resourceId: null,
+                    description: $"Failed to create role {roleName} for user assignment",
+                    status: "Failed");
+
                 return false;
             }
         }
@@ -190,10 +247,28 @@ public sealed class AuthService : IAuthService
         if (!result.Succeeded)
         {
             _logger.LogError("Failed to assign role {Role} to user: {UserId}", roleName, userId);
+
+            // Audit logging for failed role assignment
+            await _auditService.LogAuditEventAsync(
+                action: "ASSIGN_ROLE",
+                resourceType: "User",
+                resourceId: userId,
+                description: $"Failed to assign role {roleName} to user {user.Email}",
+                status: "Failed");
+
             return false;
         }
 
         _logger.LogInformation("Role {Role} assigned successfully to user: {UserId}", roleName, userId);
+
+        // Audit logging for successful role assignment
+        await _auditService.LogAuditEventAsync(
+            action: "ASSIGN_ROLE",
+            resourceType: "User",
+            resourceId: userId,
+            description: $"Role {roleName} assigned to user {user.Email}",
+            status: "Success");
+
         return true;
     }
 
@@ -205,6 +280,15 @@ public sealed class AuthService : IAuthService
         if (user == null)
         {
             _logger.LogWarning("User not found for email: {Email}", request.Email);
+
+            // Audit logging for failed password reset request - user not found
+            await _auditService.LogAuditEventAsync(
+                action: "FORGOT_PASSWORD",
+                resourceType: "User",
+                resourceId: null,
+                description: $"Password reset requested for non-existent email {request.Email}",
+                status: "Failed");
+
             throw new Exception("User not found");
         }
 
@@ -217,10 +301,28 @@ public sealed class AuthService : IAuthService
         if (!emailSent)
         {
             _logger.LogError("Failed to send password reset email to {Email}", request.Email);
+
+            // Audit logging for failed password reset email sending
+            await _auditService.LogAuditEventAsync(
+                action: "FORGOT_PASSWORD",
+                resourceType: "User",
+                resourceId: user.Id,
+                description: $"Failed to send password reset email to {request.Email}",
+                status: "Failed");
+
             throw new Exception("Failed to send reset email");
         }
 
         _logger.LogInformation("Password reset email sent successfully to {Email}", request.Email);
+
+        // Audit logging for successful password reset request
+        await _auditService.LogAuditEventAsync(
+            action: "FORGOT_PASSWORD",
+            resourceType: "User",
+            resourceId: user.Id,
+            description: $"Password reset email sent successfully to {request.Email}",
+            status: "Success");
+
         return "Password reset email sent successfully";
     }
 
@@ -232,6 +334,15 @@ public sealed class AuthService : IAuthService
         if (user == null)
         {
             _logger.LogWarning("User not found for email: {Email}", request.Email);
+
+            // Audit logging for failed password reset - user not found
+            await _auditService.LogAuditEventAsync(
+                action: "RESET_PASSWORD",
+                resourceType: "User",
+                resourceId: null,
+                description: $"Password reset attempted for non-existent email {request.Email}",
+                status: "Failed");
+
             throw new Exception("User not found");
         }
 
@@ -241,10 +352,28 @@ public sealed class AuthService : IAuthService
         {
             _logger.LogError("Failed to reset password for user: {UserId}. Errors: {Errors}",
                 user.Id, string.Join(", ", result.Errors.Select(e => e.Description)));
+
+            // Audit logging for failed password reset
+            await _auditService.LogAuditEventAsync(
+                action: "RESET_PASSWORD",
+                resourceType: "User",
+                resourceId: user.Id,
+                description: $"Failed to reset password for {request.Email}: {string.Join(", ", result.Errors.Select(e => e.Description))}",
+                status: "Failed");
+
             throw new Exception("Invalid or expired reset token");
         }
 
         _logger.LogInformation("Password reset successfully for user: {UserId}", user.Id);
+
+        // Audit logging for successful password reset
+        await _auditService.LogAuditEventAsync(
+            action: "RESET_PASSWORD",
+            resourceType: "User",
+            resourceId: user.Id,
+            description: $"Password reset successfully for {request.Email}",
+            status: "Success");
+
         return "Password reset successfully";
     }
 }

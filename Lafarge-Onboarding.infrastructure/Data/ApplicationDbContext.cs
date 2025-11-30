@@ -16,6 +16,7 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
     public DbSet<Contact> Contacts { get; set; }
     public DbSet<AllContact> AllContacts { get; set; }
     public DbSet<AppVersion> AppVersions { get; set; }
+    public DbSet<AuditLog> AuditLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -117,7 +118,24 @@ public class ApplicationDbContext : IdentityDbContext<Users, Role, string>
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
         });
 
-        
+        modelBuilder.Entity<AuditLog>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Timestamp).IsRequired();
+            entity.Property(e => e.Action).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.ResourceType).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.Status).IsRequired().HasMaxLength(20);
+            entity.Property(e => e.OldValues).HasColumnType("text");
+            entity.Property(e => e.NewValues).HasColumnType("text");
+            entity.Property(e => e.AdditionalData).HasColumnType("text");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
+            entity.HasIndex(e => e.Timestamp);
+            entity.HasIndex(e => e.UserId);
+            entity.HasIndex(e => e.Action);
+            entity.HasIndex(e => e.ResourceType);
+            entity.HasIndex(e => new { e.ResourceType, e.ResourceId });
+        });
+
         modelBuilder.Entity<Users>(entity =>
         {
             entity.Property(e => e.FirstName).HasMaxLength(100);

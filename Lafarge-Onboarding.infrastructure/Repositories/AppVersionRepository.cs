@@ -15,11 +15,21 @@ public sealed class AppVersionRepository : IAppVersionRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<AppVersion?> GetLatestAsync(string appName)
+    public async Task<AppVersionResponse?> GetLatestAsync(string appName)
     {
         return await _context.AppVersions
             .Where(av => av.AppName == appName)
             .OrderByDescending(av => av.Version)
+            .AsNoTracking()
+            .Select(av => new AppVersionResponse
+            {
+                Id = av.Id,
+                Version = av.Version,
+                Link = av.Link,
+                Features = av.Features,
+                AppName = av.AppName,
+                IsCritical = av.IsCritical
+            })
             .FirstOrDefaultAsync();
     }
 

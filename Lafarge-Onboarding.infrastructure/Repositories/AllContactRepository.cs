@@ -17,7 +17,7 @@ public sealed class AllContactRepository : IAllContactRepository
 
     public async Task<List<AllContact>> GetAllAsync()
     {
-        return await _context.AllContacts.ToListAsync();
+        return await _context.AllContacts.AsNoTracking().ToListAsync();
     }
 
     public async Task DeleteAllAsync()

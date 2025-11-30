@@ -4,15 +4,18 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
 {
     private readonly ILocalHireInfoRepository _repository;
     private readonly IImprovedDocumentExtractionService _extractionService;
+    private readonly IAuditService _auditService;
     private readonly ILogger<LocalHireInfoService> _logger;
 
     public LocalHireInfoService(
         ILocalHireInfoRepository repository,
         IImprovedDocumentExtractionService extractionService,
+        IAuditService auditService,
         ILogger<LocalHireInfoService> logger)
     {
         _repository = repository;
         _extractionService = extractionService;
+        _auditService = auditService;
         _logger = logger;
     }
 
@@ -30,6 +33,8 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
         var entity = MapToEntity(parsedData);
         await _repository.AddAsync(entity);
 
+        await _auditService.LogAuditEventAsync("UPLOAD", "LocalHireInfo", entity.Id.ToString(), "Uploaded local hire info document");
+
         _logger.LogInformation("Local hire info saved successfully with ID: {Id}", entity.Id);
         return parsedData;
     }
@@ -38,14 +43,14 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
     {
         _logger.LogInformation("Retrieving latest local hire info");
 
-        var entity = await _repository.GetLatestAsync();
-        if (entity == null)
+        var response = await _repository.GetLatestAsync();
+        if (response == null)
         {
             _logger.LogInformation("No local hire info found");
             return null;
         }
 
-        var response = MapToResponse(entity);
+        await _auditService.LogAuditEventAsync("RETRIEVE", "LocalHireInfo", "latest", "Retrieved local hire info");
         _logger.LogInformation("Local hire info retrieved successfully");
         return response;
     }
@@ -53,13 +58,21 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
     public async Task DeleteLatestAsync()
     {
         _logger.LogInformation("Deleting latest local hire info");
-        await _repository.DeleteLatestAsync();
-        _logger.LogInformation("Latest local hire info deleted successfully");
+        var entity = await _repository.GetLatestAsync();
+        if (entity != null)
+        {
+            await _repository.DeleteLatestAsync();
+            await _auditService.LogAuditEventAsync("DELETE", "LocalHireInfo", entity.Id.ToString(), "Deleted latest local hire info");
+            _logger.LogInformation("Latest local hire info deleted successfully");
+        }
+        else
+        {
+            _logger.LogInformation("No local hire info to delete");
+        }
     }
 
     private LocalHireInfoResponse ParseLocalHireInfo(Dictionary<string, string> sections)
     {
-        var response = new LocalHireInfoResponse();
         var fullText = string.Join("\n", sections.Values);
         var lines = fullText.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                            .Select(line => line.Trim())
@@ -68,24 +81,35 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
 
         _logger.LogInformation("Total lines extracted: {Count}", lines.Length);
 
-        response.AboutLafarge.WhoWeAre = ExtractSection(lines, "1. WHO WE ARE", "2. LAFARGE AFRICA FOOTPRINT");
-        response.AboutLafarge.Footprint.Summary = ExtractSection(lines, "2. LAFARGE AFRICA FOOTPRINT", "Cement Plants");
-        response.AboutLafarge.Footprint.Plants = ExtractList(lines, "Cement Plants", "ReadyMix Locations");
-        response.AboutLafarge.Footprint.ReadyMix = ExtractList(lines, "ReadyMix Locations", "Depots");
-        response.AboutLafarge.Footprint.Depots = ExtractSection(lines, "Depots", "3. LAFARGE AFRICA CULTURE");
-
-        response.AboutLafarge.Culture.Summary = ExtractSection(lines, "3. LAFARGE AFRICA CULTURE", "Behavioural Pillars");
-        response.AboutLafarge.Culture.Pillars = ExtractSection(lines, "Behavioural Pillars", "Huaxin Spirit");
-        response.AboutLafarge.Culture.HuaxinSpirit = ExtractList(lines, "Huaxin Spirit", "• Innovation:");
-        response.AboutLafarge.Culture.Innovation = ExtractSection(lines, "• Innovation:", "Respectful Workplaces");
-        response.AboutLafarge.Culture.RespectfulWorkplaces = ExtractSection(lines, "Respectful Workplaces", "1.1. General introduction");
-
-        response.GeneralIntro.Introduction = ExtractSection(lines, "1.1. General introduction", "Country:");
-        response.GeneralIntro.CountryFacts = ExtractCountryFacts(lines);
-        response.GeneralIntro.InterestingFacts = ExtractList(lines, "Interesting Facts About Nigeria", "National Holidays");
-        response.GeneralIntro.Holidays = ExtractHolidays(lines);
-
-        return response;
+        return new LocalHireInfoResponse
+        {
+            AboutLafarge = new AboutLafarge
+            {
+                WhoWeAre = ExtractSection(lines, "1. WHO WE ARE", "2. LAFARGE AFRICA FOOTPRINT"),
+                Footprint = new Footprint
+                {
+                    Summary = ExtractSection(lines, "2. LAFARGE AFRICA FOOTPRINT", "Cement Plants"),
+                    Plants = ExtractList(lines, "Cement Plants", "ReadyMix Locations"),
+                    ReadyMix = ExtractList(lines, "ReadyMix Locations", "Depots"),
+                    Depots = ExtractSection(lines, "Depots", "3. LAFARGE AFRICA CULTURE")
+                },
+                Culture = new Culture
+                {
+                    Summary = ExtractSection(lines, "3. LAFARGE AFRICA CULTURE", "Behavioural Pillars"),
+                    Pillars = ExtractSection(lines, "Behavioural Pillars", "Huaxin Spirit"),
+                    HuaxinSpirit = ExtractList(lines, "Huaxin Spirit", "• Innovation:"),
+                    Innovation = ExtractSection(lines, "• Innovation:", "Respectful Workplaces"),
+                    RespectfulWorkplaces = ExtractSection(lines, "Respectful Workplaces", "1.1. General introduction")
+                }
+            },
+            GeneralIntro = new GeneralIntro
+            {
+                Introduction = ExtractSection(lines, "1.1. General introduction", "Country:"),
+                CountryFacts = ExtractCountryFacts(lines),
+                InterestingFacts = ExtractList(lines, "Interesting Facts About Nigeria", "National Holidays"),
+                Holidays = ExtractHolidays(lines)
+            }
+        };
     }
 
     private string ExtractSection(string[] lines, string startHeading, string stopHeading)

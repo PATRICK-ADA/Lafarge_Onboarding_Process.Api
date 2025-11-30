@@ -6,13 +6,16 @@ public sealed class ContactService : IContactService
 {
     private readonly IContactRepository _repository;
     private readonly ILogger<ContactService> _logger;
+    private readonly IAuditService _auditService;
 
     public ContactService(
         IContactRepository repository,
-        ILogger<ContactService> logger)
+        ILogger<ContactService> logger,
+        IAuditService auditService)
     {
         _repository = repository;
         _logger = logger;
+        _auditService = auditService;
     }
 
     public async Task UploadContactsAsync(IFormFile file)
@@ -31,21 +34,28 @@ public sealed class ContactService : IContactService
         await _repository.AddRangeAsync(entities);
 
         _logger.LogInformation("Contacts uploaded successfully");
+
+        await _auditService.LogAuditEventAsync(
+            action: "UPLOAD",
+            resourceType: "Contact",
+            description: $"Uploaded {entities.Count} contacts from file {file.FileName}",
+            status: "Success");
     }
 
     public async Task<List<ContactDto>> GetLocalContactsAsync()
     {
         _logger.LogInformation("Retrieving local contacts");
 
-        var entities = await _repository.GetAllAsync();
-        var dtos = entities.Select(c => new ContactDto
-        {
-            Name = c.Name,
-            Email = c.Email,
-            Phone = c.Phone
-        }).ToList();
+        var dtos = await _repository.GetAllAsync();
 
         _logger.LogInformation("Retrieved {Count} contacts", dtos.Count);
+
+        await _auditService.LogAuditEventAsync(
+            action: "READ",
+            resourceType: "Contact",
+            description: $"Retrieved {dtos.Count} contacts",
+            status: "Success");
+
         return dtos;
     }
 

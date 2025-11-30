@@ -1,3 +1,4 @@
+
 namespace Lafarge_Onboarding.infrastructure.Repositories;
 
 public sealed class EtiquetteRepository : IEtiquetteRepository
@@ -15,11 +16,21 @@ public sealed class EtiquetteRepository : IEtiquetteRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Etiquette?> GetLatestAsync()
+    public async Task<EtiquetteResponse?> GetLatestAsync()
     {
-        return await _context.Etiquettes
+        var entity = await _context.Etiquettes
             .OrderByDescending(e => e.CreatedAt)
+            .AsNoTracking()
             .FirstOrDefaultAsync();
+
+        if (entity == null) return null;
+
+        return new EtiquetteResponse
+        {
+            Id = entity.Id,
+            RegionalInfo = JsonSerializer.Deserialize<List<RegionalInfoItem>>(entity.RegionalInfo) ?? new List<RegionalInfoItem>(),
+            FirstImpression = JsonSerializer.Deserialize<List<FirstImpressionItem>>(entity.FirstImpression) ?? new List<FirstImpressionItem>()
+        };
     }
 
     public async Task UpdateAsync(Etiquette etiquette)
@@ -31,7 +42,7 @@ public sealed class EtiquetteRepository : IEtiquetteRepository
 
     public async Task DeleteLatestAsync()
     {
-        var latest = await GetLatestAsync();
+        var latest = await _context.Etiquettes.OrderByDescending(e => e.CreatedAt).FirstOrDefaultAsync();
         if (latest != null)
         {
             _context.Etiquettes.Remove(latest);

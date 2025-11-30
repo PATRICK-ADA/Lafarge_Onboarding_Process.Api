@@ -1,4 +1,5 @@
 
+
 namespace Lafarge_Onboarding.infrastructure.Repositories;
 
 public sealed class UsersRepository : IUsersRepository
@@ -10,13 +11,23 @@ public sealed class UsersRepository : IUsersRepository
         _context = context;
     }
 
-    public async Task<(IEnumerable<Users> Users, int TotalCount)> GetUsersAsync(PaginationRequest pagination)
+    public async Task<(IEnumerable<GetUserResponse> Users, int TotalCount)> GetUsersAsync(PaginationRequest pagination)
     {
         var query = _context.Users.AsQueryable();
         var totalCount = await query.CountAsync();
         var users = await query
             .Skip(pagination.Skip)
             .Take(pagination.PageSize)
+            .AsNoTracking()
+            .Select(u => new GetUserResponse
+            {
+                Id = u.Id,
+                Name = $"{u.FirstName} {u.LastName}",
+                Email = u.Email!,
+                PhoneNumber = u.PhoneNumber,
+                Role = u.Role,
+                CreatedAt = u.CreatedAt
+            })
             .ToListAsync();
 
         return (users, totalCount);
@@ -29,19 +40,29 @@ public sealed class UsersRepository : IUsersRepository
         return count;
     }
 
-    public async Task<(IEnumerable<Users> Users, int TotalCount)> GetUsersByRoleAsync(string role, PaginationRequest pagination)
+    public async Task<(IEnumerable<GetUserResponse> Users, int TotalCount)> GetUsersByRoleAsync(string role, PaginationRequest pagination)
     {
         var query = _context.Users.Where(u => u.Role == role);
         var totalCount = await query.CountAsync();
         var users = await query
             .Skip(pagination.Skip)
             .Take(pagination.PageSize)
+            .AsNoTracking()
+            .Select(u => new GetUserResponse
+            {
+                Id = u.Id,
+                Name = $"{u.FirstName} {u.LastName}",
+                Email = u.Email!,
+                PhoneNumber = u.PhoneNumber,
+                Role = u.Role,
+                CreatedAt = u.CreatedAt
+            })
             .ToListAsync();
 
         return (users, totalCount);
     }
 
-    public async Task<(IEnumerable<Users> Users, int TotalCount)> GetUsersByNameAsync(string name, PaginationRequest pagination)
+    public async Task<(IEnumerable<GetUserResponse> Users, int TotalCount)> GetUsersByNameAsync(string name, PaginationRequest pagination)
     {
         var query = _context.Users.Where(u =>
             (u.FirstName + " " + u.LastName).Contains(name) ||
@@ -51,14 +72,36 @@ public sealed class UsersRepository : IUsersRepository
         var users = await query
             .Skip(pagination.Skip)
             .Take(pagination.PageSize)
+            .AsNoTracking()
+            .Select(u => new GetUserResponse
+            {
+                Id = u.Id,
+                Name = $"{u.FirstName} {u.LastName}",
+                Email = u.Email!,
+                PhoneNumber = u.PhoneNumber,
+                Role = u.Role,
+                CreatedAt = u.CreatedAt
+            })
             .ToListAsync();
 
         return (users, totalCount);
     }
 
-    public async Task<Users?> GetUserByIdAsync(string id)
+    public async Task<GetUserResponse?> GetUserByIdAsync(string id)
     {
-        return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+        return await _context.Users
+            .AsNoTracking()
+            .Where(u => u.Id == id)
+            .Select(u => new GetUserResponse
+            {
+                Id = u.Id,
+                Name = $"{u.FirstName} {u.LastName}",
+                Email = u.Email!,
+                PhoneNumber = u.PhoneNumber,
+                Role = u.Role,
+                CreatedAt = u.CreatedAt
+            })
+            .FirstOrDefaultAsync();
     }
 
     public async Task<bool> UpdateUserAsync(string id, UpdateUserRequest request)

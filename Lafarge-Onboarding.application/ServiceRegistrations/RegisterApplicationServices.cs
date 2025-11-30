@@ -26,6 +26,7 @@ public static class RegisterApplicationServices
             new Lafarge_Onboarding.application.Services.CachedWelcomeMessageService(
                 provider.GetRequiredService<Lafarge_Onboarding.application.Services.WelcomeMessageService>(),
                 provider.GetRequiredService<IMemoryCache>(),
+                provider.GetRequiredService<IAuditService>(),
                 provider.GetRequiredService<ILogger<Lafarge_Onboarding.application.Services.CachedWelcomeMessageService>>()));
                 
         services.AddScoped<IOnboardingPlanService, Lafarge_Onboarding.application.Services.OnboardingPlanService>();
@@ -34,6 +35,7 @@ public static class RegisterApplicationServices
         services.AddScoped<IAllContactService, Lafarge_Onboarding.application.Services.AllContactService>();
         services.AddScoped<IGalleryService, Lafarge_Onboarding.application.Services.GalleryService>();
         services.AddScoped<IAppVersionService, Lafarge_Onboarding.application.Services.AppVersionService>();
+        services.AddScoped<IAuditService, Lafarge_Onboarding.application.Services.AuditService>();
 
 
         return services;

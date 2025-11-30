@@ -1,8 +1,8 @@
 namespace Lafarge_Onboarding.domain.Dtos.OnboardingRequests;
 
-public class ContactDto
+public sealed record ContactDto
 {
-    public string Name { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public string Phone { get; set; } = string.Empty;
+    public required string Name { get; init; }
+    public required string Email { get; init; }
+    public required string Phone { get; init; }
 }

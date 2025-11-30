@@ -15,9 +15,17 @@ public sealed class ContactRepository : IContactRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<Contact>> GetAllAsync()
+    public async Task<List<ContactDto>> GetAllAsync()
     {
-        return await _context.Contacts.ToListAsync();
+        return await _context.Contacts
+            .AsNoTracking()
+            .Select(c => new ContactDto
+            {
+                Name = c.Name,
+                Email = c.Email,
+                Phone = c.Phone
+            })
+            .ToListAsync();
     }
 
     public async Task DeleteAllAsync()

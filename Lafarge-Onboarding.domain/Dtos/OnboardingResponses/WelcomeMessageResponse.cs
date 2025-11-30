@@ -1,15 +1,15 @@
 namespace Lafarge_Onboarding.domain.Dtos.OnboardingResponses;
 
-public class WelcomeMessageResponse
+public sealed record WelcomeMessageResponse
 {
-    public WelcomePerson Ceo { get; set; } = new();
-    public WelcomePerson Hr { get; set; } = new();
+    public WelcomePerson Ceo { get; init; } = new();
+    public WelcomePerson Hr { get; init; } = new();
 }
 
-public class WelcomePerson
+public sealed record WelcomePerson
 {
-    public string Name { get; set; } = string.Empty;
-    public string Title { get; set; } = string.Empty;
-    public string ImageUrl { get; set; } = string.Empty;
-    public string Message { get; set; } = string.Empty;
+    public string Name { get; init; } = string.Empty;
+    public string Title { get; init; } = string.Empty;
+    public string ImageUrl { get; init; } = string.Empty;
+    public string Message { get; init; } = string.Empty;
 }

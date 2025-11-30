@@ -1,37 +1,37 @@
 namespace Lafarge_Onboarding.domain.Dtos.OnboardingResponses;
 
-public class AllContactsResponse
+public sealed record AllContactsResponse
 {
-    public List<EmergencyContact> Emergency { get; set; } = new();
-    public List<LafargeContact> Lafarge { get; set; } = new();
-    public List<EmbassyContact> Embassies { get; set; } = new();
-    public List<HrContact> Hr { get; set; } = new();
+    public List<EmergencyContact> Emergency { get; init; } = new();
+    public List<LafargeContact> Lafarge { get; init; } = new();
+    public List<EmbassyContact> Embassies { get; init; } = new();
+    public List<HrContact> Hr { get; init; } = new();
 }
 
-public class EmergencyContact
+public sealed record EmergencyContact
 {
-    public string Service { get; set; } = string.Empty;
-    public string Info { get; set; } = string.Empty;
+    public string Service { get; init; } = string.Empty;
+    public string Info { get; init; } = string.Empty;
 }
 
-public class LafargeContact
+public sealed record LafargeContact
 {
-    public string Function { get; set; } = string.Empty;
-    public string Name { get; set; } = string.Empty;
-    public string Phone { get; set; } = string.Empty;
+    public string Function { get; init; } = string.Empty;
+    public string Name { get; init; } = string.Empty;
+    public string Phone { get; init; } = string.Empty;
 }
 
-public class EmbassyContact
+public sealed record EmbassyContact
 {
-    public string Embassy { get; set; } = string.Empty;
-    public string Address { get; set; } = string.Empty;
-    public string Website { get; set; } = string.Empty;
-    public string Phone { get; set; } = string.Empty;
+    public string Embassy { get; init; } = string.Empty;
+    public string Address { get; init; } = string.Empty;
+    public string Website { get; init; } = string.Empty;
+    public string Phone { get; init; } = string.Empty;
 }
 
-public class HrContact
+public sealed record HrContact
 {
-    public string Name { get; set; } = string.Empty;
-    public string Designation { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
+    public string Name { get; init; } = string.Empty;
+    public string Designation { get; init; } = string.Empty;
+    public string Email { get; init; } = string.Empty;
 }

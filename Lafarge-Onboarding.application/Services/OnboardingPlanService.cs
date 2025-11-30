@@ -4,15 +4,18 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
 {
     private readonly IOnboardingPlanRepository _repository;
     private readonly IDocumentsUploadService _documentService;
+    private readonly IAuditService _auditService;
     private readonly ILogger<OnboardingPlanService> _logger;
 
     public OnboardingPlanService(
         IOnboardingPlanRepository repository,
         IDocumentsUploadService documentService,
+        IAuditService auditService,
         ILogger<OnboardingPlanService> logger)
     {
         _repository = repository;
         _documentService = documentService;
+        _auditService = auditService;
         _logger = logger;
     }
 
@@ -30,6 +33,8 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
         var entity = MapToEntity(parsedData);
         await _repository.AddAsync(entity);
 
+        await _auditService.LogAuditEventAsync("UPLOAD", "OnboardingPlan", entity.Id.ToString(), "Uploaded onboarding plan document");
+
         _logger.LogInformation("Onboarding plan saved successfully with ID: {Id}", entity.Id);
         return parsedData;
     }
@@ -38,14 +43,14 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
     {
         _logger.LogInformation("Retrieving latest onboarding plan");
 
-        var entity = await _repository.GetLatestAsync();
-        if (entity == null)
+        var response = await _repository.GetLatestAsync();
+        if (response == null)
         {
             _logger.LogInformation("No onboarding plan found");
             return null;
         }
 
-        var response = MapToResponse(entity);
+        await _auditService.LogAuditEventAsync("RETRIEVE", "OnboardingPlan", "latest", "Retrieved onboarding plan");
         _logger.LogInformation("Onboarding plan retrieved successfully");
         return response;
     }
@@ -53,29 +58,40 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
     public async Task DeleteLatestAsync()
     {
         _logger.LogInformation("Deleting latest onboarding plan");
-        await _repository.DeleteLatestAsync();
-        _logger.LogInformation("Latest onboarding plan deleted successfully");
+        var entity = await _repository.GetLatestAsync();
+        if (entity != null)
+        {
+            await _repository.DeleteLatestAsync();
+            await _auditService.LogAuditEventAsync("DELETE", "OnboardingPlan", entity.Id.ToString(), "Deleted latest onboarding plan");
+            _logger.LogInformation("Latest onboarding plan deleted successfully");
+        }
+        else
+        {
+            _logger.LogInformation("No onboarding plan to delete");
+        }
     }
 
     private OnboardingPlanResponse ParseOnboardingPlan(string text)
     {
-        var response = new OnboardingPlanResponse();
-
-        // Split text into lines for processing
+       
         var lines = text.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                        .Select(line => line.Trim())
                        .Where(line => !string.IsNullOrWhiteSpace(line))
                        .ToArray();
 
-        // Parse Buddy section
-        response.Buddy.Details = ExtractBuddyDetails(lines);
-        response.Buddy.Activities = ExtractBuddyActivities(lines);
-
-        // Parse Checklist section
-        response.Checklist.Summary = ExtractChecklistSummary(lines);
-        response.Checklist.Timeline = ExtractTimeline(lines);
-
-        return response;
+        return new OnboardingPlanResponse
+        {
+            Buddy = new Buddy
+            {
+                Details = ExtractBuddyDetails(lines),
+                Activities = ExtractBuddyActivities(lines)
+            },
+            Checklist = new Checklist
+            {
+                Summary = ExtractChecklistSummary(lines),
+                Timeline = ExtractTimeline(lines)
+            }
+        };
     }
 
     private string ExtractBuddyDetails(string[] lines)
@@ -96,7 +112,7 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
         for (int i = startIndex; i < lines.Length; i++)
         {
             var line = lines[i];
-            // Stop at bullet points or next major section
+     
             if (line.Trim().StartsWith("•") || line.ToUpper().Contains("NEW HIRE CHECKLIST"))
             {
                 break;
@@ -112,7 +128,7 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
         var activities = new List<string>();
         var startIndex = -1;
 
-        // Find the buddy section
+       
         for (int i = 0; i < lines.Length; i++)
         {
             if (lines[i].ToUpper().Contains("YOUR ONBOARDING BUDDY"))
@@ -129,23 +145,23 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
             return activities;
         }
 
-        // Skip the introductory paragraph and collect bullet points
+        
         bool foundIntro = false;
         for (int i = startIndex; i < lines.Length; i++)
         {
             var line = lines[i];
-            // Stop at next major section
+      
             if (line.ToUpper().Contains("NEW HIRE CHECKLIST"))
             {
                 _logger.LogDebug("Stopping buddy activities extraction at line {LineIndex} due to: '{Line}'", i, line);
                 break;
             }
 
-            // Skip empty lines
+        
             if (string.IsNullOrWhiteSpace(line))
                 continue;
 
-            // Look for the introductory text
+           
             if (!foundIntro && line.Contains("You may also want to consult"))
             {
                 foundIntro = true;
@@ -153,7 +169,7 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
                 continue;
             }
 
-            // After finding intro, collect all non-empty lines as activities
+            
             if (foundIntro)
             {
                 var activity = line.Trim();
@@ -187,7 +203,7 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
         for (int i = startIndex; i < lines.Length; i++)
         {
             var line = lines[i];
-            // Stop at timeline sections
+           
             if (line.Contains("Day One:") || line.Contains("First week") ||
                 line.Contains("Within first month") || line.Contains("Within first three"))
             {
@@ -205,7 +221,7 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
         var timeline = new List<TimelineItem>();
         var startIndex = -1;
 
-        // Find the checklist section
+        
         for (int i = 0; i < lines.Length; i++)
         {
             if (lines[i].ToUpper().Contains("NEW HIRE CHECKLIST"))
@@ -223,7 +239,7 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
         {
             var line = lines[i];
 
-            // Look for period headers like "Day One:", "First week", "Within first month", etc.
+      
             if (line.Contains("Day One:") || line.Contains("First week") ||
                 line.Contains("Within first month") || line.Contains("Within first three"))
             {
@@ -254,7 +270,7 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
             {
                 var trimmed = line.Trim();
 
-                // Check if this is a subtask (contains "○" or specific subtask indicators, or indented)
+              
                 if (trimmed.StartsWith("○") || trimmed.StartsWith("  ") || trimmed.StartsWith("\t"))
                 {
                     trimmed = trimmed.TrimStart('○', ' ', '\t');
@@ -272,7 +288,7 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
                       !line.Contains("Day One:") && !line.Contains("First week") &&
                       !line.Contains("Within first month") && !line.Contains("Within first three"))
             {
-                // Continuation of previous task
+               
                 if (currentItem.Tasks.Count > 0)
                 {
                     currentItem.Tasks[currentItem.Tasks.Count - 1] += " " + line.Trim();

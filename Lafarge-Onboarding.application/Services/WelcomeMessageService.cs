@@ -41,14 +41,13 @@ public sealed class WelcomeMessageService : IWelcomeMessageService
     {
         _logger.LogInformation("Retrieving latest welcome messages");
 
-        var entity = await _repository.GetLatestAsync();
-        if (entity == null)
+        var response = await _repository.GetLatestAsync();
+        if (response == null)
         {
             _logger.LogInformation("No welcome messages found");
             return null;
         }
 
-        var response = MapToResponse(entity);
         _logger.LogInformation("Welcome messages retrieved successfully");
         return response;
     }
@@ -62,23 +61,29 @@ public sealed class WelcomeMessageService : IWelcomeMessageService
 
     private WelcomeMessageResponse ParseWelcomeMessages(string ceoText, string hrText)
     {
-        var response = new WelcomeMessageResponse();
-
         // Parse CEO
         var ceoParsed = ParsePersonText(ceoText);
-        response.Ceo.Name = ceoParsed.Name;
-        response.Ceo.Title = ceoParsed.Title;
-        response.Ceo.Message = ceoParsed.Message;
-        response.Ceo.ImageUrl = string.Empty; // Placeholder
-
+        
         // Parse HR
         var hrParsed = ParsePersonText(hrText);
-        response.Hr.Name = hrParsed.Name;
-        response.Hr.Title = hrParsed.Title;
-        response.Hr.Message = hrParsed.Message;
-        response.Hr.ImageUrl = string.Empty; // Placeholder
 
-        return response;
+        return new WelcomeMessageResponse
+        {
+            Ceo = new WelcomePerson
+            {
+                Name = ceoParsed.Name,
+                Title = ceoParsed.Title,
+                Message = ceoParsed.Message,
+                ImageUrl = string.Empty
+            },
+            Hr = new WelcomePerson
+            {
+                Name = hrParsed.Name,
+                Title = hrParsed.Title,
+                Message = hrParsed.Message,
+                ImageUrl = string.Empty
+            }
+        };
     }
 
 

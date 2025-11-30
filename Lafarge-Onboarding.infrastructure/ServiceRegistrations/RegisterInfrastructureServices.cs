@@ -17,6 +17,7 @@ public static class RegisterInfrastructureServices
         services.AddScoped<IAllContactRepository, Lafarge_Onboarding.infrastructure.Repositories.AllContactRepository>();
         services.AddScoped<IGalleryRepository, Lafarge_Onboarding.infrastructure.Repositories.GalleryRepository>();
         services.AddScoped<IAppVersionRepository, Lafarge_Onboarding.infrastructure.Repositories.AppVersionRepository>();
+        services.AddScoped<IAuditLogRepository, Lafarge_Onboarding.infrastructure.Repositories.AuditLogRepository>();
 
         return services;
     }

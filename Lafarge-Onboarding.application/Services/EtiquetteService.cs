@@ -4,15 +4,18 @@ public sealed class EtiquetteService : IEtiquetteService
 {
     private readonly IEtiquetteRepository _repository;
     private readonly IDocumentsUploadService _documentService;
+    private readonly IAuditService _auditService;
     private readonly ILogger<EtiquetteService> _logger;
 
     public EtiquetteService(
         IEtiquetteRepository repository,
         IDocumentsUploadService documentService,
+        IAuditService auditService,
         ILogger<EtiquetteService> logger)
     {
         _repository = repository;
         _documentService = documentService;
+        _auditService = auditService;
         _logger = logger;
     }
 
@@ -30,6 +33,8 @@ public sealed class EtiquetteService : IEtiquetteService
         var entity = MapToEntity(parsedData);
         await _repository.AddAsync(entity);
 
+        await _auditService.LogAuditEventAsync("UPLOAD", "Etiquette", entity.Id.ToString(), "Uploaded etiquette document");
+
         _logger.LogInformation("Etiquette saved successfully with ID: {Id}", entity.Id);
         return parsedData;
     }
@@ -38,14 +43,14 @@ public sealed class EtiquetteService : IEtiquetteService
     {
         _logger.LogInformation("Retrieving latest etiquette");
 
-        var entity = await _repository.GetLatestAsync();
-        if (entity == null)
+        var response = await _repository.GetLatestAsync();
+        if (response == null)
         {
             _logger.LogInformation("No etiquette found");
             return null;
         }
 
-        var response = MapToResponse(entity);
+        await _auditService.LogAuditEventAsync("RETRIEVE", "Etiquette", "latest", "Retrieved etiquette");
         _logger.LogInformation("Etiquette retrieved successfully");
         return response;
     }
@@ -53,27 +58,32 @@ public sealed class EtiquetteService : IEtiquetteService
     public async Task DeleteLatestAsync()
     {
         _logger.LogInformation("Deleting latest etiquette");
-        await _repository.DeleteLatestAsync();
-        _logger.LogInformation("Latest etiquette deleted successfully");
+        var entity = await _repository.GetLatestAsync();
+        if (entity != null)
+        {
+            await _repository.DeleteLatestAsync();
+            await _auditService.LogAuditEventAsync("DELETE", "Etiquette", entity.Id.ToString(), "Deleted latest etiquette");
+            _logger.LogInformation("Latest etiquette deleted successfully");
+        }
+        else
+        {
+            _logger.LogInformation("No etiquette to delete");
+        }
     }
 
     private EtiquetteResponse ParseEtiquette(string text)
     {
-        var response = new EtiquetteResponse();
-
         // Split text into lines for processing
         var lines = text.Split('\n', StringSplitOptions.RemoveEmptyEntries)
                        .Select(line => line.Trim())
                        .Where(line => !string.IsNullOrWhiteSpace(line))
                        .ToArray();
 
-        // Parse Regional Info
-        response.RegionalInfo = ParseRegionalInfo(lines);
-
-        // Parse First Impression
-        response.FirstImpression = ParseFirstImpression(lines);
-
-        return response;
+        return new EtiquetteResponse
+        {
+            RegionalInfo = ParseRegionalInfo(lines),
+            FirstImpression = ParseFirstImpression(lines)
+        };
     }
 
     private List<RegionalInfoItem> ParseRegionalInfo(string[] lines)

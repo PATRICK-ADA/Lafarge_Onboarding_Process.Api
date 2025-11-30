@@ -1,3 +1,4 @@
+
 namespace Lafarge_Onboarding.application.Services;
 
 public sealed class GalleryService : IGalleryService
@@ -5,12 +6,14 @@ public sealed class GalleryService : IGalleryService
     private readonly IGalleryRepository _repository;
     private readonly ILogger<GalleryService> _logger;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IAuditService _auditService;
 
-    public GalleryService(IGalleryRepository repository, ILogger<GalleryService> logger, IHttpContextAccessor httpContextAccessor)
+    public GalleryService(IGalleryRepository repository, ILogger<GalleryService> logger, IHttpContextAccessor httpContextAccessor, IAuditService auditService)
     {
         _repository = repository;
         _logger = logger;
         _httpContextAccessor = httpContextAccessor;
+        _auditService = auditService;
     }
 
     public async Task<string> UploadImageAsync(IFormFile image, string imageType)
@@ -32,8 +35,16 @@ public sealed class GalleryService : IGalleryService
         };
 
         await _repository.AddAsync(gallery);
-        
+
         _logger.LogInformation("Successfully uploaded {ImageType} image with ID: {Id}", imageType, gallery.Id);
+
+        await _auditService.LogAuditEventAsync(
+            action: "UPLOAD",
+            resourceType: "Gallery",
+            resourceId: gallery.Id.ToString(),
+            description: $"Uploaded {imageType} image: {gallery.ImageName}",
+            newValues: JsonSerializer.Serialize(new { gallery.Id, gallery.ImageName, gallery.ImageType }));
+
         return $"{imageType} image uploaded successfully";
     }
 
@@ -63,42 +74,93 @@ public sealed class GalleryService : IGalleryService
         return outputStream.ToArray();
     }
 
-    public async Task<List<Gallery>> GetCeoImagesAsync()
+    public async Task<List<GalleryResponse>> GetCeoImagesAsync()
     {
         _logger.LogInformation("Retrieving CEO images");
-        return await _repository.GetByImageTypeAsync("CEO");
+        var images = await _repository.GetByImageTypeAsync("CEO");
+
+        await _auditService.LogAuditEventAsync(
+            action: "RETRIEVE",
+            resourceType: "Gallery",
+            resourceId: "CEO",
+            description: $"Retrieved {images.Count} CEO images");
+
+        return images;
     }
 
-    public async Task<List<Gallery>> GetHrImagesAsync()
+    public async Task<List<GalleryResponse>> GetHrImagesAsync()
     {
         _logger.LogInformation("Retrieving HR images");
-        return await _repository.GetByImageTypeAsync("HR");
+        var images = await _repository.GetByImageTypeAsync("HR");
+
+        await _auditService.LogAuditEventAsync(
+            action: "RETRIEVE",
+            resourceType: "Gallery",
+            resourceId: "HR",
+            description: $"Retrieved {images.Count} HR images");
+
+        return images;
     }
 
-    public async Task<List<Gallery>> GetAnyImagesAsync()
+    public async Task<List<GalleryResponse>> GetAnyImagesAsync()
     {
         _logger.LogInformation("Retrieving general images");
-        return await _repository.GetByImageTypeAsync("GENERAL");
+        var images = await _repository.GetByImageTypeAsync("GENERAL");
+
+        await _auditService.LogAuditEventAsync(
+            action: "RETRIEVE",
+            resourceType: "Gallery",
+            resourceId: "GENERAL",
+            description: $"Retrieved {images.Count} general images");
+
+        return images;
     }
 
     public async Task<string> DeleteCeoImagesAsync()
     {
         _logger.LogInformation("Deleting all CEO images");
+        var oldImages = await _repository.GetByImageTypeAsync("CEO");
         await _repository.DeleteByImageTypeAsync("CEO");
+
+        await _auditService.LogAuditEventAsync(
+            action: "DELETE",
+            resourceType: "Gallery",
+            resourceId: "CEO",
+            description: $"Deleted {oldImages.Count} CEO images",
+            oldValues: JsonSerializer.Serialize(oldImages.Select(i => new { i.Id, i.ImageName })));
+
         return "CEO images deleted successfully";
     }
 
     public async Task<string> DeleteHrImagesAsync()
     {
         _logger.LogInformation("Deleting all HR images");
+        var oldImages = await _repository.GetByImageTypeAsync("HR");
         await _repository.DeleteByImageTypeAsync("HR");
+
+        await _auditService.LogAuditEventAsync(
+            action: "DELETE",
+            resourceType: "Gallery",
+            resourceId: "HR",
+            description: $"Deleted {oldImages.Count} HR images",
+            oldValues: JsonSerializer.Serialize(oldImages.Select(i => new { i.Id, i.ImageName })));
+
         return "HR images deleted successfully";
     }
 
     public async Task<string> DeleteAnyImagesAsync()
     {
         _logger.LogInformation("Deleting all general images");
+        var oldImages = await _repository.GetByImageTypeAsync("GENERAL");
         await _repository.DeleteByImageTypeAsync("GENERAL");
+
+        await _auditService.LogAuditEventAsync(
+            action: "DELETE",
+            resourceType: "Gallery",
+            resourceId: "GENERAL",
+            description: $"Deleted {oldImages.Count} general images",
+            oldValues: JsonSerializer.Serialize(oldImages.Select(i => new { i.Id, i.ImageName })));
+
         return "General images deleted successfully";
     }
 
@@ -106,8 +168,20 @@ public sealed class GalleryService : IGalleryService
     {
         _logger.LogInformation("Deleting image with ID: {Id}", id);
         var image = await _repository.GetByIdAsync(id);
-        return image == null 
-            ? throw new KeyNotFoundException($"Image with ID {id} not found")
-            : await Task.Run(async () => { await _repository.DeleteByIdAsync(id); return "Image deleted successfully"; });
+        if (image == null)
+        {
+            throw new KeyNotFoundException($"Image with ID {id} not found");
+        }
+
+        await _repository.DeleteByIdAsync(id);
+
+        await _auditService.LogAuditEventAsync(
+            action: "DELETE",
+            resourceType: "Gallery",
+            resourceId: id.ToString(),
+            description: $"Deleted image: {image.ImageName}",
+            oldValues: JsonSerializer.Serialize(new { image.Id, image.ImageName, image.ImageType }));
+
+        return "Image deleted successfully";
     }
 }

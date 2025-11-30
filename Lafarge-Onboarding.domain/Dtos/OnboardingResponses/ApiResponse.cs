@@ -25,7 +25,7 @@ public sealed record ApiResponse<T>
         return new ApiResponse<T>
         {
             Message = message,
-            Result = (T)(object)"Failure!"!,
+            Result = default(T),
             StatusCode = statusCode,
             IsSuccessful = false,
             TimeStamp = DateTime.UtcNow

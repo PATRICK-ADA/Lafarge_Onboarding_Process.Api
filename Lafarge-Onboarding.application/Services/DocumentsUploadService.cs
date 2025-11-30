@@ -5,23 +5,38 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
 {
     private readonly IDocumentsUploadRepository _repository;
     private readonly ILogger<DocumentsUploadService> _logger;
+    private readonly IAuditService _auditService;
 
-    public DocumentsUploadService(IDocumentsUploadRepository repository, ILogger<DocumentsUploadService> logger)
+    public DocumentsUploadService(IDocumentsUploadRepository repository, ILogger<DocumentsUploadService> logger, IAuditService auditService)
     {
         _repository = repository;
         _logger = logger;
+        _auditService = auditService;
     }
 
-    public async Task<IEnumerable<OnboardingDocument>> GetAllDocumentsAsync()
+    public async Task<IEnumerable<DocumentUploadResponse>> GetAllDocumentsAsync()
     {
         _logger.LogInformation("Retrieving all documents");
-        return await _repository.GetAllAsync();
+        var result = await _repository.GetAllAsync();
+
+        // Log audit event for retrieval
+        await _auditService.LogAuditEventAsync("READ", "Document", null, "Retrieved all documents");
+
+        return result;
     }
 
-    public async Task<OnboardingDocument?> GetDocumentByIdAsync(int id)
+    public async Task<DocumentUploadResponse?> GetDocumentByIdAsync(int id)
     {
         _logger.LogInformation("Retrieving document by ID: {DocumentId}", id);
-        return await _repository.GetByIdAsync(id);
+        var result = await _repository.GetByIdAsync(id);
+
+        if (result != null)
+        {
+            // Log audit event for retrieval
+            await _auditService.LogAuditEventAsync("READ", "Document", id.ToString(), $"Retrieved document by ID: {id}");
+        }
+
+        return result;
     }
 
     public async Task<PaginatedResponse<DocumentUploadResponse>> GetAllDocumentsPaginatedAsync(PaginationRequest request)
@@ -30,26 +45,19 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
 
         var (documents, totalCount) = await _repository.GetAllPaginatedAsync(request);
 
-        var data = documents.Select(doc => new DocumentUploadResponse
-        {
-            BodyContentFileType = doc.FileName,
-            BodyFilePath = doc.FilePath,
-            BodyContent = doc.Content,
-            ImageFilePath = doc.ImageFilePath,
-            ImageFileType = doc.ImageFileType,
-            ContentHeading = doc.ContentHeading,
-            ContentSubHeading = doc.ContentSubHeading
-        });
-
         var response = new PaginatedResponse<DocumentUploadResponse>
         {
-            Content = data,
+            Content = documents,
             PageNumber = request.PageNumber,
             PageSize = request.PageSize,
             TotalCount = totalCount
         };
 
         _logger.LogInformation("Retrieved {DocumentCount} documents out of {TotalCount}", documents.Count(), totalCount);
+
+        // Log audit event for paginated retrieval
+        await _auditService.LogAuditEventAsync("READ", "Document", null, $"Retrieved paginated documents: page {request.PageNumber}, size {request.PageSize}");
+
         return response;
     }
 
@@ -181,6 +189,9 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
         _logger.LogInformation("Saving document metadata to database");
         await _repository.AddAsync(document);
         _logger.LogInformation("Document upload completed successfully. Document ID: {DocumentId}", document.Id);
+
+        // Log audit event for document upload
+        await _auditService.LogAuditEventAsync("CREATE", "Document", document.Id.ToString(), $"Document uploaded: {document.FileName}");
 
         return document;
     }
@@ -397,6 +408,9 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
 
         var responses = await Task.WhenAll(tasks);
         _logger.LogInformation("Bulk document upload completed. Processed {DocumentCount} documents", responses.Length);
+
+        // Log audit event for bulk upload
+        await _auditService.LogAuditEventAsync("CREATE", "Document", null, "Bulk document upload completed", additionalData: $"{responses.Length} documents uploaded");
 
         return responses;
     }

@@ -4,11 +4,13 @@ public sealed class AppVersionService : IAppVersionService
 {
     private readonly IAppVersionRepository _repository;
     private readonly ILogger<AppVersionService> _logger;
+    private readonly IAuditService _auditService;
 
-    public AppVersionService(IAppVersionRepository repository, ILogger<AppVersionService> logger)
+    public AppVersionService(IAppVersionRepository repository, ILogger<AppVersionService> logger, IAuditService auditService)
     {
         _repository = repository;
         _logger = logger;
+        _auditService = auditService;
     }
 
     public async Task<AppVersionResponse> CreateAppVersionAsync(AppVersionRequest request)
@@ -28,6 +30,9 @@ public sealed class AppVersionService : IAppVersionService
 
         _logger.LogInformation("App version created successfully with ID: {Id}", entity.Id);
 
+        // Log audit event for app version creation
+        await _auditService.LogAuditEventAsync("CREATE", "AppVersion", entity.Id.ToString(), null, "Success", null, JsonSerializer.Serialize(entity), null);
+
         return MapToResponse(entity);
     }
 
@@ -35,15 +40,18 @@ public sealed class AppVersionService : IAppVersionService
     {
         _logger.LogInformation("Retrieving latest app version for {AppName}", appName);
 
-        var entity = await _repository.GetLatestAsync(appName);
-        if (entity == null)
+        var response = await _repository.GetLatestAsync(appName);
+        if (response == null)
         {
             _logger.LogInformation("No app version found for {AppName}", appName);
             return null;
         }
 
-        var response = MapToResponse(entity);
         _logger.LogInformation("Latest app version retrieved successfully");
+
+        // Log audit event for app version retrieval
+        await _auditService.LogAuditEventAsync("READ", "AppVersion", response.Id.ToString(), $"Latest app version retrieved: {response.AppName} v{response.Version}");
+
         return response;
     }
 

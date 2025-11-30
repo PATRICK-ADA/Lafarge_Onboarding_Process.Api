@@ -15,11 +15,21 @@ public sealed class GalleryRepository : IGalleryRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<Gallery>> GetByImageTypeAsync(string imageType)
+    public async Task<List<GalleryResponse>> GetByImageTypeAsync(string imageType)
     {
         return await _context.Galleries
             .Where(g => g.ImageType == imageType)
             .OrderByDescending(g => g.UploadedAt)
+            .AsNoTracking()
+            .Select(g => new GalleryResponse
+            {
+                Id = g.Id,
+                ImageName = g.ImageName,
+                ImageBase64 = g.ImageBase64,
+                ImageType = g.ImageType,
+                UploadedAt = g.UploadedAt,
+                UploadedBy = g.UploadedBy
+            })
             .ToListAsync();
     }
 
@@ -33,9 +43,21 @@ public sealed class GalleryRepository : IGalleryRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Gallery?> GetByIdAsync(int id)
+    public async Task<GalleryResponse?> GetByIdAsync(int id)
     {
-        return await _context.Galleries.FindAsync(id);
+        return await _context.Galleries
+            .Where(g => g.Id == id)
+            .AsNoTracking()
+            .Select(g => new GalleryResponse
+            {
+                Id = g.Id,
+                ImageName = g.ImageName,
+                ImageBase64 = g.ImageBase64,
+                ImageType = g.ImageType,
+                UploadedAt = g.UploadedAt,
+                UploadedBy = g.UploadedBy
+            })
+            .FirstOrDefaultAsync();
     }
 
     public async Task DeleteByIdAsync(int id)

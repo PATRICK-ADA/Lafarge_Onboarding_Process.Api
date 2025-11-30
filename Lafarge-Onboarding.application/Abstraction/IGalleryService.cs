@@ -3,9 +3,9 @@ namespace Lafarge_Onboarding.application.Abstraction;
 public interface IGalleryService
 {
     Task<string> UploadImageAsync(IFormFile image, string imageType);
-    Task<List<Gallery>> GetCeoImagesAsync();
-    Task<List<Gallery>> GetHrImagesAsync();
-    Task<List<Gallery>> GetAnyImagesAsync();
+    Task<List<GalleryResponse>> GetCeoImagesAsync();
+    Task<List<GalleryResponse>> GetHrImagesAsync();
+    Task<List<GalleryResponse>> GetAnyImagesAsync();
     Task<string> DeleteCeoImagesAsync();
     Task<string> DeleteHrImagesAsync();
     Task<string> DeleteAnyImagesAsync();
