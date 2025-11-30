@@ -20,7 +20,6 @@ public class AuditLoggingMiddleware
     {
         var startTime = DateTime.UtcNow;
 
-        // Capture request details
         var requestDetails = new
         {
             Method = context.Request.Method,
@@ -31,13 +30,11 @@ public class AuditLoggingMiddleware
             ContentLength = context.Request.ContentLength
         };
 
-        // Capture user context
         var userId = context.User?.FindFirst("sub")?.Value ??
                     context.User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         var userName = context.User?.Identity?.Name;
         var userEmail = context.User?.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
 
-        // Get client IP address
         var ipAddress = context.Connection.RemoteIpAddress?.ToString();
         if (string.IsNullOrEmpty(ipAddress) || ipAddress == "::1")
         {
@@ -57,10 +54,10 @@ public class AuditLoggingMiddleware
                 var endTime = DateTime.UtcNow;
                 var duration = endTime - startTime;
 
-                // Determine status based on response code
+                
                 var status = context.Response.StatusCode >= 200 && context.Response.StatusCode < 300 ? "Success" : "Failed";
 
-                // Create additional data with timing and response info
+               
                 var additionalData = JsonSerializer.Serialize(new
                 {
                     DurationMs = duration.TotalMilliseconds,
@@ -69,10 +66,10 @@ public class AuditLoggingMiddleware
                     ResponseContentLength = context.Response.ContentLength
                 });
 
-                // Extract resource type from path (e.g., /api/Users/... -> Users)
+               
                 var resourceType = ExtractResourceType(context.Request.Path.ToString());
 
-                // Log audit event
+            
                 await auditService.LogAuditEventAsync(
                     action: context.Request.Method,
                     resourceType: resourceType,
@@ -90,7 +87,7 @@ public class AuditLoggingMiddleware
                 var endTime = DateTime.UtcNow;
                 var duration = endTime - startTime;
 
-                // Log failed request
+                
                 var additionalData = JsonSerializer.Serialize(new
                 {
                     DurationMs = duration.TotalMilliseconds,
@@ -98,7 +95,7 @@ public class AuditLoggingMiddleware
                     StackTrace = ex.StackTrace
                 });
 
-                // Extract resource type from path
+               
                 var resourceType = ExtractResourceType(context.Request.Path.ToString());
 
                 await auditService.LogAuditEventAsync(
@@ -113,7 +110,7 @@ public class AuditLoggingMiddleware
                 _logger.LogError(ex, "Audit logged for failed request {Method} {Path} - Duration: {Duration}ms",
                     context.Request.Method, context.Request.Path, duration.TotalMilliseconds);
 
-                // Re-throw the exception to let other middleware handle it
+               
                 throw;
             }
         }
@@ -121,7 +118,7 @@ public class AuditLoggingMiddleware
 
     private static string ExtractResourceType(string path)
     {
-        // Extract resource from path like /api/Users/... -> Users
+    
         var segments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
         return segments.Length > 1 && segments[0].Equals("api", StringComparison.OrdinalIgnoreCase)
             ? segments[1]

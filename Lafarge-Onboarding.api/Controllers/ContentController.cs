@@ -28,8 +28,9 @@ public sealed class ContentController : ControllerBase
     {
         _logger.LogInformation("Local hire info upload request received");
 
-        return (file == null || file.Length == 0) ? BadRequest(ApiResponse<object>.Failure("File is required")) :
-           Ok(ApiResponse<LocalHireInfoResponse>.Success(await _localHireInfoService.ExtractAndSaveLocalHireInfoAsync(file)));
+        return (file == null || file.Length == 0) 
+        ? BadRequest(ApiResponse<object>.Failure("File is required")) 
+        : Ok(ApiResponse<LocalHireInfoResponse>.Success(await _localHireInfoService.ExtractAndSaveLocalHireInfoAsync(file)));
 
     }
 
@@ -89,7 +90,9 @@ public sealed class ContentController : ControllerBase
         _logger.LogInformation("Get local hire info request received");
 
             var result = await _localHireInfoService.GetLocalHireInfoAsync();
-            return result == null ? NotFound(ApiResponse<object>.Failure("Local hire info not found", "404")) : Ok(ApiResponse<LocalHireInfoResponse>.Success(result));
+            return result == null 
+            ? NotFound(ApiResponse<object>.Failure("Local hire info not found", "404")) 
+            : Ok(ApiResponse<LocalHireInfoResponse>.Success(result));
 
     }
 
@@ -102,7 +105,9 @@ public sealed class ContentController : ControllerBase
         _logger.LogInformation("Get welcome messages request received");
 
         var result = await _welcomeMessageService.GetWelcomeMessagesAsync();
-        return result == null ? NotFound(ApiResponse<object>.Failure("Welcome messages not found", "404")) : Ok(ApiResponse<WelcomeMessageResponse>.Success(result));
+        return result == null 
+        ? NotFound(ApiResponse<object>.Failure("Welcome messages not found", "404")) 
+        : Ok(ApiResponse<WelcomeMessageResponse>.Success(result));
     }
 
 
@@ -115,7 +120,9 @@ public sealed class ContentController : ControllerBase
         _logger.LogInformation("Get onboarding plan request received");
 
         var result = await _onboardingPlanService.GetOnboardingPlanAsync();
-        return result == null ? NotFound(ApiResponse<object>.Failure("Onboarding plan not found", "404")) : Ok(ApiResponse<OnboardingPlanResponse>.Success(result));
+        return result == null 
+        ? NotFound(ApiResponse<object>.Failure("Onboarding plan not found", "404")) 
+        : Ok(ApiResponse<OnboardingPlanResponse>.Success(result));
     }
 
     [HttpGet("get-etiquette")]
@@ -127,7 +134,9 @@ public sealed class ContentController : ControllerBase
         _logger.LogInformation("Get etiquette request received");
 
         var result = await _etiquetteService.GetEtiquetteAsync();
-        return result == null ? NotFound(ApiResponse<object>.Failure("Etiquette not found", "404")) : Ok(ApiResponse<EtiquetteResponse>.Success(result));
+        return result == null 
+        ? NotFound(ApiResponse<object>.Failure("Etiquette not found", "404")) 
+        : Ok(ApiResponse<EtiquetteResponse>.Success(result));
     }
 
     [HttpDelete("delete-local-hire-info")]

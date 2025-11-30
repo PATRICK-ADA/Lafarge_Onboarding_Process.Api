@@ -21,10 +21,10 @@ public sealed class DocumentsUploadController : ControllerBase
     {
     
       return   request.ContentBodyUpload == null 
-      ? BadRequest(ApiResponse<DocumentUploadResponse>.Failure("ContentBodyUpload file is required")) 
-      :User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value == null 
-      ?Unauthorized(ApiResponse<DocumentUploadResponse>.Failure("User not authenticated", "401")) 
-      :Ok(await _uploadService.ProcessDocumentUploadAsync(request.ContentBodyUpload, User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value, request.ContentHeading, request.ContentSubHeading, request.ImageUpload));
+               ? BadRequest(ApiResponse<DocumentUploadResponse>.Failure("ContentBodyUpload file is required")) 
+               : User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value == null 
+               ? Unauthorized(ApiResponse<DocumentUploadResponse>.Failure("User not authenticated", "401")) 
+               : Ok(await _uploadService.ProcessDocumentUploadAsync(request.ContentBodyUpload, User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value, request.ContentHeading, request.ContentSubHeading, request.ImageUpload));
 
     }
 

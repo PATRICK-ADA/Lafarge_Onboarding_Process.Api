@@ -59,7 +59,9 @@ public sealed class GalleryController : ControllerBase
     public async Task<IActionResult> GetCeoImages()
     {
         var images = await _galleryService.GetCeoImagesAsync();
-        return images.Count == 0 ? NotFound(ApiResponse<object>.Failure("Ceo Image not found", "404")) : Ok(ApiResponse<List<GalleryResponse>>.Success(images));
+        return images.Count == 0 
+               ? NotFound(ApiResponse<object>.Failure("Ceo Image not found", "404")) 
+               : Ok(ApiResponse<List<GalleryResponse>>.Success(images));
     }
 
     [HttpGet("get-hr-images")]
@@ -68,7 +70,9 @@ public sealed class GalleryController : ControllerBase
     public async Task<IActionResult> GetHrImages()
     {
         var images = await _galleryService.GetHrImagesAsync();
-        return images.Count == 0 ? NotFound(ApiResponse<object>.Failure("Hr Image not found", "404")) : Ok(ApiResponse<List<GalleryResponse>>.Success(images));
+        return images.Count == 0 
+               ? NotFound(ApiResponse<object>.Failure("Hr Image not found", "404")) 
+               : Ok(ApiResponse<List<GalleryResponse>>.Success(images));
     }
 
     [HttpGet("get-any-images")]
@@ -77,7 +81,9 @@ public sealed class GalleryController : ControllerBase
     public async Task<IActionResult> GetAnyImages()
     {
         var images = await _galleryService.GetAnyImagesAsync();
-        return images.Count == 0 ? NotFound(ApiResponse<object>.Failure("Image not found", "404")) : Ok(ApiResponse<List<GalleryResponse>>.Success(images));
+        return images.Count == 0 
+               ? NotFound(ApiResponse<object>.Failure("Image not found", "404")) 
+               : Ok(ApiResponse<List<GalleryResponse>>.Success(images));
     }
 
     [HttpDelete("delete-ceo-images")]
@@ -106,6 +112,7 @@ public sealed class GalleryController : ControllerBase
         var result = await _galleryService.DeleteAnyImagesAsync();
         return Ok(ApiResponse<string>.Success(result));
     }
+    
 
     [HttpDelete("delete-image/{id}")]
     [Authorize(Roles = "HR_ADMIN")]
