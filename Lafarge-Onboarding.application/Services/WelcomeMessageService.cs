@@ -1,20 +1,32 @@
+
 namespace Lafarge_Onboarding.application.Services;
 
 public sealed class WelcomeMessageService : IWelcomeMessageService
 {
     private readonly IWelcomeMessageRepository _repository;
     private readonly IDocumentsUploadService _documentService;
+    private readonly IAuditService _auditService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ILogger<WelcomeMessageService> _logger;
 
     public WelcomeMessageService(
         IWelcomeMessageRepository repository,
         IDocumentsUploadService documentService,
+        IAuditService auditService,
+        IHttpContextAccessor httpContextAccessor,
         ILogger<WelcomeMessageService> logger)
     {
         _repository = repository;
         _documentService = documentService;
+        _auditService = auditService;
+        _httpContextAccessor = httpContextAccessor;
         _logger = logger;
     }
+    private string GetStatus()
+    {
+        return _httpContextAccessor.HttpContext.Response.StatusCode >= 200 && _httpContextAccessor.HttpContext.Response.StatusCode < 300 ? "Success" : "Failed";
+    }
+
 
     public async Task<WelcomeMessageResponse> ExtractAndSaveWelcomeMessagesAsync(IFormFileCollection files)
     {
@@ -33,6 +45,9 @@ public sealed class WelcomeMessageService : IWelcomeMessageService
         var entity = MapToEntity(parsedData);
         await _repository.AddAsync(entity);
 
+        var status = GetStatus();
+        await _auditService.LogAuditEventAsync("CREATE", "WelcomeMessage", entity.Id.ToString(), status: status, newValues: JsonSerializer.Serialize(parsedData));
+
         _logger.LogInformation("Welcome messages saved successfully with ID: {Id}", entity.Id);
         return parsedData;
     }
@@ -48,6 +63,8 @@ public sealed class WelcomeMessageService : IWelcomeMessageService
             return null;
         }
 
+        var status = GetStatus();
+        await _auditService.LogAuditEventAsync("READ", "WelcomeMessage", _httpContextAccessor.HttpContext?.Request?.Path.ToString(), status: status);
         _logger.LogInformation("Welcome messages retrieved successfully");
         return response;
     }
@@ -55,7 +72,19 @@ public sealed class WelcomeMessageService : IWelcomeMessageService
     public async Task DeleteLatestAsync()
     {
         _logger.LogInformation("Deleting latest welcome messages");
+
+        var existingEntity = await _repository.GetLatestAsync();
+        string? oldValues = null;
+        if (existingEntity != null)
+        {
+            oldValues = JsonSerializer.Serialize(existingEntity);
+        }
+
         await _repository.DeleteLatestAsync();
+
+        var status = GetStatus();
+        await _auditService.LogAuditEventAsync("DELETE", "WelcomeMessage", _httpContextAccessor.HttpContext?.Request?.Path.ToString(), status: status, oldValues: oldValues, newValues: null);
+
         _logger.LogInformation("Latest welcome messages deleted successfully");
     }
 

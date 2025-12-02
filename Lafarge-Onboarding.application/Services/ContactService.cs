@@ -7,16 +7,24 @@ public sealed class ContactService : IContactService
     private readonly IContactRepository _repository;
     private readonly ILogger<ContactService> _logger;
     private readonly IAuditService _auditService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public ContactService(
         IContactRepository repository,
         ILogger<ContactService> logger,
-        IAuditService auditService)
+        IAuditService auditService,
+        IHttpContextAccessor httpContextAccessor)
     {
         _repository = repository;
         _logger = logger;
         _auditService = auditService;
+        _httpContextAccessor = httpContextAccessor;
     }
+    private string GetStatus()
+    {
+        return _httpContextAccessor.HttpContext.Response.StatusCode >= 200 && _httpContextAccessor.HttpContext.Response.StatusCode < 300 ? "Success" : "Failed";
+    }
+
 
     public async Task UploadContactsAsync(IFormFile file)
     {
@@ -35,11 +43,14 @@ public sealed class ContactService : IContactService
 
         _logger.LogInformation("Contacts uploaded successfully");
 
+        var status = GetStatus();
+
         await _auditService.LogAuditEventAsync(
-            action: "UPLOAD",
+            action: "CREATE",
             resourceType: "Contact",
-            description: $"Uploaded {entities.Count} contacts from file {file.FileName}",
-            status: "Success");
+            resourceId: _httpContextAccessor.HttpContext?.Request?.Path.ToString(),
+            status: status,
+            newValues: JsonSerializer.Serialize(entities));
     }
 
     public async Task<List<ContactDto>> GetLocalContactsAsync()
@@ -50,11 +61,13 @@ public sealed class ContactService : IContactService
 
         _logger.LogInformation("Retrieved {Count} contacts", dtos.Count);
 
+        var status = GetStatus();
+
         await _auditService.LogAuditEventAsync(
             action: "READ",
             resourceType: "Contact",
-            description: $"Retrieved {dtos.Count} contacts",
-            status: "Success");
+            resourceId: _httpContextAccessor.HttpContext?.Request?.Path.ToString(),
+            status: status);
 
         return dtos;
     }
@@ -62,8 +75,24 @@ public sealed class ContactService : IContactService
     public async Task DeleteAllContactsAsync()
     {
         _logger.LogInformation("Deleting all local contacts");
+
+        var contacts = await _repository.GetAllAsync();
+        var oldValues = JsonSerializer.Serialize(contacts);
+
         await _repository.DeleteAllAsync();
+
         _logger.LogInformation("All local contacts deleted successfully");
+
+        var status = GetStatus();
+
+        await _auditService.LogAuditEventAsync(
+            action: "DELETE",
+            resourceType: "Contact",
+            resourceId: _httpContextAccessor.HttpContext?.Request?.Path.ToString(),
+            oldValues: oldValues,
+            newValues: null,
+            status: status
+        );
     }
 
     private async Task<List<ContactDto>> ParseContactsFromFileAsync(IFormFile file)

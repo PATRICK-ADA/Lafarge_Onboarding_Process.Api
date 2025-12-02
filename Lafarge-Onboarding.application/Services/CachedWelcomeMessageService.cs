@@ -5,6 +5,7 @@ public sealed class CachedWelcomeMessageService : IWelcomeMessageService
     private readonly IWelcomeMessageService _baseService;
     private readonly IMemoryCache _cache;
     private readonly IAuditService _auditService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ILogger<CachedWelcomeMessageService> _logger;
     private const string CacheKey = "WelcomeMessage_Latest";
 
@@ -12,20 +13,28 @@ public sealed class CachedWelcomeMessageService : IWelcomeMessageService
         IWelcomeMessageService baseService,
         IMemoryCache cache,
         IAuditService auditService,
+        IHttpContextAccessor httpContextAccessor,
         ILogger<CachedWelcomeMessageService> logger)
     {
         _baseService = baseService;
         _cache = cache;
         _auditService = auditService;
+        _httpContextAccessor = httpContextAccessor;
         _logger = logger;
     }
+    private string GetStatus()
+    {
+        return _httpContextAccessor.HttpContext.Response.StatusCode >= 200 && _httpContextAccessor.HttpContext.Response.StatusCode < 300 ? "Success" : "Failed";
+    }
+
 
     public async Task<WelcomeMessageResponse> ExtractAndSaveWelcomeMessagesAsync(IFormFileCollection files)
     {
         var result = await _baseService.ExtractAndSaveWelcomeMessagesAsync(files);
-        await _auditService.LogAuditEventAsync("UPLOAD", "WelcomeMessage", null, "Uploaded welcome message files");
         _cache.Remove(CacheKey);
         _logger.LogInformation("Cache cleared after new welcome message upload");
+        var status = GetStatus();
+        await _auditService.LogAuditEventAsync("CREATE", "CachedWelcomeMessage", _httpContextAccessor.HttpContext?.Request?.Path.ToString(), status: status, newValues: JsonSerializer.Serialize(result));
         return result;
     }
 
@@ -34,13 +43,14 @@ public sealed class CachedWelcomeMessageService : IWelcomeMessageService
         if (_cache.TryGetValue(CacheKey, out WelcomeMessageResponse? cached))
         {
             _logger.LogInformation("Returning cached welcome message");
+            var auditStatus = GetStatus();
+            await _auditService.LogAuditEventAsync("READ", "CachedWelcomeMessage", _httpContextAccessor.HttpContext?.Request?.Path.ToString(), status: auditStatus);
             return cached;
         }
 
         var result = await _baseService.GetWelcomeMessagesAsync();
         if (result != null)
         {
-            await _auditService.LogAuditEventAsync("RETRIEVE", "WelcomeMessage", null, "Retrieved welcome messages");
             _cache.Set(CacheKey, result, new MemoryCacheEntryOptions
             {
                 Priority = CacheItemPriority.High,
@@ -48,15 +58,23 @@ public sealed class CachedWelcomeMessageService : IWelcomeMessageService
             });
             _logger.LogInformation("Welcome message cached until next database update");
         }
-
+        var status = GetStatus();
+        await _auditService.LogAuditEventAsync("READ", "CachedWelcomeMessage", _httpContextAccessor.HttpContext?.Request?.Path.ToString(), status: status);
         return result;
     }
 
     public async Task DeleteLatestAsync()
     {
+        var entity = await _baseService.GetWelcomeMessagesAsync();
+        string? oldValues = null;
+        if (entity != null)
+        {
+            oldValues = JsonSerializer.Serialize(entity);
+        }
         await _baseService.DeleteLatestAsync();
-        await _auditService.LogAuditEventAsync("DELETE", "WelcomeMessage", null, "Deleted latest welcome message");
         _cache.Remove(CacheKey);
         _logger.LogInformation("Cache cleared after welcome message deletion");
+        var status = GetStatus();
+        await _auditService.LogAuditEventAsync("DELETE", "CachedWelcomeMessage", _httpContextAccessor.HttpContext?.Request?.Path.ToString(), status: status, oldValues: oldValues, newValues: null);
     }
 }

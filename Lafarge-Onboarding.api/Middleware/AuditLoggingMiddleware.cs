@@ -58,20 +58,14 @@ public class AuditLoggingMiddleware
                 var status = context.Response.StatusCode >= 200 && context.Response.StatusCode < 300 ? "Success" : "Failed";
 
                
-                var additionalData = JsonSerializer.Serialize(new
-                {
-                    DurationMs = duration.TotalMilliseconds,
-                    ResponseStatusCode = context.Response.StatusCode,
-                    ResponseContentType = context.Response.ContentType,
-                    ResponseContentLength = context.Response.ContentLength
-                });
+                var additionalData = $"Completed api call in {duration.TotalMilliseconds:F2}ms";
 
                
                 var resourceType = ExtractResourceType(context.Request.Path.ToString());
 
             
                 await auditService.LogAuditEventAsync(
-                    action: context.Request.Method,
+                    action: MapHttpMethodToAction(context.Request.Method),
                     resourceType: resourceType,
                     resourceId: null,
                     description: $"API call to {context.Request.Path} completed in {duration.TotalMilliseconds:F2}ms",
@@ -99,7 +93,7 @@ public class AuditLoggingMiddleware
                 var resourceType = ExtractResourceType(context.Request.Path.ToString());
 
                 await auditService.LogAuditEventAsync(
-                    action: context.Request.Method,
+                    action: MapHttpMethodToAction(context.Request.Method),
                     resourceType: resourceType,
                     resourceId: null,
                     description: $"API call to {context.Request.Path} failed after {duration.TotalMilliseconds:F2}ms",
@@ -116,9 +110,21 @@ public class AuditLoggingMiddleware
         }
     }
 
+    private static string MapHttpMethodToAction(string method)
+    {
+        return method.ToUpper() switch
+        {
+            "GET" => "READ",
+            "POST" => "CREATE",
+            "PUT" => "UPDATE",
+            "DELETE" => "DELETE",
+            _ => method
+        };
+    }
+
     private static string ExtractResourceType(string path)
     {
-    
+
         var segments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
         return segments.Length > 1 && segments[0].Equals("api", StringComparison.OrdinalIgnoreCase)
             ? segments[1]

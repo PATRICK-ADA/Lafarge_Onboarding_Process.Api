@@ -57,7 +57,7 @@ public sealed class AuditService : IAuditService
                 Action = action,
                 Description = description,
                 ResourceType = resourceType,
-                ResourceId = resourceId,
+                ResourceId = resourceId ?? httpContext?.Request.Path.ToString(),
                 HttpMethod = httpMethod,
                 Url = url,
                 StatusCode = statusCode,

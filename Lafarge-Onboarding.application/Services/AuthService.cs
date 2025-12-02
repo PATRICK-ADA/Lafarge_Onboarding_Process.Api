@@ -106,7 +106,6 @@ public sealed class AuthService : IAuthService
                 throw new InvalidOperationException($"User registration failed: {string.Join(", ", result.Errors.Select(e => e.Description))}");
             }
 
-            // Assign role to user
             var roleResult = await _userManager.AddToRoleAsync(user, request.Role);
             if (!roleResult.Succeeded)
             {

@@ -1,0 +1,23 @@
+2025-12-02 01:11:40.456 +01:00 [INF] Applying database migrations... <s:Program>
+2025-12-02 01:11:41.278 +01:00 [INF] Database migrations applied succ2025-12-02 01:11:41.272025-12-02 01:12:36.691 +01:00 [INF] Audit event logged: 2025-12-02 01:12:36.691 +01:00 [INF] Audit event logged: READ on AppVersionCheck null by patada306@gmail.com
+2025-12-02 01:12:36.695 +01:00 [INF] Audit logged for GET /api/AppVersionCheck/latest - Status: 400, Duration: 110.8352ms
+2025-12-02 01:13:03.703 +01:00 [INF] Retrieving all contacts
+2025-12-02 01:13:03.881 +01:00 [INF] All contacts retrieved successfully
+2025-12-02 01:13:03.884 +01:00 [INF] Audit event logged: READ on AllContact /api/Contacts/get-all by patada306@gmail.com
+2025-12-02 01:13:03.908 +01:00 [INF] Audit event logged: READ on Contacts null by patada306@gmail.com
+2025-12-02 01:13:03.908 +01:00 [INF] Audit logged for GET /api/Contacts/get-all - Status: 200, Duration: 211.7637ms
+2025-12-02 01:14:22.681 +01:00 [INF] Retrieving local contacts
+2025-12-02 01:14:22.726 +01:00 [INF] Retrieved 0 contacts
+2025-12-02 01:14:22.729 +01:00 [INF] Audit event logged: READ on Contact /api/Contacts/get-local by patada306@gmail.com
+2025-12-02 01:14:22.733 +01:00 [INF] Audit event logged: READ on Contacts null by patada306@gmail.com
+2025-12-02 01:14:22.734 +01:00 [INF] Audit logged for GET /api/Contacts/get-local - Status: 200, Duration: 61.257ms
+2025-12-02 01:14:51.266 +01:00 [INF] Retrieving audit logs with filter
+2025-12-02 01:14:51.322 +01:00 [INF] Retrieved 20 audit logs out of 32
+2025-12-02 01:14:51.338 +01:00 [INF] Audit event logged: READ on AuditLogs null by patada306@gmail.com
+2025-12-02 01:14:51.338 +01:00 [INF] Audit logged for GET /api/AuditLogs/get-audit-logs - Status: 200, Duration: 82.2664ms
+gged: READ on Contacts null by patada306@gmail.com <s:Lafarge_Onboarding.application.Services.AuditService>
+2025-12-02 01:14:22.734 +01:00 [INF] Audit logged for GET /api/Contacts/get-local - Status: 200, Duration: 61.257ms <s:Lafarge_Onboarding.api.Middleware.AuditLoggingMiddleware>
+2025-12-02 01:14:51.266 +01:00 [INF] Retrieving audit logs with filter <s:Lafarge_Onboarding.application.Services.AuditService>
+2025-12-02 01:14:51.322 +01:00 [INF] Retrieved 20 audit logs out of 32 <s:Lafarge_Onboarding.application.Services.AuditService>
+2025-12-02 01:14:51.338 +01:00 [INF] Audit event logged: READ on AuditLogs null by patada306@gmail.com <s:Lafarge_Onboarding.application.Services.AuditService>
+2025-12-02 01:14:51.338 +01:00 [INF] Audit logged for GET /api/AuditLogs/get-audit-logs - Status: 200, Duration: 82.2664ms <s:Lafarge_Onboarding.api.Middleware.AuditLoggingMiddleware>

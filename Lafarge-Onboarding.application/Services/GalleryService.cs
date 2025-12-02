@@ -15,6 +15,11 @@ public sealed class GalleryService : IGalleryService
         _httpContextAccessor = httpContextAccessor;
         _auditService = auditService;
     }
+    private string GetStatus()
+    {
+        return _httpContextAccessor.HttpContext.Response.StatusCode >= 200 && _httpContextAccessor.HttpContext.Response.StatusCode < 300 ? "Success" : "Failed";
+    }
+
 
     public async Task<string> UploadImageAsync(IFormFile image, string imageType)
     {
@@ -24,7 +29,7 @@ public sealed class GalleryService : IGalleryService
         var base64String = Convert.ToBase64String(compressedBytes);
 
         var currentUser = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Email)?.Value;
-        
+
         var gallery = new Gallery
         {
             ImageName = image.FileName,
@@ -38,11 +43,14 @@ public sealed class GalleryService : IGalleryService
 
         _logger.LogInformation("Successfully uploaded {ImageType} image with ID: {Id}", imageType, gallery.Id);
 
+        var status = GetStatus();
+
         await _auditService.LogAuditEventAsync(
-            action: "UPLOAD",
+            action: "CREATE",
             resourceType: "Gallery",
             resourceId: gallery.Id.ToString(),
             description: $"Uploaded {imageType} image: {gallery.ImageName}",
+            status: status,
             newValues: JsonSerializer.Serialize(new { gallery.Id, gallery.ImageName, gallery.ImageType }));
 
         return $"{imageType} image uploaded successfully";
@@ -79,11 +87,14 @@ public sealed class GalleryService : IGalleryService
         _logger.LogInformation("Retrieving CEO images");
         var images = await _repository.GetByImageTypeAsync("CEO");
 
+        var status = GetStatus();
+
         await _auditService.LogAuditEventAsync(
-            action: "RETRIEVE",
+            action: "READ",
             resourceType: "Gallery",
-            resourceId: "CEO",
-            description: $"Retrieved {images.Count} CEO images");
+            resourceId: _httpContextAccessor.HttpContext?.Request?.Path.ToString(),
+            description: $"Retrieved {images.Count} CEO images",
+            status: status);
 
         return images;
     }
@@ -93,11 +104,14 @@ public sealed class GalleryService : IGalleryService
         _logger.LogInformation("Retrieving HR images");
         var images = await _repository.GetByImageTypeAsync("HR");
 
+        var status = GetStatus();
+
         await _auditService.LogAuditEventAsync(
-            action: "RETRIEVE",
+            action: "READ",
             resourceType: "Gallery",
-            resourceId: "HR",
-            description: $"Retrieved {images.Count} HR images");
+            resourceId: _httpContextAccessor.HttpContext?.Request?.Path.ToString(),
+            description: $"Retrieved {images.Count} HR images",
+            status: status);
 
         return images;
     }
@@ -107,11 +121,14 @@ public sealed class GalleryService : IGalleryService
         _logger.LogInformation("Retrieving general images");
         var images = await _repository.GetByImageTypeAsync("GENERAL");
 
+        var status = GetStatus();
+
         await _auditService.LogAuditEventAsync(
-            action: "RETRIEVE",
+            action: "READ",
             resourceType: "Gallery",
-            resourceId: "GENERAL",
-            description: $"Retrieved {images.Count} general images");
+            resourceId: _httpContextAccessor.HttpContext?.Request?.Path.ToString(),
+            description: $"Retrieved {images.Count} general images",
+            status: status);
 
         return images;
     }
@@ -122,11 +139,14 @@ public sealed class GalleryService : IGalleryService
         var oldImages = await _repository.GetByImageTypeAsync("CEO");
         await _repository.DeleteByImageTypeAsync("CEO");
 
+        var status = GetStatus();
+
         await _auditService.LogAuditEventAsync(
             action: "DELETE",
             resourceType: "Gallery",
-            resourceId: "CEO",
+            resourceId: _httpContextAccessor.HttpContext?.Request?.Path.ToString(),
             description: $"Deleted {oldImages.Count} CEO images",
+            status: status,
             oldValues: JsonSerializer.Serialize(oldImages.Select(i => new { i.Id, i.ImageName })));
 
         return "CEO images deleted successfully";
@@ -138,11 +158,14 @@ public sealed class GalleryService : IGalleryService
         var oldImages = await _repository.GetByImageTypeAsync("HR");
         await _repository.DeleteByImageTypeAsync("HR");
 
+        var status = GetStatus();
+
         await _auditService.LogAuditEventAsync(
             action: "DELETE",
             resourceType: "Gallery",
-            resourceId: "HR",
+            resourceId: _httpContextAccessor.HttpContext?.Request?.Path.ToString(),
             description: $"Deleted {oldImages.Count} HR images",
+            status: status,
             oldValues: JsonSerializer.Serialize(oldImages.Select(i => new { i.Id, i.ImageName })));
 
         return "HR images deleted successfully";
@@ -154,11 +177,14 @@ public sealed class GalleryService : IGalleryService
         var oldImages = await _repository.GetByImageTypeAsync("GENERAL");
         await _repository.DeleteByImageTypeAsync("GENERAL");
 
+        var status = GetStatus();
+
         await _auditService.LogAuditEventAsync(
             action: "DELETE",
             resourceType: "Gallery",
-            resourceId: "GENERAL",
+            resourceId: _httpContextAccessor.HttpContext?.Request?.Path.ToString(),
             description: $"Deleted {oldImages.Count} general images",
+            status: status,
             oldValues: JsonSerializer.Serialize(oldImages.Select(i => new { i.Id, i.ImageName })));
 
         return "General images deleted successfully";
@@ -175,11 +201,14 @@ public sealed class GalleryService : IGalleryService
 
         await _repository.DeleteByIdAsync(id);
 
+        var status = GetStatus();
+
         await _auditService.LogAuditEventAsync(
             action: "DELETE",
             resourceType: "Gallery",
             resourceId: id.ToString(),
             description: $"Deleted image: {image.ImageName}",
+            status: status,
             oldValues: JsonSerializer.Serialize(new { image.Id, image.ImageName, image.ImageType }));
 
         return "Image deleted successfully";

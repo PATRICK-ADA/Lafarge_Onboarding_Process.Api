@@ -3,18 +3,26 @@ namespace Lafarge_Onboarding.application.Services;
 public sealed class AllContactService : IAllContactService
 {
     private readonly IAllContactRepository _repository;
-    private readonly IDocumentsUploadService _documentService;
     private readonly ILogger<AllContactService> _logger;
+    private readonly IAuditService _auditService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public AllContactService(
         IAllContactRepository repository,
-        IDocumentsUploadService documentService,
-        ILogger<AllContactService> logger)
+        ILogger<AllContactService> logger,
+        IAuditService auditService,
+        IHttpContextAccessor httpContextAccessor)
     {
         _repository = repository;
-        _documentService = documentService;
         _logger = logger;
+        _auditService = auditService;
+        _httpContextAccessor = httpContextAccessor;
     }
+    private string GetStatus()
+    {
+        return _httpContextAccessor.HttpContext.Response.StatusCode >= 200 && _httpContextAccessor.HttpContext.Response.StatusCode < 300 ? "Success" : "Failed";
+    }
+
 
     private async Task<List<AllContactRow>> ParseCsvAsync(IFormFile file)
     {
@@ -64,6 +72,10 @@ public sealed class AllContactService : IAllContactService
     {
         _logger.LogInformation("Starting all contacts parsing from file: {FileName}", file.FileName);
 
+
+        var existingEntities = await _repository.GetAllAsync();
+        var oldValues = JsonSerializer.Serialize(existingEntities);
+
         var extension = Path.GetExtension(file.FileName).ToLower();
         List<AllContactRow> rows;
 
@@ -83,6 +95,7 @@ public sealed class AllContactService : IAllContactService
         _logger.LogInformation("Parsed {Count} rows from file", rows.Count);
 
         var parsedData = ParseAllContacts(rows);
+        var newValues = JsonSerializer.Serialize(parsedData);
 
         await _repository.DeleteAllAsync(); // Clear existing
 
@@ -90,6 +103,16 @@ public sealed class AllContactService : IAllContactService
         await _repository.AddRangeAsync(entities);
 
         _logger.LogInformation("All contacts saved successfully");
+
+        var status = GetStatus();
+        await _auditService.LogAuditEventAsync(
+            action: "CREATE",
+            resourceType: "AllContact",
+            resourceId: _httpContextAccessor.HttpContext?.Request?.Path.ToString(),
+            description: $"Uploaded all contacts from file {file.FileName}",
+            status: status,
+            oldValues: oldValues,
+            newValues: newValues);
     }
 
     public async Task<AllContactsResponse> GetAllContactsAsync()
@@ -100,14 +123,39 @@ public sealed class AllContactService : IAllContactService
         var response = MapToResponse(entities);
 
         _logger.LogInformation("All contacts retrieved successfully");
+
+        var status = GetStatus();
+        await _auditService.LogAuditEventAsync(
+            action: "READ",
+            resourceType: "AllContact",
+            resourceId: _httpContextAccessor.HttpContext?.Request?.Path.ToString(),
+            description: "Retrieved all contacts",
+            status: status);
+
         return response;
     }
 
     public async Task DeleteAllContactsAsync()
     {
         _logger.LogInformation("Deleting all contacts");
+
+        // Get existing contacts for audit logging
+        var existingEntities = await _repository.GetAllAsync();
+        var oldValues = JsonSerializer.Serialize(existingEntities);
+
         await _repository.DeleteAllAsync();
+
         _logger.LogInformation("All contacts deleted successfully");
+
+        var status = GetStatus();
+        await _auditService.LogAuditEventAsync(
+            action: "DELETE",
+            resourceType: "AllContact",
+            resourceId: _httpContextAccessor.HttpContext?.Request?.Path.ToString(),
+            description: "Deleted all contacts",
+            status: status,
+            oldValues: oldValues,
+            newValues: null);
     }
 
     private AllContactsResponse ParseAllContacts(List<AllContactRow> rows)

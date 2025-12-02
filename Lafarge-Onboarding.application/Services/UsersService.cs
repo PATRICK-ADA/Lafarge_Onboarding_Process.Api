@@ -6,110 +6,116 @@ public sealed class UsersService : IUsersService
     private readonly UserManager<Users> _userManager;
     private readonly RoleManager<Role> _roleManager;
     private readonly IAuditService _auditService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public UsersService(IUsersRepository usersRepository, UserManager<Users> userManager, RoleManager<Role> roleManager, IAuditService auditService)
+    public UsersService(IUsersRepository usersRepository, UserManager<Users> userManager, RoleManager<Role> roleManager, IAuditService auditService, IHttpContextAccessor httpContextAccessor)
     {
         _usersRepository = usersRepository;
         _userManager = userManager;
         _roleManager = roleManager;
         _auditService = auditService;
+        _httpContextAccessor = httpContextAccessor;
     }
+    private string GetStatus()
+    {
+        return _httpContextAccessor.HttpContext.Response.StatusCode >= 200 && _httpContextAccessor.HttpContext.Response.StatusCode < 300 ? "Success" : "Failed";
+    }
+
 
     public async Task<PaginatedResponse<GetUserResponse>> GetUsersAsync(PaginationRequest pagination)
     {
         var (users, totalCount) = await _usersRepository.GetUsersAsync(pagination);
 
-        return new PaginatedResponse<GetUserResponse>
+        var result = new PaginatedResponse<GetUserResponse>
         {
             Content = users,
             PageNumber = pagination.PageNumber,
             PageSize = pagination.PageSize,
             TotalCount = totalCount
         };
+
+        var status = GetStatus();
+        await _auditService.LogAuditEventAsync("READ", "User", _httpContextAccessor.HttpContext?.Request?.Path.ToString(), status: status);
+
+        return result;
     }
 
     public async Task<string> UploadBulkUsersAsync(IFormFile file)
     {
         var errors = new List<string>();
         var successCount = 0;
+        var createdUsers = new List<GetUserResponse>();
 
         var fileExtension = Path.GetExtension(file.FileName).ToLower();
         List<CreateUserRequest> userRequests;
 
-        try
+        if (fileExtension == ".csv")
         {
-            if (fileExtension == ".csv")
-            {
-                userRequests = await ParseCsvFileAsync(file);
-            }
-            else if (fileExtension == ".xlsx" || fileExtension == ".xls")
-            {
-                userRequests = await ParseExcelFileAsync(file);
-            }
-            else
-            {
-                throw new InvalidOperationException("Unsupported file type");
-            }
+            userRequests = await ParseCsvFileAsync(file);
         }
-        catch (Exception ex)
+        else if (fileExtension == ".xlsx" || fileExtension == ".xls")
         {
-            return $"Error parsing file: {ex.Message}";
+            userRequests = await ParseExcelFileAsync(file);
+        }
+        else
+        {
+            throw new InvalidOperationException("Unsupported file type");
         }
 
         foreach (var userRequest in userRequests)
         {
-            try
+            var existingUser = await _userManager.FindByEmailAsync(userRequest.Email);
+            if (existingUser != null)
             {
-                var existingUser = await _userManager.FindByEmailAsync(userRequest.Email);
-                if (existingUser != null)
-                {
-                    errors.Add($"User with email {userRequest.Email} already exists");
-                    continue;
-                }
-
-                // Create new user
-                var user = new Users
-                {
-                    UserName = userRequest.Email,
-                    Email = userRequest.Email,
-                    FirstName = userRequest.FirstName,
-                    LastName = userRequest.LastName,
-                    PhoneNumber = userRequest.PhoneNumber,
-                    StaffProfilePicture = userRequest.StaffProfilePicture,
-                    Role = userRequest.Role,
-                    ActiveStatus = userRequest.ActiveStatus,
-                    EmailConfirmed = true
-                };
-
-                var tempPassword = Guid.NewGuid().ToString("N").Substring(0, 8) + "Temp!";
-
-                var result = await _userManager.CreateAsync(user, tempPassword);
-                if (!result.Succeeded)
-                {
-                    errors.Add($"Failed to create user {userRequest.Email}: {string.Join(", ", result.Errors.Select(e => e.Description))}");
-                    continue;
-                }
-
-                var roleName = userRequest.Role;
-                if (!await _roleManager.RoleExistsAsync(roleName))
-                {
-                    var role = new Role { Name = roleName, Description = $"{roleName} role" };
-                    await _roleManager.CreateAsync(role);
-                }
-
-                var roleResult = await _userManager.AddToRoleAsync(user, roleName);
-                if (!roleResult.Succeeded)
-                {
-                    errors.Add($"Failed to assign role to user {userRequest.Email}: {string.Join(", ", roleResult.Errors.Select(e => e.Description))}");
-                    continue;
-                }
-
-                successCount++;
+                errors.Add($"User with email {userRequest.Email} already exists");
+                continue;
             }
-            catch (Exception ex)
+
+            // Create new user
+            var user = new Users
             {
-                errors.Add($"Error processing user {userRequest.Email}: {ex.Message}");
+                UserName = userRequest.Email,
+                Email = userRequest.Email,
+                FirstName = userRequest.FirstName,
+                LastName = userRequest.LastName,
+                PhoneNumber = userRequest.PhoneNumber,
+                StaffProfilePicture = userRequest.StaffProfilePicture,
+                Role = userRequest.Role,
+                ActiveStatus = userRequest.ActiveStatus,
+                EmailConfirmed = true
+            };
+
+            var tempPassword = Guid.NewGuid().ToString("N").Substring(0, 8) + "Temp!";
+
+            var result = await _userManager.CreateAsync(user, tempPassword);
+            if (!result.Succeeded)
+            {
+                errors.Add($"Failed to create user {userRequest.Email}: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                continue;
             }
+
+            var roleName = userRequest.Role;
+            if (!await _roleManager.RoleExistsAsync(roleName))
+            {
+                var role = new Role { Name = roleName, Description = $"{roleName} role" };
+                await _roleManager.CreateAsync(role);
+            }
+
+            var roleResult = await _userManager.AddToRoleAsync(user, roleName);
+            if (!roleResult.Succeeded)
+            {
+                errors.Add($"Failed to assign role to user {userRequest.Email}: {string.Join(", ", roleResult.Errors.Select(e => e.Description))}");
+                continue;
+            }
+
+           
+            var createdUser = await _usersRepository.GetUserByIdAsync(user.Id);
+            if (createdUser != null)
+            {
+                createdUsers.Add(createdUser);
+            }
+
+            successCount++;
         }
 
         var message = $"Bulk upload completed. {successCount} users created successfully.";
@@ -117,6 +123,9 @@ public sealed class UsersService : IUsersService
         {
             message += $" Errors: {string.Join("; ", errors)}";
         }
+
+        var status = GetStatus();
+        await _auditService.LogAuditEventAsync("CREATE", "User", _httpContextAccessor.HttpContext?.Request?.Path.ToString(), status: status, oldValues: null, newValues: JsonSerializer.Serialize(createdUsers));
 
         return message;
     }
@@ -186,26 +195,36 @@ public sealed class UsersService : IUsersService
     {
         var (users, totalCount) = await _usersRepository.GetUsersByRoleAsync(role, pagination);
 
-        return new PaginatedResponse<GetUserResponse>
+        var result = new PaginatedResponse<GetUserResponse>
         {
             Content = users,
             PageNumber = pagination.PageNumber,
             PageSize = pagination.PageSize,
             TotalCount = totalCount
         };
+
+        var status = GetStatus();
+        await _auditService.LogAuditEventAsync("READ", "User", _httpContextAccessor.HttpContext?.Request?.Path.ToString(), status: status);
+
+        return result;
     }
 
     public async Task<PaginatedResponse<GetUserResponse>> GetUsersByNameAsync(string name, PaginationRequest pagination)
     {
         var (users, totalCount) = await _usersRepository.GetUsersByNameAsync(name, pagination);
 
-        return new PaginatedResponse<GetUserResponse>
+        var result = new PaginatedResponse<GetUserResponse>
         {
             Content = users,
             PageNumber = pagination.PageNumber,
             PageSize = pagination.PageSize,
             TotalCount = totalCount
         };
+
+        var status = GetStatus();
+        await _auditService.LogAuditEventAsync("READ", "User", _httpContextAccessor.HttpContext?.Request?.Path.ToString(), status: status);
+
+        return result;
     }
 
     public async Task<GetUserResponse> GetUserByIdAsync(string id)
@@ -215,6 +234,9 @@ public sealed class UsersService : IUsersService
         {
             throw new KeyNotFoundException("User not found");
         }
+
+        var status = GetStatus();
+        await _auditService.LogAuditEventAsync("READ", "User", id, status: status);
 
         return user;
     }
@@ -237,7 +259,8 @@ public sealed class UsersService : IUsersService
         var updatedUser = await _usersRepository.GetUserByIdAsync(id);
         var newValues = JsonSerializer.Serialize(updatedUser);
 
-        await _auditService.LogAuditEventAsync("UPDATE", "User", id, oldValues: oldValues, newValues: newValues);
+        var status = GetStatus();
+        await _auditService.LogAuditEventAsync("UPDATE", "User", id, status: status, oldValues: oldValues, newValues: newValues);
 
         return "User updated successfully";
     }
@@ -261,41 +284,33 @@ public sealed class UsersService : IUsersService
 
         foreach (var userItem in request.Users)
         {
-            try
+            
+            var existingUser = await _usersRepository.GetUserByIdAsync(userItem.Id);
+            if (existingUser == null)
             {
-                // Validate user exists
-                var existingUser = await _usersRepository.GetUserByIdAsync(userItem.Id);
-                if (existingUser == null)
-                {
-                    errors.Add($"User with ID {userItem.Id} does not exist");
-                    continue;
-                }
-
-                // Update user
-                var updateRequest = new UpdateUserRequest
-                {
-                    Name = userItem.Name,
-                    Email = userItem.Email,
-                    PhoneNumber = userItem.PhoneNumber,
-                    Role = userItem.Role,
-                    Department = userItem.Department,
-                    OnboardingStatus = userItem.OnboardingStatus,
-                    IsActive = userItem.IsActive
-                };
-
-                var result = await _usersRepository.UpdateUserAsync(userItem.Id, updateRequest);
-                if (!result)
-                {
-                    errors.Add($"Failed to update user with ID {userItem.Id}");
-                    continue;
-                }
-
-                successCount++;
+                errors.Add($"User with ID {userItem.Id} does not exist");
+                continue;
             }
-            catch (Exception ex)
+
+            var updateRequest = new UpdateUserRequest
             {
-                errors.Add($"Error updating user with ID {userItem.Id}: {ex.Message}");
+                Name = userItem.Name,
+                Email = userItem.Email,
+                PhoneNumber = userItem.PhoneNumber,
+                Role = userItem.Role,
+                Department = userItem.Department,
+                OnboardingStatus = userItem.OnboardingStatus,
+                IsActive = userItem.IsActive
+            };
+
+            var result = await _usersRepository.UpdateUserAsync(userItem.Id, updateRequest);
+            if (!result)
+            {
+                errors.Add($"Failed to update user with ID {userItem.Id}");
+                continue;
             }
+
+            successCount++;
         }
 
         var newUsers = new List<GetUserResponse>();
@@ -309,7 +324,8 @@ public sealed class UsersService : IUsersService
         }
         var newValues = JsonSerializer.Serialize(newUsers);
 
-        await _auditService.LogAuditEventAsync("UPDATE", "User", "bulk", oldValues: oldValues, newValues: newValues);
+        var status = GetStatus();
+        await _auditService.LogAuditEventAsync("UPDATE", "User", null, status: status, oldValues: oldValues, newValues: newValues);
 
         var message = $"{successCount} users updated successfully.";
         if (errors.Any())
@@ -333,7 +349,8 @@ public sealed class UsersService : IUsersService
         {
             throw new KeyNotFoundException("User not found");
         }
-        await _auditService.LogAuditEventAsync("DELETE", "User", id, oldValues: oldValues, newValues: null);
+        var status = GetStatus();
+        await _auditService.LogAuditEventAsync("DELETE", "User", id, status: status, oldValues: oldValues, newValues: null);
         return $"User deleted successfully";
     }
 
@@ -345,7 +362,8 @@ public sealed class UsersService : IUsersService
         var (oldUsers, _) = await _usersRepository.GetUsersByRoleAsync(role, pagination);
         var oldValues = JsonSerializer.Serialize(oldUsers);
         var count = await _usersRepository.DeleteUsersByRoleAsync(role);
-        await _auditService.LogAuditEventAsync("DELETE", "User", "bulk-by-role", oldValues: oldValues, newValues: null);
+        var status = GetStatus();
+        await _auditService.LogAuditEventAsync("DELETE", "User", null, status: status, oldValues: oldValues, newValues: null);
         return $"{count} users deleted successfully";
     }
 }

@@ -19,7 +19,7 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
         _logger.LogInformation("Retrieving all documents");
         var result = await _repository.GetAllAsync();
 
-        // Log audit event for retrieval
+       
         await _auditService.LogAuditEventAsync("READ", "Document", null, "Retrieved all documents");
 
         return result;
@@ -32,7 +32,6 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
 
         if (result != null)
         {
-            // Log audit event for retrieval
             await _auditService.LogAuditEventAsync("READ", "Document", id.ToString(), $"Retrieved document by ID: {id}");
         }
 
@@ -55,7 +54,7 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
 
         _logger.LogInformation("Retrieved {DocumentCount} documents out of {TotalCount}", documents.Count(), totalCount);
 
-        // Log audit event for paginated retrieval
+        
         await _auditService.LogAuditEventAsync("READ", "Document", null, $"Retrieved paginated documents: page {request.PageNumber}, size {request.PageSize}");
 
         return response;
@@ -83,7 +82,7 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
         return response;
     }
 
-    // Define allowed document types
+  
     private readonly string[] _allowedDocumentTypes = {
         "welcome-message-CEO",
         "welcome-message-HR",
@@ -121,7 +120,7 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
             throw new ArgumentException("Invalid file type. Allowed types: PDF, DOC, DOCX, TXT, JPG, JPEG, PNG, GIF.");
         }
 
-        // Ensure uploads directory exists
+        
         var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
         if (!Directory.Exists(uploadsPath))
         {
@@ -141,12 +140,12 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
         }
         _logger.LogInformation("File saved successfully. Size: {FileSize} bytes", file.Length);
 
-        // Extract text content from the document
+      
         _logger.LogInformation("Starting text extraction for file: {FileName}", uniqueFileName);
         var content = await ExtractTextFromDocumentAsync(filePath);
         _logger.LogInformation("Text extraction completed. Content length: {ContentLength} characters", content.Length);
 
-        // Handle image upload if provided
+        
         string? imageFilePath = null;
         string? imageFileType = null;
         if (imageFile != null && imageFile.Length > 0)
@@ -185,12 +184,11 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
             UploadedBy = uploadedBy
         };
 
-        // Save to database
+        
         _logger.LogInformation("Saving document metadata to database");
         await _repository.AddAsync(document);
         _logger.LogInformation("Document upload completed successfully. Document ID: {DocumentId}", document.Id);
 
-        // Log audit event for document upload
         await _auditService.LogAuditEventAsync("CREATE", "Document", document.Id.ToString(), $"Document uploaded: {document.FileName}");
 
         return document;
@@ -409,7 +407,7 @@ public sealed class DocumentsUploadService : IDocumentsUploadService
         var responses = await Task.WhenAll(tasks);
         _logger.LogInformation("Bulk document upload completed. Processed {DocumentCount} documents", responses.Length);
 
-        // Log audit event for bulk upload
+       
         await _auditService.LogAuditEventAsync("CREATE", "Document", null, "Bulk document upload completed", additionalData: $"{responses.Length} documents uploaded");
 
         return responses;
