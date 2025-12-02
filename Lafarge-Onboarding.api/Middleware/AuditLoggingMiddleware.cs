@@ -64,14 +64,14 @@ public class AuditLoggingMiddleware
                 var resourceType = ExtractResourceType(context.Request.Path.ToString());
 
             
-                await auditService.LogAuditEventAsync(
-                    action: MapHttpMethodToAction(context.Request.Method),
-                    resourceType: resourceType,
-                    resourceId: null,
-                    description: $"API call to {context.Request.Path} completed in {duration.TotalMilliseconds:F2}ms",
-                    status: status,
-                    additionalData: additionalData
-                );
+                // await auditService.LogAuditEventAsync(
+                //     action: MapHttpMethodToAction(context.Request.Method),
+                //     resourceType: resourceType,
+                //     resourceId: null,
+                //     description: $"API call to {context.Request.Path} completed in {duration.TotalMilliseconds:F2}ms",
+                //     status: status,
+                //     additionalData: additionalData
+                // );
 
                 _logger.LogInformation("Audit logged for {Method} {Path} - Status: {StatusCode}, Duration: {Duration}ms",
                     context.Request.Method, context.Request.Path, context.Response.StatusCode, duration.TotalMilliseconds);
@@ -90,16 +90,16 @@ public class AuditLoggingMiddleware
                 });
 
                
-                var resourceType = ExtractResourceType(context.Request.Path.ToString());
+                // var resourceType = ExtractResourceType(context.Request.Path.ToString());
 
-                await auditService.LogAuditEventAsync(
-                    action: MapHttpMethodToAction(context.Request.Method),
-                    resourceType: resourceType,
-                    resourceId: null,
-                    description: $"API call to {context.Request.Path} failed after {duration.TotalMilliseconds:F2}ms",
-                    status: "Failed",
-                    additionalData: additionalData
-                );
+                // await auditService.LogAuditEventAsync(
+                //     action: MapHttpMethodToAction(context.Request.Method),
+                //     resourceType: resourceType,
+                //     resourceId: null,
+                //     description: $"API call to {context.Request.Path} failed after {duration.TotalMilliseconds:F2}ms",
+                //     status: "Failed",
+                //     additionalData: additionalData
+                // );
 
                 _logger.LogError(ex, "Audit logged for failed request {Method} {Path} - Duration: {Duration}ms",
                     context.Request.Method, context.Request.Path, duration.TotalMilliseconds);
