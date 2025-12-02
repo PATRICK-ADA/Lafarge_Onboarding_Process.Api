@@ -129,8 +129,8 @@ public static class Configurations
    
     public static WebApplication ConfigureMiddleware(this WebApplication app)
     {
-        // Add audit logging middleware early in the pipeline
-        app.UseMiddleware<Lafarge_Onboarding.api.Middleware.AuditLoggingMiddleware>();
+    
+        //app.UseMiddleware<Lafarge_Onboarding.api.Middleware.AuditLoggingMiddleware>();
 
         app.UseMiddleware<Lafarge_Onboarding.api.Middleware.ExceptionHandlingMiddleware>();
 
