@@ -33,8 +33,8 @@ public sealed class AuditLogsController : ControllerBase
     {
         var filter = new AuditLogFilterRequest
         {
-            StartDate = startDate,
-            EndDate = endDate,
+            StartDate = startDate.HasValue ? DateTime.SpecifyKind(startDate.Value, DateTimeKind.Utc) : null,
+            EndDate = endDate.HasValue ? DateTime.SpecifyKind(endDate.Value, DateTimeKind.Utc) : null,
             UserId = userId,
             UserName = userName,
             UserEmail = userEmail,
