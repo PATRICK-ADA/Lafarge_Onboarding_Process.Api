@@ -1,3 +1,5 @@
+
+
 namespace Lafarge_Onboarding.api.ConfigExtension;
 
 public static class Configurations
@@ -8,6 +10,14 @@ public static class Configurations
         var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
         builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
+        // Configure forwarded headers for proper IP address capture
+        builder.Services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto;
+            // Clear known proxies/networks to accept forwarded headers from any source (safe for Cloud Run/Google LB)
+            options.KnownProxies.Clear();
+            options.KnownNetworks.Clear();
+        });
 
         builder.Host.UseSerilog((context, configuration) =>
         {
@@ -128,8 +138,10 @@ public static class Configurations
    
     public static WebApplication ConfigureMiddleware(this WebApplication app)
     {
-    
-        //app.UseMiddleware<Lafarge_Onboarding.api.Middleware.AuditLoggingMiddleware>();
+        // Use forwarded headers to capture real client IP
+        app.UseForwardedHeaders();
+
+        app.UseMiddleware<Lafarge_Onboarding.api.Middleware.AuditLoggingMiddleware>();
 
         app.UseMiddleware<Lafarge_Onboarding.api.Middleware.ExceptionHandlingMiddleware>();
 

@@ -44,8 +44,23 @@ public sealed class AuditService : IAuditService
             var url = httpContext != null
                 ? $"{httpContext.Request.Path}{httpContext.Request.QueryString}"
                 : null;
+
             var ipAddress = httpContext?.Connection.RemoteIpAddress?.ToString();
+            if (string.IsNullOrEmpty(ipAddress) || ipAddress == "::1")
+            {
+                ipAddress = httpContext?.Request.Headers["X-Forwarded-For"].FirstOrDefault() ??
+                           httpContext?.Request.Headers["X-Real-IP"].FirstOrDefault();
+            }
             var statusCode = httpContext?.Response.StatusCode;
+
+            // Calculate timing
+            string? timingData = null;
+            if (httpContext?.Items.TryGetValue("RequestStartTime", out var startTimeObj) == true && startTimeObj is DateTime startTime)
+            {
+                var endTime = DateTime.UtcNow;
+                var duration = endTime - startTime;
+                timingData = $"User action complete in {duration.TotalMilliseconds:F2}ms";
+            }
 
             var auditLog = new AuditLog
             {
@@ -62,10 +77,10 @@ public sealed class AuditService : IAuditService
                 Url = url,
                 StatusCode = statusCode,
                 IpAddress = ipAddress,
-                Status = status,
+                Status = _httpContextAccessor.HttpContext.Response.StatusCode >= 200 && _httpContextAccessor.HttpContext.Response.StatusCode < 300 ? "Success" : "Failed" ?? status,
                 OldValues = oldValues,
                 NewValues = newValues,
-                AdditionalData = additionalData,
+                AdditionalData = timingData != null ? (additionalData == null ? timingData : $"{timingData}; {additionalData}") : additionalData,
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -78,7 +93,7 @@ public sealed class AuditService : IAuditService
         {
             _logger.LogError(ex, "Failed to log audit event: {Action} on {ResourceType}",
                 action, resourceType);
-           
+
         }
     }
 

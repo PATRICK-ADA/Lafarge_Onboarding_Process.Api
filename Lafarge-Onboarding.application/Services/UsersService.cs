@@ -6,19 +6,13 @@ public sealed class UsersService : IUsersService
     private readonly UserManager<Users> _userManager;
     private readonly RoleManager<Role> _roleManager;
     private readonly IAuditService _auditService;
-    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public UsersService(IUsersRepository usersRepository, UserManager<Users> userManager, RoleManager<Role> roleManager, IAuditService auditService, IHttpContextAccessor httpContextAccessor)
+    public UsersService(IUsersRepository usersRepository, UserManager<Users> userManager, RoleManager<Role> roleManager, IAuditService auditService)
     {
         _usersRepository = usersRepository;
         _userManager = userManager;
         _roleManager = roleManager;
         _auditService = auditService;
-        _httpContextAccessor = httpContextAccessor;
-    }
-    private string GetStatus()
-    {
-        return _httpContextAccessor.HttpContext.Response.StatusCode >= 200 && _httpContextAccessor.HttpContext.Response.StatusCode < 300 ? "Success" : "Failed";
     }
 
 
@@ -34,8 +28,7 @@ public sealed class UsersService : IUsersService
             TotalCount = totalCount
         };
 
-        var status = GetStatus();
-        await _auditService.LogAuditEventAsync("READ", "User", _httpContextAccessor.HttpContext?.Request?.Path.ToString(), status: status);
+        await _auditService.LogAuditEventAsync("READ", "User", null);
 
         return result;
     }
@@ -124,8 +117,7 @@ public sealed class UsersService : IUsersService
             message += $" Errors: {string.Join("; ", errors)}";
         }
 
-        var status = GetStatus();
-        await _auditService.LogAuditEventAsync("CREATE", "User", _httpContextAccessor.HttpContext?.Request?.Path.ToString(), status: status, oldValues: null, newValues: JsonSerializer.Serialize(createdUsers));
+        await _auditService.LogAuditEventAsync("CREATE", "User", null, oldValues: null, newValues: JsonSerializer.Serialize(createdUsers));
 
         return message;
     }
@@ -203,8 +195,7 @@ public sealed class UsersService : IUsersService
             TotalCount = totalCount
         };
 
-        var status = GetStatus();
-        await _auditService.LogAuditEventAsync("READ", "User", _httpContextAccessor.HttpContext?.Request?.Path.ToString(), status: status);
+        await _auditService.LogAuditEventAsync("READ", "User", null);
 
         return result;
     }
@@ -221,8 +212,7 @@ public sealed class UsersService : IUsersService
             TotalCount = totalCount
         };
 
-        var status = GetStatus();
-        await _auditService.LogAuditEventAsync("READ", "User", _httpContextAccessor.HttpContext?.Request?.Path.ToString(), status: status);
+        await _auditService.LogAuditEventAsync("READ", "User", null);
 
         return result;
     }
@@ -235,8 +225,7 @@ public sealed class UsersService : IUsersService
             throw new KeyNotFoundException("User not found");
         }
 
-        var status = GetStatus();
-        await _auditService.LogAuditEventAsync("READ", "User", id, status: status);
+        await _auditService.LogAuditEventAsync("READ", "User", id);
 
         return user;
     }
@@ -259,8 +248,7 @@ public sealed class UsersService : IUsersService
         var updatedUser = await _usersRepository.GetUserByIdAsync(id);
         var newValues = JsonSerializer.Serialize(updatedUser);
 
-        var status = GetStatus();
-        await _auditService.LogAuditEventAsync("UPDATE", "User", id, status: status, oldValues: oldValues, newValues: newValues);
+        await _auditService.LogAuditEventAsync("UPDATE", "User", id, oldValues: oldValues, newValues: newValues);
 
         return "User updated successfully";
     }
@@ -324,8 +312,7 @@ public sealed class UsersService : IUsersService
         }
         var newValues = JsonSerializer.Serialize(newUsers);
 
-        var status = GetStatus();
-        await _auditService.LogAuditEventAsync("UPDATE", "User", null, status: status, oldValues: oldValues, newValues: newValues);
+        await _auditService.LogAuditEventAsync("UPDATE", "User", null, oldValues: oldValues, newValues: newValues);
 
         var message = $"{successCount} users updated successfully.";
         if (errors.Any())
@@ -349,8 +336,7 @@ public sealed class UsersService : IUsersService
         {
             throw new KeyNotFoundException("User not found");
         }
-        var status = GetStatus();
-        await _auditService.LogAuditEventAsync("DELETE", "User", id, status: status, oldValues: oldValues, newValues: null);
+        await _auditService.LogAuditEventAsync("DELETE", "User", id, oldValues: oldValues, newValues: null);
         return $"User deleted successfully";
     }
 
@@ -362,8 +348,7 @@ public sealed class UsersService : IUsersService
         var (oldUsers, _) = await _usersRepository.GetUsersByRoleAsync(role, pagination);
         var oldValues = JsonSerializer.Serialize(oldUsers);
         var count = await _usersRepository.DeleteUsersByRoleAsync(role);
-        var status = GetStatus();
-        await _auditService.LogAuditEventAsync("DELETE", "User", null, status: status, oldValues: oldValues, newValues: null);
+        await _auditService.LogAuditEventAsync("DELETE", "User", null, oldValues: oldValues, newValues: null);
         return $"{count} users deleted successfully";
     }
 }

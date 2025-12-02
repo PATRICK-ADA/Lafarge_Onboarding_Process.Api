@@ -5,22 +5,15 @@ public sealed class AllContactService : IAllContactService
     private readonly IAllContactRepository _repository;
     private readonly ILogger<AllContactService> _logger;
     private readonly IAuditService _auditService;
-    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public AllContactService(
         IAllContactRepository repository,
         ILogger<AllContactService> logger,
-        IAuditService auditService,
-        IHttpContextAccessor httpContextAccessor)
+        IAuditService auditService)
     {
         _repository = repository;
         _logger = logger;
         _auditService = auditService;
-        _httpContextAccessor = httpContextAccessor;
-    }
-    private string GetStatus()
-    {
-        return _httpContextAccessor.HttpContext.Response.StatusCode >= 200 && _httpContextAccessor.HttpContext.Response.StatusCode < 300 ? "Success" : "Failed";
     }
 
 
@@ -104,13 +97,11 @@ public sealed class AllContactService : IAllContactService
 
         _logger.LogInformation("All contacts saved successfully");
 
-        var status = GetStatus();
         await _auditService.LogAuditEventAsync(
             action: "CREATE",
             resourceType: "AllContact",
-            resourceId: _httpContextAccessor.HttpContext?.Request?.Path.ToString(),
+            resourceId: null,
             description: $"Uploaded all contacts from file {file.FileName}",
-            status: status,
             oldValues: oldValues,
             newValues: newValues);
     }
@@ -124,13 +115,11 @@ public sealed class AllContactService : IAllContactService
 
         _logger.LogInformation("All contacts retrieved successfully");
 
-        var status = GetStatus();
         await _auditService.LogAuditEventAsync(
             action: "READ",
             resourceType: "AllContact",
-            resourceId: _httpContextAccessor.HttpContext?.Request?.Path.ToString(),
-            description: "Retrieved all contacts",
-            status: status);
+            resourceId: null,
+            description: "Retrieved all contacts");
 
         return response;
     }
@@ -147,13 +136,11 @@ public sealed class AllContactService : IAllContactService
 
         _logger.LogInformation("All contacts deleted successfully");
 
-        var status = GetStatus();
         await _auditService.LogAuditEventAsync(
             action: "DELETE",
             resourceType: "AllContact",
-            resourceId: _httpContextAccessor.HttpContext?.Request?.Path.ToString(),
+            resourceId: null,
             description: "Deleted all contacts",
-            status: status,
             oldValues: oldValues,
             newValues: null);
     }

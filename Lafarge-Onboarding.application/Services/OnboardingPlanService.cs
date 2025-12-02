@@ -5,25 +5,18 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
     private readonly IOnboardingPlanRepository _repository;
     private readonly IDocumentsUploadService _documentService;
     private readonly IAuditService _auditService;
-    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ILogger<OnboardingPlanService> _logger;
 
     public OnboardingPlanService(
         IOnboardingPlanRepository repository,
         IDocumentsUploadService documentService,
         IAuditService auditService,
-        IHttpContextAccessor httpContextAccessor,
         ILogger<OnboardingPlanService> logger)
     {
         _repository = repository;
         _documentService = documentService;
         _auditService = auditService;
-        _httpContextAccessor = httpContextAccessor;
         _logger = logger;
-    }
-    private string GetStatus()
-    {
-        return _httpContextAccessor.HttpContext.Response.StatusCode >= 200 && _httpContextAccessor.HttpContext.Response.StatusCode < 300 ? "Success" : "Failed";
     }
 
 
@@ -42,8 +35,7 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
         await _repository.AddAsync(entity);
 
         _logger.LogInformation("Onboarding plan saved successfully with ID: {Id}", entity.Id);
-        var status = GetStatus();
-        await _auditService.LogAuditEventAsync("CREATE", "OnboardingPlan", entity.Id.ToString(), status: status, newValues: JsonSerializer.Serialize(entity));
+        await _auditService.LogAuditEventAsync("CREATE", "OnboardingPlan", entity.Id.ToString(), newValues: JsonSerializer.Serialize(entity));
         return parsedData;
     }
 
@@ -59,8 +51,7 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
         }
 
         _logger.LogInformation("Onboarding plan retrieved successfully");
-        var status = GetStatus();
-        await _auditService.LogAuditEventAsync("READ", "OnboardingPlan", response.Id.ToString(), status: status);
+        await _auditService.LogAuditEventAsync("READ", "OnboardingPlan", response.Id.ToString());
         return response;
     }
 
@@ -72,14 +63,13 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
         {
             await _repository.DeleteLatestAsync();
             _logger.LogInformation("Latest onboarding plan deleted successfully");
+            await _auditService.LogAuditEventAsync("DELETE", "OnboardingPlan", entity.Id.ToString(), oldValues: JsonSerializer.Serialize(entity), newValues: null);
         }
         else
         {
             _logger.LogInformation("No onboarding plan to delete");
+            await _auditService.LogAuditEventAsync("DELETE", "OnboardingPlan", null, oldValues: null, newValues: null);
         }
-        var status = GetStatus();
-        var entityId = entity != null ? entity.Id.ToString() : _httpContextAccessor.HttpContext?.Request?.Path.ToString();
-        await _auditService.LogAuditEventAsync("DELETE", "OnboardingPlan", entityId, status: status, oldValues: entity != null ? JsonSerializer.Serialize(entity) : null, newValues: null);
     }
 
     private OnboardingPlanResponse ParseOnboardingPlan(string text)

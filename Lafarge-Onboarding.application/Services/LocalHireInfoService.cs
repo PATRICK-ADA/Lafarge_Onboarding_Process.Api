@@ -6,24 +6,17 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
     private readonly IImprovedDocumentExtractionService _extractionService;
     private readonly IAuditService _auditService;
     private readonly ILogger<LocalHireInfoService> _logger;
-    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public LocalHireInfoService(
         ILocalHireInfoRepository repository,
         IImprovedDocumentExtractionService extractionService,
         IAuditService auditService,
-        ILogger<LocalHireInfoService> logger,
-        IHttpContextAccessor httpContextAccessor)
+        ILogger<LocalHireInfoService> logger)
     {
         _repository = repository;
         _extractionService = extractionService;
         _auditService = auditService;
         _logger = logger;
-        _httpContextAccessor = httpContextAccessor;
-    }
-    private string GetStatus()
-    {
-        return _httpContextAccessor.HttpContext.Response.StatusCode >= 200 && _httpContextAccessor.HttpContext.Response.StatusCode < 300 ? "Success" : "Failed";
     }
 
 
@@ -41,8 +34,7 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
         var entity = MapToEntity(parsedData);
         await _repository.AddAsync(entity);
 
-        var status = GetStatus();
-        await _auditService.LogAuditEventAsync("CREATE", "LocalHireInfo", entity.Id.ToString(), status: status, oldValues: null, newValues: JsonSerializer.Serialize(entity));
+        await _auditService.LogAuditEventAsync("CREATE", "LocalHireInfo", entity.Id.ToString(), oldValues: null, newValues: JsonSerializer.Serialize(entity));
 
         _logger.LogInformation("Local hire info saved successfully with ID: {Id}", entity.Id);
         return parsedData;
@@ -56,13 +48,11 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
         if (response == null)
         {
             _logger.LogInformation("No local hire info found");
-            var auditStatus = GetStatus();
-            await _auditService.LogAuditEventAsync("READ", "LocalHireInfo", _httpContextAccessor.HttpContext?.Request?.Path.ToString(), status: auditStatus);
+            await _auditService.LogAuditEventAsync("READ", "LocalHireInfo", null);
             return null;
         }
 
-        var status = GetStatus();
-        await _auditService.LogAuditEventAsync("READ", "LocalHireInfo", response.Id.ToString(), status: status);
+        await _auditService.LogAuditEventAsync("READ", "LocalHireInfo", response.Id.ToString());
         _logger.LogInformation("Local hire info retrieved successfully");
         return response;
     }
@@ -74,15 +64,13 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
         if (entity != null)
         {
             await _repository.DeleteLatestAsync();
-            var status = GetStatus();
-            await _auditService.LogAuditEventAsync("DELETE", "LocalHireInfo", entity.Id.ToString(), status: status, oldValues: JsonSerializer.Serialize(entity), newValues: null);
+            await _auditService.LogAuditEventAsync("DELETE", "LocalHireInfo", entity.Id.ToString(), oldValues: JsonSerializer.Serialize(entity), newValues: null);
             _logger.LogInformation("Latest local hire info deleted successfully");
         }
         else
         {
             _logger.LogInformation("No local hire info to delete");
-            var status = GetStatus();
-            await _auditService.LogAuditEventAsync("DELETE", "LocalHireInfo", _httpContextAccessor.HttpContext?.Request?.Path.ToString(), status: status);
+            await _auditService.LogAuditEventAsync("DELETE", "LocalHireInfo", null);
         }
     }
 

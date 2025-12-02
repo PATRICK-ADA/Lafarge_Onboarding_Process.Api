@@ -6,25 +6,18 @@ public sealed class EtiquetteService : IEtiquetteService
     private readonly IEtiquetteRepository _repository;
     private readonly IDocumentsUploadService _documentService;
     private readonly IAuditService _auditService;
-    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly ILogger<EtiquetteService> _logger;
 
     public EtiquetteService(
         IEtiquetteRepository repository,
         IDocumentsUploadService documentService,
         IAuditService auditService,
-        IHttpContextAccessor httpContextAccessor,
         ILogger<EtiquetteService> logger)
     {
         _repository = repository;
         _documentService = documentService;
         _auditService = auditService;
-        _httpContextAccessor = httpContextAccessor;
         _logger = logger;
-    }
-    private string GetStatus()
-    {
-        return _httpContextAccessor.HttpContext.Response.StatusCode >= 200 && _httpContextAccessor.HttpContext.Response.StatusCode < 300 ? "Success" : "Failed";
     }
 
 
@@ -42,8 +35,7 @@ public sealed class EtiquetteService : IEtiquetteService
         var entity = MapToEntity(parsedData);
         await _repository.AddAsync(entity);
 
-        var status = GetStatus();
-        await _auditService.LogAuditEventAsync("CREATE", "Etiquette", entity.Id.ToString(), status: status, oldValues: null, newValues: JsonSerializer.Serialize(entity));
+        await _auditService.LogAuditEventAsync("CREATE", "Etiquette", entity.Id.ToString(), oldValues: null, newValues: JsonSerializer.Serialize(entity));
 
         _logger.LogInformation("Etiquette saved successfully with ID: {Id}", entity.Id);
         return parsedData;
@@ -55,8 +47,7 @@ public sealed class EtiquetteService : IEtiquetteService
 
         var response = await _repository.GetLatestAsync();
     
-        var status = GetStatus();
-        await _auditService.LogAuditEventAsync("READ", "Etiquette", resourceId: response!.Id.ToString(), status: status);
+        await _auditService.LogAuditEventAsync("READ", "Etiquette", resourceId: response!.Id.ToString());
         _logger.LogInformation("Etiquette retrieved successfully");
         return response;
     }
@@ -68,15 +59,13 @@ public sealed class EtiquetteService : IEtiquetteService
         if (entity != null)
         {
             await _repository.DeleteLatestAsync();
-            var status = GetStatus();
-            await _auditService.LogAuditEventAsync("DELETE", "Etiquette", entity.Id.ToString(), status: status, oldValues: JsonSerializer.Serialize(entity), newValues: null);
+            await _auditService.LogAuditEventAsync("DELETE", "Etiquette", entity.Id.ToString(), oldValues: JsonSerializer.Serialize(entity), newValues: null);
             _logger.LogInformation("Latest etiquette deleted successfully");
         }
         else
         {
             _logger.LogInformation("No etiquette to delete");
-            var status = GetStatus();
-            await _auditService.LogAuditEventAsync("DELETE", "Etiquette", _httpContextAccessor.HttpContext?.Request?.Path.ToString(), status: status);
+            await _auditService.LogAuditEventAsync("DELETE", "Etiquette", null);
         }
     }
 

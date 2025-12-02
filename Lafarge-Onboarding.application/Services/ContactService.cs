@@ -7,22 +7,15 @@ public sealed class ContactService : IContactService
     private readonly IContactRepository _repository;
     private readonly ILogger<ContactService> _logger;
     private readonly IAuditService _auditService;
-    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public ContactService(
         IContactRepository repository,
         ILogger<ContactService> logger,
-        IAuditService auditService,
-        IHttpContextAccessor httpContextAccessor)
+        IAuditService auditService)
     {
         _repository = repository;
         _logger = logger;
         _auditService = auditService;
-        _httpContextAccessor = httpContextAccessor;
-    }
-    private string GetStatus()
-    {
-        return _httpContextAccessor.HttpContext.Response.StatusCode >= 200 && _httpContextAccessor.HttpContext.Response.StatusCode < 300 ? "Success" : "Failed";
     }
 
 
@@ -43,13 +36,10 @@ public sealed class ContactService : IContactService
 
         _logger.LogInformation("Contacts uploaded successfully");
 
-        var status = GetStatus();
-
         await _auditService.LogAuditEventAsync(
             action: "CREATE",
             resourceType: "Contact",
-            resourceId: _httpContextAccessor.HttpContext?.Request?.Path.ToString(),
-            status: status,
+            resourceId: null,
             newValues: JsonSerializer.Serialize(entities));
     }
 
@@ -61,13 +51,10 @@ public sealed class ContactService : IContactService
 
         _logger.LogInformation("Retrieved {Count} contacts", dtos.Count);
 
-        var status = GetStatus();
-
         await _auditService.LogAuditEventAsync(
             action: "READ",
             resourceType: "Contact",
-            resourceId: _httpContextAccessor.HttpContext?.Request?.Path.ToString(),
-            status: status);
+            resourceId: null);
 
         return dtos;
     }
@@ -83,15 +70,12 @@ public sealed class ContactService : IContactService
 
         _logger.LogInformation("All local contacts deleted successfully");
 
-        var status = GetStatus();
-
         await _auditService.LogAuditEventAsync(
             action: "DELETE",
             resourceType: "Contact",
-            resourceId: _httpContextAccessor.HttpContext?.Request?.Path.ToString(),
+            resourceId: null,
             oldValues: oldValues,
-            newValues: null,
-            status: status
+            newValues: null
         );
     }
 

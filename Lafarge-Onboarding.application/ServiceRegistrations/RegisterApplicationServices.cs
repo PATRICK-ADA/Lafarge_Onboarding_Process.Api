@@ -27,7 +27,6 @@ public static class RegisterApplicationServices
                 provider.GetRequiredService<Lafarge_Onboarding.application.Services.WelcomeMessageService>(),
                 provider.GetRequiredService<IMemoryCache>(),
                 provider.GetRequiredService<IAuditService>(),
-                provider.GetRequiredService<IHttpContextAccessor>(),
                 provider.GetRequiredService<ILogger<Lafarge_Onboarding.application.Services.CachedWelcomeMessageService>>()));
                 
         services.AddScoped<IOnboardingPlanService, Lafarge_Onboarding.application.Services.OnboardingPlanService>();

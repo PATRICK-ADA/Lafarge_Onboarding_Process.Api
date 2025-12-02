@@ -24,3 +24,4 @@ global using Microsoft.Extensions.Caching.Memory;
 global using System.IO.Compression;
 global using System.Security.Cryptography;
 global using Microsoft.AspNetCore.ResponseCompression;
+global using Microsoft.AspNetCore.HttpOverrides;
