@@ -25,12 +25,14 @@ public sealed class AuditLogRepository : IAuditLogRepository
         // Apply filters
         if (filter.StartDate.HasValue)
         {
-            query = query.Where(x => x.Timestamp >= filter.StartDate.Value);
+            var start = filter.StartDate.Value.Date;
+            query = query.Where(x => x.Timestamp >= start);
         }
 
         if (filter.EndDate.HasValue)
         {
-            query = query.Where(x => x.Timestamp <= filter.EndDate.Value);
+            var end = filter.EndDate.Value.Date.AddDays(1);
+            query = query.Where(x => x.Timestamp < end);
         }
 
         if (!string.IsNullOrWhiteSpace(filter.UserId))

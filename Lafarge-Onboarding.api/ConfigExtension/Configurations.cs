@@ -13,8 +13,7 @@ public static class Configurations
         {
             configuration
                 .ReadFrom.Configuration(context.Configuration)
-                .WriteTo.Console()
-                .WriteTo.File("logs/lafarge-onboarding-.txt", rollingInterval: RollingInterval.Day);
+                .WriteTo.Console();
         });
 
         builder.Services.AddCors(options =>
