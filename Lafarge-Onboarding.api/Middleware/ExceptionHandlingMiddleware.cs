@@ -27,11 +27,13 @@ public class ExceptionHandlingMiddleware
             {
                 context.Items["AuditStatus"] = "Failed";
                 await HandleUnauthorizedAsync(context);
+                context.Items["AuditStatusCode"] = context.Response.StatusCode;
             }
             else if (context.Response.StatusCode == 403 && !context.Response.HasStarted)
             {
                 context.Items["AuditStatus"] = "Failed";
                 await HandleForbiddenAsync(context);
+                context.Items["AuditStatusCode"] = context.Response.StatusCode;
             }
         }
         catch (Exception ex)
