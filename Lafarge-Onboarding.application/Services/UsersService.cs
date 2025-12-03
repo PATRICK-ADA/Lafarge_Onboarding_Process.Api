@@ -28,7 +28,7 @@ public sealed class UsersService : IUsersService
             TotalCount = totalCount
         };
 
-        await _auditService.LogAuditEventAsync("READ", "User", null);
+        await _auditService.LogAuditEventAsync("READ", "User", null, "Retrieved users by name");
 
         return result;
     }
@@ -117,7 +117,7 @@ public sealed class UsersService : IUsersService
             message += $" Errors: {string.Join("; ", errors)}";
         }
 
-        await _auditService.LogAuditEventAsync("CREATE", "User", null, oldValues: null, newValues: JsonSerializer.Serialize(createdUsers));
+        await _auditService.LogAuditEventAsync("CREATE", "User", null, "Bulk user creation completed", oldValues: null, newValues: JsonSerializer.Serialize(createdUsers));
 
         return message;
     }
@@ -195,7 +195,7 @@ public sealed class UsersService : IUsersService
             TotalCount = totalCount
         };
 
-        await _auditService.LogAuditEventAsync("READ", "User", null);
+        await _auditService.LogAuditEventAsync("READ", "User", null, "Retrieved paginated list of users");
 
         return result;
     }
@@ -212,7 +212,7 @@ public sealed class UsersService : IUsersService
             TotalCount = totalCount
         };
 
-        await _auditService.LogAuditEventAsync("READ", "User", null);
+        await _auditService.LogAuditEventAsync("READ", "User", null, "Retrieved users by role");
 
         return result;
     }
@@ -225,7 +225,7 @@ public sealed class UsersService : IUsersService
             throw new KeyNotFoundException("User not found");
         }
 
-        await _auditService.LogAuditEventAsync("READ", "User", id);
+        await _auditService.LogAuditEventAsync("READ", "User", id, $"Retrieved user by ID: {id}");
 
         return user;
     }
@@ -248,7 +248,7 @@ public sealed class UsersService : IUsersService
         var updatedUser = await _usersRepository.GetUserByIdAsync(id);
         var newValues = JsonSerializer.Serialize(updatedUser);
 
-        await _auditService.LogAuditEventAsync("UPDATE", "User", id, oldValues: oldValues, newValues: newValues);
+        await _auditService.LogAuditEventAsync("UPDATE", "User", id, $"Updated user with ID: {id}", oldValues: oldValues, newValues: newValues);
 
         return "User updated successfully";
     }
@@ -312,7 +312,7 @@ public sealed class UsersService : IUsersService
         }
         var newValues = JsonSerializer.Serialize(newUsers);
 
-        await _auditService.LogAuditEventAsync("UPDATE", "User", null, oldValues: oldValues, newValues: newValues);
+        await _auditService.LogAuditEventAsync("UPDATE", "User", null, "Bulk user update completed", oldValues: oldValues, newValues: newValues);
 
         var message = $"{successCount} users updated successfully.";
         if (errors.Any())
@@ -336,7 +336,7 @@ public sealed class UsersService : IUsersService
         {
             throw new KeyNotFoundException("User not found");
         }
-        await _auditService.LogAuditEventAsync("DELETE", "User", id, oldValues: oldValues, newValues: null);
+        await _auditService.LogAuditEventAsync("DELETE", "User", id, $"Deleted user with ID: {id}", oldValues: oldValues, newValues: null);
         return $"User deleted successfully";
     }
 
@@ -348,7 +348,7 @@ public sealed class UsersService : IUsersService
         var (oldUsers, _) = await _usersRepository.GetUsersByRoleAsync(role, pagination);
         var oldValues = JsonSerializer.Serialize(oldUsers);
         var count = await _usersRepository.DeleteUsersByRoleAsync(role);
-        await _auditService.LogAuditEventAsync("DELETE", "User", null, oldValues: oldValues, newValues: null);
+        await _auditService.LogAuditEventAsync("DELETE", "User", null, $"Deleted users by role: {role}", oldValues: oldValues, newValues: null);
         return $"{count} users deleted successfully";
     }
 }

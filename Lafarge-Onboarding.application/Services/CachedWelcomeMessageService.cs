@@ -26,7 +26,7 @@ public sealed class CachedWelcomeMessageService : IWelcomeMessageService
         var result = await _baseService.ExtractAndSaveWelcomeMessagesAsync(files);
         _cache.Remove(CacheKey);
         _logger.LogInformation("Cache cleared after new welcome message upload");
-        await _auditService.LogAuditEventAsync("CREATE", "CachedWelcomeMessage", null, newValues: JsonSerializer.Serialize(result));
+        await _auditService.LogAuditEventAsync("CREATE", "CachedWelcomeMessage", null, "Welcome message cached", newValues: JsonSerializer.Serialize(result));
         return result;
     }
 
@@ -35,7 +35,7 @@ public sealed class CachedWelcomeMessageService : IWelcomeMessageService
         if (_cache.TryGetValue(CacheKey, out WelcomeMessageResponse? cached))
         {
             _logger.LogInformation("Returning cached welcome message");
-            await _auditService.LogAuditEventAsync("READ", "CachedWelcomeMessage", null);
+            await _auditService.LogAuditEventAsync("READ", "CachedWelcomeMessage", null, "Cached welcome message retrieved");
             return cached;
         }
 
@@ -49,7 +49,7 @@ public sealed class CachedWelcomeMessageService : IWelcomeMessageService
             });
             _logger.LogInformation("Welcome message cached until next database update");
         }
-        await _auditService.LogAuditEventAsync("READ", "CachedWelcomeMessage", null);
+        await _auditService.LogAuditEventAsync("READ", "CachedWelcomeMessage", null, "Welcome messages retrieved from cache");
         return result;
     }
 
@@ -64,6 +64,6 @@ public sealed class CachedWelcomeMessageService : IWelcomeMessageService
         await _baseService.DeleteLatestAsync();
         _cache.Remove(CacheKey);
         _logger.LogInformation("Cache cleared after welcome message deletion");
-        await _auditService.LogAuditEventAsync("DELETE", "CachedWelcomeMessage", null, oldValues: oldValues, newValues: null);
+        await _auditService.LogAuditEventAsync("DELETE", "CachedWelcomeMessage", null, "Welcome message cache cleared", oldValues: oldValues, newValues: null);
     }
 }

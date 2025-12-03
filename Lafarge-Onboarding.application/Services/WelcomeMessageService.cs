@@ -38,7 +38,7 @@ public sealed class WelcomeMessageService : IWelcomeMessageService
         var entity = MapToEntity(parsedData);
         await _repository.AddAsync(entity);
 
-        await _auditService.LogAuditEventAsync("CREATE", "WelcomeMessage", entity.Id.ToString(), newValues: JsonSerializer.Serialize(parsedData));
+        await _auditService.LogAuditEventAsync("CREATE", "WelcomeMessage", entity.Id.ToString(), "Welcome message created", newValues: JsonSerializer.Serialize(parsedData));
 
         _logger.LogInformation("Welcome messages saved successfully with ID: {Id}", entity.Id);
         return parsedData;
@@ -55,7 +55,7 @@ public sealed class WelcomeMessageService : IWelcomeMessageService
             return null;
         }
 
-        await _auditService.LogAuditEventAsync("READ", "WelcomeMessage", null);
+        await _auditService.LogAuditEventAsync("READ", "WelcomeMessage", null, "Welcome messages retrieved");
         _logger.LogInformation("Welcome messages retrieved successfully");
         return response;
     }
@@ -73,7 +73,7 @@ public sealed class WelcomeMessageService : IWelcomeMessageService
 
         await _repository.DeleteLatestAsync();
 
-        await _auditService.LogAuditEventAsync("DELETE", "WelcomeMessage", null, oldValues: oldValues, newValues: null);
+        await _auditService.LogAuditEventAsync("DELETE", "WelcomeMessage", null, "Welcome message deleted", oldValues: oldValues, newValues: null);
 
         _logger.LogInformation("Latest welcome messages deleted successfully");
     }

@@ -24,20 +24,24 @@ public sealed class AuditService : IAuditService
         string status = "Success",
         string? oldValues = null,
         string? newValues = null,
-        string? additionalData = null)
+        string? additionalData = null,
+        string? userId = null,
+        string? userName = null,
+        string? userEmail = null,
+        string? userRole = null)
     {
         try
         {
             var httpContext = _httpContextAccessor.HttpContext;
             var user = httpContext?.User;
 
-            // Capture user context
-            var userId = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var userEmail = user?.FindFirst(ClaimTypes.Email)?.Value;
-            var userName = user != null
+            // Capture user context - use provided values or fall back to HttpContext
+            var capturedUserId = userId ?? user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var capturedUserEmail = userEmail ?? user?.FindFirst(ClaimTypes.Email)?.Value;
+            var capturedUserName = userName ?? (user != null
                 ? $"{user.FindFirst(ClaimTypes.GivenName)?.Value} {user.FindFirst(ClaimTypes.Surname)?.Value}".Trim()
-                : null;
-            var userRole = user?.FindFirst(ClaimTypes.Role)?.Value;
+                : null);
+            var capturedUserRole = userRole ?? user?.FindFirst(ClaimTypes.Role)?.Value;
 
             // Capture HTTP details
             var httpMethod = httpContext?.Request.Method;
@@ -59,16 +63,16 @@ public sealed class AuditService : IAuditService
             {
                 var endTime = DateTime.UtcNow;
                 var duration = endTime - startTime;
-                timingData = $"User action complete in {duration.TotalMilliseconds:F2}ms";
+                timingData = $"User action completed in {duration.TotalMilliseconds:F2}ms";
             }
 
             var auditLog = new AuditLog
             {
                 Timestamp = DateTime.UtcNow,
-                UserId = userId,
-                UserName = userName,
-                UserEmail = userEmail,
-                UserRole = userRole,
+                UserId = capturedUserId,
+                UserName = capturedUserName,
+                UserEmail = capturedUserEmail,
+                UserRole = capturedUserRole,
                 Action = action,
                 Description = description,
                 ResourceType = resourceType,

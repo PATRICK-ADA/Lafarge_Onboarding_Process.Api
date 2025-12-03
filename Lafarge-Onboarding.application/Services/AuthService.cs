@@ -186,7 +186,11 @@ public sealed class AuthService : IAuthService
                 resourceType: "User",
                 resourceId: user.Id,
                 description: $"User {user.Email} logged in successfully",
-                status: "Success");
+                status: "Success",
+                userId: user.Id,
+                userName: $"{user.FirstName} {user.LastName}".Trim(),
+                userEmail: user.Email,
+                userRole: user.Role);
 
             return response;
         }

@@ -34,7 +34,7 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
         var entity = MapToEntity(parsedData);
         await _repository.AddAsync(entity);
 
-        await _auditService.LogAuditEventAsync("CREATE", "LocalHireInfo", entity.Id.ToString(), oldValues: null, newValues: JsonSerializer.Serialize(entity));
+        await _auditService.LogAuditEventAsync("CREATE", "LocalHireInfo", entity.Id.ToString(), "Local hire info created", oldValues: null, newValues: JsonSerializer.Serialize(entity));
 
         _logger.LogInformation("Local hire info saved successfully with ID: {Id}", entity.Id);
         return parsedData;
@@ -48,11 +48,11 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
         if (response == null)
         {
             _logger.LogInformation("No local hire info found");
-            await _auditService.LogAuditEventAsync("READ", "LocalHireInfo", null);
+            await _auditService.LogAuditEventAsync("READ", "LocalHireInfo", null, "No local hire info found");
             return null;
         }
 
-        await _auditService.LogAuditEventAsync("READ", "LocalHireInfo", response.Id.ToString());
+        await _auditService.LogAuditEventAsync("READ", "LocalHireInfo", response.Id.ToString(), "Local hire info retrieved");
         _logger.LogInformation("Local hire info retrieved successfully");
         return response;
     }
@@ -64,13 +64,13 @@ public sealed class LocalHireInfoService : ILocalHireInfoService
         if (entity != null)
         {
             await _repository.DeleteLatestAsync();
-            await _auditService.LogAuditEventAsync("DELETE", "LocalHireInfo", entity.Id.ToString(), oldValues: JsonSerializer.Serialize(entity), newValues: null);
+            await _auditService.LogAuditEventAsync("DELETE", "LocalHireInfo", entity.Id.ToString(), "Local hire info deleted", oldValues: JsonSerializer.Serialize(entity), newValues: null);
             _logger.LogInformation("Latest local hire info deleted successfully");
         }
         else
         {
             _logger.LogInformation("No local hire info to delete");
-            await _auditService.LogAuditEventAsync("DELETE", "LocalHireInfo", null);
+            await _auditService.LogAuditEventAsync("DELETE", "LocalHireInfo", null, "No local hire info to delete");
         }
     }
 

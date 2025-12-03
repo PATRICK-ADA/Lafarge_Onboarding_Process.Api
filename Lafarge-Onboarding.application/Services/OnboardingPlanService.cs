@@ -35,7 +35,7 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
         await _repository.AddAsync(entity);
 
         _logger.LogInformation("Onboarding plan saved successfully with ID: {Id}", entity.Id);
-        await _auditService.LogAuditEventAsync("CREATE", "OnboardingPlan", entity.Id.ToString(), newValues: JsonSerializer.Serialize(entity));
+        await _auditService.LogAuditEventAsync("CREATE", "OnboardingPlan", entity.Id.ToString(), "Onboarding plan created", newValues: JsonSerializer.Serialize(entity));
         return parsedData;
     }
 
@@ -51,7 +51,7 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
         }
 
         _logger.LogInformation("Onboarding plan retrieved successfully");
-        await _auditService.LogAuditEventAsync("READ", "OnboardingPlan", response.Id.ToString());
+        await _auditService.LogAuditEventAsync("READ", "OnboardingPlan", response.Id.ToString(), "Onboarding plan retrieved");
         return response;
     }
 
@@ -63,12 +63,12 @@ public sealed class OnboardingPlanService : IOnboardingPlanService
         {
             await _repository.DeleteLatestAsync();
             _logger.LogInformation("Latest onboarding plan deleted successfully");
-            await _auditService.LogAuditEventAsync("DELETE", "OnboardingPlan", entity.Id.ToString(), oldValues: JsonSerializer.Serialize(entity), newValues: null);
+            await _auditService.LogAuditEventAsync("DELETE", "OnboardingPlan", entity.Id.ToString(), "Onboarding plan deleted", oldValues: JsonSerializer.Serialize(entity), newValues: null);
         }
         else
         {
             _logger.LogInformation("No onboarding plan to delete");
-            await _auditService.LogAuditEventAsync("DELETE", "OnboardingPlan", null, oldValues: null, newValues: null);
+            await _auditService.LogAuditEventAsync("DELETE", "OnboardingPlan", null, "No onboarding plan to delete", oldValues: null, newValues: null);
         }
     }
 

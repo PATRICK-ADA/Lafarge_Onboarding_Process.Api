@@ -13,6 +13,10 @@ public interface IAuditService
     /// <param name="oldValues">The old values before the operation (optional, JSON string).</param>
     /// <param name="newValues">The new values after the operation (optional, JSON string).</param>
     /// <param name="additionalData">Any additional data related to the audit event (optional, JSON string).</param>
+    /// <param name="userId">The user ID (optional, overrides automatic capture).</param>
+    /// <param name="userName">The user name (optional, overrides automatic capture).</param>
+    /// <param name="userEmail">The user email (optional, overrides automatic capture).</param>
+    /// <param name="userRole">The user role (optional, overrides automatic capture).</param>
     Task LogAuditEventAsync(
         string action,
         string resourceType,
@@ -21,7 +25,11 @@ public interface IAuditService
         string status = "Success",
         string? oldValues = null,
         string? newValues = null,
-        string? additionalData = null);
+        string? additionalData = null,
+        string? userId = null,
+        string? userName = null,
+        string? userEmail = null,
+        string? userRole = null);
 
     /// <summary>
     /// Retrieves audit logs with filtering and pagination.
