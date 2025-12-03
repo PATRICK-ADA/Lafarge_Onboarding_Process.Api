@@ -36,6 +36,7 @@ public sealed class AuditService : IAuditService
             var user = httpContext?.User;
 
             // Capture user context - use provided values or fall back to HttpContext
+            
             var capturedUserId = userId ?? user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var capturedUserEmail = userEmail ?? user?.FindFirst(ClaimTypes.Email)?.Value;
             var capturedUserName = userName ?? (user != null
@@ -53,9 +54,10 @@ public sealed class AuditService : IAuditService
             if (string.IsNullOrEmpty(ipAddress) || ipAddress == "::1")
             {
                 ipAddress = httpContext?.Request.Headers["X-Forwarded-For"].FirstOrDefault() ??
-                           httpContext?.Request.Headers["X-Real-IP"].FirstOrDefault();
+                            httpContext?.Request.Headers["X-Real-IP"].FirstOrDefault();
             }
-            var statusCode = httpContext?.Response.StatusCode;
+            // Get status code from ExceptionHandlingMiddleware
+            var statusCode = httpContext?.Items.TryGetValue("AuditStatusCode", out var codeObj) == true && codeObj is int code ? code : httpContext?.Response.StatusCode;
 
             // Calculate timing
             string? timingData = null;
@@ -65,6 +67,9 @@ public sealed class AuditService : IAuditService
                 var duration = endTime - startTime;
                 timingData = $"User action completed in {duration.TotalMilliseconds:F2}ms";
             }
+
+            // Determine status from ExceptionHandlingMiddleware
+            var auditStatus = httpContext?.Items.TryGetValue("AuditStatus", out var statusObj) == true && statusObj is string statusStr ? statusStr : status;
 
             var auditLog = new AuditLog
             {
@@ -81,7 +86,7 @@ public sealed class AuditService : IAuditService
                 Url = url,
                 StatusCode = statusCode,
                 IpAddress = ipAddress,
-                Status = _httpContextAccessor.HttpContext.Response.StatusCode >= 200 && _httpContextAccessor.HttpContext.Response.StatusCode < 300 ? "Success" : "Failed" ?? status,
+                Status = auditStatus,
                 OldValues = oldValues,
                 NewValues = newValues,
                 AdditionalData = timingData != null ? (additionalData == null ? timingData : $"{timingData}; {additionalData}") : additionalData,

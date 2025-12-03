@@ -16,19 +16,27 @@ public class ExceptionHandlingMiddleware
         try
         {
             await _next(context);
-            
+
+            // Set audit status code and status based on response
+            context.Items["AuditStatusCode"] = context.Response.StatusCode;
+            var auditStatus = context.Response.StatusCode >= 200 && context.Response.StatusCode < 300 ? "Success" : "Failed";
+            context.Items["AuditStatus"] = auditStatus;
+
             // Handle authentication/authorization responses that don't throw exceptions
             if (context.Response.StatusCode == 401 && !context.Response.HasStarted)
             {
+                context.Items["AuditStatus"] = "Failed";
                 await HandleUnauthorizedAsync(context);
             }
             else if (context.Response.StatusCode == 403 && !context.Response.HasStarted)
             {
+                context.Items["AuditStatus"] = "Failed";
                 await HandleForbiddenAsync(context);
             }
         }
         catch (Exception ex)
         {
+            context.Items["AuditStatus"] = "Failed";
             await HandleExceptionAsync(context, ex);
         }
     }
@@ -43,7 +51,7 @@ public class ExceptionHandlingMiddleware
             InvalidOperationException => (int)HttpStatusCode.BadRequest,
             KeyNotFoundException => (int)HttpStatusCode.NotFound,
             UnauthorizedAccessException => (int)HttpStatusCode.Unauthorized,
-            
+
             _ => (int)HttpStatusCode.InternalServerError
         };
 
@@ -61,6 +69,7 @@ public class ExceptionHandlingMiddleware
         context.Response.Clear();
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = statusCode;
+        context.Items["AuditStatusCode"] = statusCode;
 
         var json = JsonSerializer.Serialize(response);
         await context.Response.WriteAsync(json);
@@ -80,6 +89,7 @@ public class ExceptionHandlingMiddleware
         context.Response.Clear();
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = 401;
+        context.Items["AuditStatusCode"] = 401;
 
         var json = JsonSerializer.Serialize(response);
         await context.Response.WriteAsync(json);
@@ -99,6 +109,7 @@ public class ExceptionHandlingMiddleware
         context.Response.Clear();
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = 403;
+        context.Items["AuditStatusCode"] = 403;
 
         var json = JsonSerializer.Serialize(response);
         await context.Response.WriteAsync(json);
